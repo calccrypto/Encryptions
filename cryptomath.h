@@ -83,7 +83,8 @@ T two_comp(const T & a, const uint8_t bits = 16){
 
 // From a Twofish code (modified)
 // Rotate Right
-template <typename T> T ROR(T x, const uint64_t & n, const uint64_t & bits){
+template <typename T>
+T ROR(T x, const uint64_t & n, const uint64_t & bits){
 	// Bitwise rotation to the right
 	T mask = 1;
 	mask = (mask << (n - 1)) - 1;
@@ -93,7 +94,8 @@ template <typename T> T ROR(T x, const uint64_t & n, const uint64_t & bits){
 }
 
 // Rotate Left
-template <typename T> T ROL(const T & x, const uint64_t & n, const uint64_t & bits){
+template <typename T>
+T ROL(const T & x, const uint64_t & n, const uint64_t & bits){
 	// Bitwise rotation to the left
 	return ROR(x, bits - n, bits);
 }
