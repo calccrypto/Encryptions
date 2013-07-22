@@ -65,6 +65,10 @@ Notes:
 
         The default Initialization Vector is just a series of 0s.
 
+Build:
+	g++ -std=c++11 *.cpp
+	or some equivalent
+
 Usage:
   'instance' is an instance of an algorithm
   'key' is a string that is one key long for any algorithm
