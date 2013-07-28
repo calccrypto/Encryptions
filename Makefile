@@ -1,4 +1,4 @@
-# Encryptions Libraray Makefile
+# Encryptions Library Makefile
 
 all: common Encryptions
 
