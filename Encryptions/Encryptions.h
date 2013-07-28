@@ -1,3 +1,4 @@
+/*
 A C++ library of encryption alogorithms
 by Jason Lee @ calccrypto at gmail.com
 
@@ -103,3 +104,67 @@ Usage:
             SymAlg * instance = new AES(key)
             data = CBC(instance, IV).encrypt(plaintext1 + plaintext2 + ... + plaintextN)
             free(instance)
+*/
+
+#ifndef ENCRYPTIONS_H
+#define ENCRYPTIONS_H
+
+#include <ctime>
+
+// common includes
+#include "../common/includes.h"
+#include "../common/cryptomath.h"
+#include "error.h"
+#include "SymAlg.h"
+
+// Algorithms
+#include "AES.h"
+#include "Blowfish.h"
+#include "Camellia.h"
+#include "CAST128.h"
+#include "CAST256.h"
+#include "DES.h"
+#include "DESX.h"
+#include "GOST.h"
+#include "IDEA.h"
+#include "MISTY1.h"
+#include "RC2.h"
+#include "RC4.h"
+#include "RC5.h"
+#include "RC6.h"
+#include "SAFERK64.h"
+#include "SEED.h"
+#include "Skipjack.h"
+#include "TDES.h"
+#include "TEA.h"
+#include "XTEA.h"
+
+// Modes of Operation
+#include "ECB.h"
+#include "CBC.h"
+#include "CFB.h"
+#include "CTR.h"
+#include "OFB.h"
+#include "PCPB.h"
+
+// Check if all symmetric algorithms pass some Known Value Tests
+bool validate_symalg(std::ostream & stream = null_out, bool do_1000000_check = false);
+
+// Do a simple benchmark of a symmetric algorithm
+template <class algorithm> double benchmark(uint64_t bytes = 1024){
+    std::string key(32, '\xff');
+    algorithm current(key);
+    uint8_t blocksize = current.blocksize() >> 3;
+    std::string data(blocksize, '\x00');
+    uint64_t loops = bytes / blocksize;
+    time_t start = clock();
+    for(uint64_t x = 0; x < loops; x++){
+        current.encrypt(data);
+    }
+    time_t end = clock();
+    return (double) bytes * CLOCKS_PER_SEC / (float(end - start) * 1048576);
+}
+// Benchmark all symmetric algorithms
+std::vector <std::string> test_all(uint64_t bytes = 1024);
+
+#endif
