@@ -1,6 +1,8 @@
 A C++ library of encryption alogorithms
 by Jason Lee @ calccrypto at gmail.com
 
+Please see LICENSE file for license.
+
 IMPORTANT:
     This library was not written for actual use.
     Rather, it was meant for educational purposes,
