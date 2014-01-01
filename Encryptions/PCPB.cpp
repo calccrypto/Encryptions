@@ -1,35 +1,37 @@
 #include "./PCPB.h"
 
-PCPB::PCPB(SymAlg * instance, std::string iv)
+PCPB::PCPB(SymAlg * instance, const std::string & iv)
   : algo(instance) {
     blocksize = algo -> blocksize() >> 3;
     const_IV = iv;
     if (const_IV == ""){
-        const_IV = std::string(blocksize, '\x00');
+        const_IV = std::string(blocksize, 0);
     }
   }
 
-std::string PCPB::encrypt(std::string data){
-    data = pkcs5(data, blocksize);
+std::string PCPB::encrypt(const std::string & data){
+    std::string temp = pkcs5(data, blocksize);
     std::string out = "";
     std::string IV = const_IV;
-    while (data.size()){
-        std::string temp = data.substr(0, blocksize);
-        out += algo ->encrypt(unhexlify(makehex(integer(hexlify(temp), 16) ^ integer(hexlify(IV), 16), blocksize << 1)));
-        IV = unhexlify(makehex(integer(hexlify(out.substr(out.size() - blocksize, blocksize)), 16) ^ integer(hexlify(temp), 16), blocksize << 1));
-        data = data.substr(blocksize, data.size() - blocksize);
+    uint32_t x = 0;
+    while (x < temp.size()){
+        std::string block = temp.substr(x, blocksize);
+        out += algo -> encrypt(unhexlify(makehex(integer(hexlify(block), 16) ^ integer(hexlify(IV), 16), blocksize << 1)));
+        IV = unhexlify(makehex(integer(hexlify(out.substr(out.size() - blocksize, blocksize)), 16) ^ integer(hexlify(block), 16), blocksize << 1));
+        x += blocksize;
     }
     return out;
 }
 
-std::string PCPB::decrypt(std::string data){
+std::string PCPB::decrypt(const std::string & data){
     std::string out = "";
     std::string IV = const_IV;
-    while (data.size()){
-        std::string temp = data.substr(0, blocksize);
-        out += unhexlify(makehex(integer(hexlify(algo ->decrypt(temp)), 16) ^ integer(hexlify(IV), 16), blocksize << 1));
-        IV = unhexlify(makehex(integer(hexlify(out.substr(out.size() - blocksize, blocksize)), 16) ^ integer(hexlify(temp), 16), blocksize << 1));
-        data = data.substr(blocksize, data.size() - blocksize);
+    uint32_t x = 0;
+    while (x < data.size()){
+        std::string block = data.substr(x, blocksize);
+        out += unhexlify(makehex(integer(hexlify(algo -> decrypt(block)), 16) ^ integer(hexlify(IV), 16), blocksize << 1));
+        IV = unhexlify(makehex(integer(hexlify(out.substr(out.size() - blocksize, blocksize)), 16) ^ integer(hexlify(block), 16), blocksize << 1));
+        x += blocksize;
     }
     return remove_padding(out);
 }

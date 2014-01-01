@@ -7,8 +7,9 @@ class SymAlg{
         bool keyset;
 
     public:
-        virtual std::string encrypt(std::string DATA) = 0;
-        virtual std::string decrypt(std::string DATA) = 0;
+        virtual ~SymAlg();
+        virtual std::string encrypt(const std::string & DATA) = 0;
+        virtual std::string decrypt(const std::string & DATA) = 0;
         virtual unsigned int blocksize() = 0;
 };
 #endif

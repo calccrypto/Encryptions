@@ -1,4 +1,6 @@
-#include "error.h"
+#include <algorithm>
+
+#include "../common/includes.h"
 #include "SymAlg.h"
 
 #ifndef __DES__
@@ -9,14 +11,14 @@
 class DES : public SymAlg{
     private:
         uint64_t keys[16];
-        std::string run(std::string & data);
+        std::string run(const std::string & data);
 
     public:
         DES();
-        DES(std::string KEY);
-        void setkey(std::string KEY);
-        std::string encrypt(std::string DATA);
-        std::string decrypt(std::string DATA);
+        DES(const std::string & KEY);
+        void setkey(const std::string & KEY);
+        std::string encrypt(const std::string & DATA);
+        std::string decrypt(const std::string & DATA);
         unsigned int blocksize();
 };
 #endif

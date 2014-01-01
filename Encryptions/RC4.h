@@ -1,6 +1,5 @@
 #include <vector>
 
-#include "error.h"
 #include "SymAlg.h"
 
 #ifndef __RC4__
@@ -13,10 +12,10 @@ class RC4 : public SymAlg{
         int prga(uint8_t & i, uint8_t & j);
 
     public:
-        RC4(std::string KEY);
-        void setkey(std::string KEY);
-        std::string encrypt(std::string DATA);
-        std::string decrypt(std::string DATA);
+        RC4(const std::string & KEY);
+        void setkey(const std::string & KEY);
+        std::string encrypt(const std::string & DATA);
+        std::string decrypt(const std::string & DATA);
         unsigned int blocksize();
 };
 #endif

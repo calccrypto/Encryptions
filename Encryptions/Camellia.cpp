@@ -1,6 +1,6 @@
 #include "./Camellia.h"
 
-unsigned int Camellia::SBOX(uint8_t s, uint8_t value){
+unsigned int Camellia::SBOX(const uint8_t s, const uint8_t value){
     if (s == 1){
         return Camellia_SBox[value];
     }
@@ -15,27 +15,27 @@ unsigned int Camellia::SBOX(uint8_t s, uint8_t value){
     }
 }
 
-uint64_t Camellia::FL(uint64_t & FL_IN, uint64_t & KE){
+uint64_t Camellia::FL(const uint64_t & FL_IN, const uint64_t & KE){
     uint64_t x1 = FL_IN >> 32;
     uint64_t x2 = FL_IN & mod32;
-    uint64_t k1 = KE >> 32;
-    uint64_t k2 = KE & mod32;
+    const uint64_t k1 = KE >> 32;
+    const uint64_t k2 = KE & mod32;
     x2 ^= ROL(x1 & k1, 1, 32);
     x1 ^= (x2 | k2);
     return (x1 << 32) | x2;
 }
 
-uint64_t Camellia::FLINV(uint64_t & FLINV_IN, uint64_t & KE){
+uint64_t Camellia::FLINV(const uint64_t & FLINV_IN, const uint64_t & KE){
     uint64_t y1 = FLINV_IN >> 32;
     uint64_t y2 = FLINV_IN & mod32;
-    uint64_t k1 = KE >> 32;
-    uint64_t k2 = KE & mod32;
+    const uint64_t k1 = KE >> 32;
+    const uint64_t k2 = KE & mod32;
     y1 ^= (y2 | k2);
     y2 ^= ROL(y1 & k1, 1, 32);
     return (y1 << 32) | y2;
 }
 
-uint64_t Camellia::F(uint64_t & F_IN, const uint64_t & KE){
+uint64_t Camellia::F(const uint64_t & F_IN, const uint64_t & KE){
     uint64_t x = F_IN ^ KE;
     uint8_t t1 = x >> 56;
     uint8_t t2 = (x >> 48) & 255;
@@ -64,13 +64,20 @@ uint64_t Camellia::F(uint64_t & F_IN, const uint64_t & KE){
     return (y1 << 56) | (y2 << 48) | (y3 << 40) | (y4 << 32) | (y5 << 24) | (y6 << 16) | (y7 << 8) | y8;
 }
 
-std::string Camellia::run(std::string & data){
+std::string Camellia::run(const std::string & data){
     if (!keyset){
-        exit(1);
+        std::cerr << "Error: Key has not been set." << std::endl;
+        throw 1;
     }
+
+    if (data.size() != 16){
+        std::cerr << "Error: Data must be 128 bits in length." << std::endl;
+        throw 1;
+    }
+
     uint64_t D1 = toint(data.substr(0, 8), 256);
     uint64_t D2 = toint(data.substr(8, 8), 256);
-    if (size == 16){
+    if (keysize == 16){
         uint64_t kw1 = keys[0];
         uint64_t kw2 = keys[1];
         uint64_t k1 = keys[2];
@@ -201,36 +208,37 @@ Camellia::Camellia(){
     keyset = false;
 }
 
-Camellia::Camellia(std::string KEY){
+Camellia::Camellia(const std::string & KEY){
     keyset = false;
     setkey(KEY);
 }
 
-void Camellia::setkey(std::string KEY){
+void Camellia::setkey(const std::string & KEY){
     if (keyset){
-        error(2);
+        std::cerr << "Error: Key has already been set." << std::endl;
+        throw 1;
     }
-    while (!((KEY.size() == 16) | (KEY.size() == 24) | (KEY.size() == 32))){
-        KEY += zero;
+
+    keysize = KEY.size();
+    if ((keysize != 16) && (keysize != 24) && (keysize != 32)){
+        std::cerr << "Error: Key size does not fit defined sizes." << std::endl;
+        throw 1;
     }
-    KEY = KEY.substr(0, std::min((int) KEY.size(), 32));
-    size = KEY.size();
+
     integer KL, KR;
-    if (size == 16){
+    if (keysize == 16){
         KL = integer(KEY, 256);
         KR = 0;
     }
-    else if (size == 24){
+    else if (keysize == 24){
         KL = integer(KEY.substr(0, 16), 256);
         KR = integer(KEY.substr(16, 8), 256); KR = (KR << 64) + (KR ^ 0xffffffffffffffffULL);
     }
-    else if (size == 32){
+    else if (keysize == 32){
         KL = integer(KEY.substr(0, 16), 256);
         KR = integer(KEY.substr(16, 16), 256);
     }
-    else{
-        error(3);
-    }
+
     uint64_t D1 = (uint64_t) ((KL ^ KR) >> 64);
     uint64_t D2 = (uint64_t) (KL ^ KR);
     D2 ^= F(D1, Camellia_Sigma1);
@@ -246,7 +254,7 @@ void Camellia::setkey(std::string KEY){
     D1 ^= F(D2, Camellia_Sigma6);
     integer KB = (integer(D1) << 64) + D2;
     integer T;
-    if (size == 16){
+    if (keysize == 16){
         T = ROL(KL, 0, 128);
         keys.push_back((uint64_t) (T >> 64));               // kw1
         keys.push_back((uint64_t) T);                       // kw2
@@ -342,7 +350,7 @@ void Camellia::setkey(std::string KEY){
         keys.push_back((uint64_t) (T >> 64));               //kw3
     }
 //// More clear way of implementing
-//    if (size == 16){
+//    if (keysize == 16){
 //        uint64_t kw1 = (uint64_t) (ROL(KL, 0, 128) >> 64);
 //        uint64_t kw2 = (uint64_t) (ROL(KL, 0, 128));
 //        uint64_t k1 = (uint64_t) (ROL(KA, 0, 128) >> 64);
@@ -470,11 +478,11 @@ void Camellia::setkey(std::string KEY){
     keyset = true;
 }
 
-std::string Camellia::encrypt(std::string DATA){
+std::string Camellia::encrypt(const std::string & DATA){
     return run(DATA);
 }
 
-std::string Camellia::decrypt(std::string DATA){
+std::string Camellia::decrypt(const std::string & DATA){
     std::reverse(keys.begin(), keys.end());
     std::string out = run(DATA);
     std::reverse(keys.begin(), keys.end());

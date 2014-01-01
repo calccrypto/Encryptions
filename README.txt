@@ -49,9 +49,8 @@ Notes:
 
         Algorithms will expect eactly 1 block or b bits of data in
         8 bit ASCII, where b is the block size of the algorithm in
-        bits. If there are less than b bits, the algorithm might
-        crash If there are more, only the first b bits will be
-        operated on.
+        bits. If there are the wrong number of bits, the algorithm 
+        should crash.
 
         The keying algorithms will do the same, unless there are
         defined padding methods.
@@ -76,7 +75,7 @@ Build:
 
 	or some equivalent
 
-	You have to provide the main function/file since this is a library,
+        The main function has to be provided since this is a library,
 	not a fully functioning program.
 
 Usage:

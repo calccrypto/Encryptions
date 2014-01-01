@@ -1,10 +1,16 @@
-#include "./DES.h"
+#include "DES.h"
 
-std::string DES::run(std::string & DATA){
+std::string DES::run(const std::string & DATA){
     if (!keyset){
-        error(1);
+        std::cerr << "Error: Key has not been set." << std::endl;
+        throw 1;
     }
-//    DATA = DATA.substr(0, 8);
+
+    if (DATA.size() != 8){
+        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
+        throw 1;
+    }
+
     std::string data = "", temp = "";
     for(uint8_t x = 0; x < 8; x++){
         data += makebin((uint8_t) DATA[x], 8);
@@ -70,24 +76,30 @@ DES::DES(){
     keyset = false;
 }
 
-DES::DES(std::string KEY){
+DES::DES(const std::string & KEY){
     keyset = false;
     setkey(KEY);
 }
 
-void DES::setkey(std::string KEY){
-    if (keyset)
-        error(2);
-    KEY = KEY.substr(0, 8);
-    for(int x = 0; x < 8; x++){
-        KEY += makebin((uint8_t) KEY[x], 8);
+void DES::setkey(const std::string & KEY){
+    if (keyset){
+        std::cerr << "Error: Key has already been set." << std::endl;
+        throw 1;
     }
-    KEY = KEY.substr(8, 64);
+    if (KEY.size() != 8){
+        std::cerr << "Error: Key must be 64 bits long." << std::endl;
+        throw 1;
+    }
+
+    std::string key = "";
+    for(int x = 0; x < 8; x++){
+        key += makebin((uint8_t) KEY[x], 8);
+    }
 
     std::string left = "", right = "";
     for (uint8_t x = 0; x < 28; x++){
-        left += KEY[DES_PC1_l[x] - 1];
-        right += KEY[DES_PC1_r[x] - 1];
+        left += key[DES_PC1_l[x] - 1];
+        right += key[DES_PC1_r[x] - 1];
     }
 
     for(uint8_t x = 0; x < 16; x++){
@@ -102,11 +114,11 @@ void DES::setkey(std::string KEY){
     keyset = true;
 }
 
-std::string DES::encrypt(std::string DATA){
+std::string DES::encrypt(const std::string & DATA){
     return run(DATA);
 }
 
-std::string DES::decrypt(std::string DATA){
+std::string DES::decrypt(const std::string & DATA){
     std::reverse(keys, keys + 16);
     std::string out = run(DATA);
     std::reverse(keys, keys + 16);

@@ -1,24 +1,24 @@
 #include "./CAST256.h"
 
-uint32_t CAST256::F1(uint32_t Data, uint32_t Kmi, uint8_t Kri){
+uint32_t CAST256::F1(const uint32_t Data, const uint32_t Kmi, const uint8_t Kri){
     uint32_t temp = ROL((Kmi + Data) & mod32, Kri, 32);
     uint8_t Ia = temp >> 24, Ib = (temp >> 16) & 255, Ic = (temp >> 8) & 255, Id = temp & 255;
     return ((CAST_S1[Ia] ^ CAST_S2[Ib]) - CAST_S3[Ic] + CAST_S4[Id]) & mod32;
 }
 
-uint32_t CAST256::F2(uint32_t Data, uint32_t Kmi, uint8_t Kri){
+uint32_t CAST256::F2(const uint32_t Data, const uint32_t Kmi, const uint8_t Kri){
     uint32_t temp = ROL(Kmi ^ Data, Kri, 32);
     uint8_t Ia = temp >> 24, Ib = (temp >> 16) & 255, Ic = (temp >> 8) & 255, Id = temp & 255;
     return ((CAST_S1[Ia] - CAST_S2[Ib] + CAST_S3[Ic]) & mod32) ^ CAST_S4[Id];
 }
 
-uint32_t CAST256::F3(uint32_t Data, uint32_t Kmi, uint8_t Kri){
+uint32_t CAST256::F3(const uint32_t Data, const uint32_t Kmi, const uint8_t Kri){
     uint32_t temp = ROL((Kmi - Data) & mod32, Kri, 32);
     uint8_t Ia = temp >> 24, Ib = (temp >> 16) & 255, Ic = (temp >> 8) & 255, Id = temp & 255;
     return ((((CAST_S1[Ia] + CAST_S2[Ib]) & mod32) ^ CAST_S3[Ic]) - CAST_S4[Id]) & mod32;
 }
 
-void CAST256::W(uint8_t i){
+void CAST256::W(const uint8_t i){
     g ^= F1(h, Tm[0][i], Tr[0][i]);
     f ^= F2(g, Tm[1][i], Tr[1][i]);
     e ^= F3(f, Tm[2][i], Tr[2][i]);
@@ -47,24 +47,31 @@ std::vector <uint32_t> CAST256::km(){
     return out;
 }
 
-void CAST256::Q(uint8_t & i){
+void CAST256::Q(const uint8_t & i){
     C ^= F1(D, Km[i][0], Kr[i][0]);
     B ^= F2(C, Km[i][1], Kr[i][1]);
     A ^= F3(B, Km[i][2], Kr[i][2]);
     D ^= F1(A, Km[i][3], Kr[i][3]);
 }
 
-void CAST256::QBAR(uint8_t & i){
+void CAST256::QBAR(const uint8_t & i){
     D ^= F1(A, Km[i][3], Kr[i][3]);
     A ^= F3(B, Km[i][2], Kr[i][2]);
     B ^= F2(C, Km[i][1], Kr[i][1]);
     C ^= F1(D, Km[i][0], Kr[i][0]);
 }
 
-std::string CAST256::run(std::string & DATA){
+std::string CAST256::run(const std::string & DATA){
     if (!keyset){
-        error(1);
+        std::cerr << "Error: Key has not been set." << std::endl;
+        throw 1;
     }
+
+    if (DATA.size() != 16){
+        std::cerr << "Error: Data must be 128 bits in length." << std::endl;
+        throw 1;
+    }
+
     A = toint(DATA.substr(0, 4), 256);
     B = toint(DATA.substr(4, 4), 256);
     C = toint(DATA.substr(8, 4), 256);
@@ -78,23 +85,27 @@ std::string CAST256::run(std::string & DATA){
     return unhexlify(makehex(A, 8) + makehex(B, 8) + makehex(C, 8) + makehex(D, 8));
 }
 
-
 CAST256::CAST256(){
     keyset = false;
 }
 
-CAST256::CAST256(std::string KEY){
+CAST256::CAST256(const std::string & KEY){
     keyset = false;
     setkey(KEY);
 }
 
 void CAST256::setkey(std::string KEY){
     if (keyset){
-        error(2);
+        std::cerr << "Error: Key has already been set." << std::endl;
+        throw 1;
     }
 
-    KEY = KEY.substr(0, std::min((int) KEY.size(), 32));
-    KEY += std::string(32 - KEY.size(), '\x00');
+    if ((KEY.size() != 16) && (KEY.size() != 20) && (KEY.size() != 24) && (KEY.size() != 28) && (KEY.size() != 32)){
+        std::cerr << "Error: Key must be 128, 160, 192, 224, or 256 bits in length." << std::endl;
+        throw 1;
+    }
+
+    KEY += std::string(32 - KEY.size(), 0);
     a = toint(KEY.substr(0, 4), 256);
     b = toint(KEY.substr(4, 4), 256);
     c = toint(KEY.substr(8, 4), 256);
@@ -117,7 +128,7 @@ void CAST256::setkey(std::string KEY){
     for(uint8_t i = 0; i < 24; i++){
         for(uint8_t j = 0; j < 8; j++){
             Tm[j][i] = Cm;
-            Cm = (Cm + Mm) & mod32;;
+            Cm = (Cm + Mm) & mod32;
             Tr[j][i] = Cr;
             Cr = (Cr + Mr) & 31;
         }
@@ -132,11 +143,11 @@ void CAST256::setkey(std::string KEY){
     keyset = true;
 }
 
-std::string CAST256::encrypt(std::string DATA){
+std::string CAST256::encrypt(const std::string & DATA){
     return run(DATA);
 }
 
-std::string CAST256::decrypt(std::string DATA){
+std::string CAST256::decrypt(const std::string & DATA){
     std::reverse(Kr.begin(), Kr.end());
     std::reverse(Km.begin(), Km.end());
     std::string out = run(DATA);

@@ -1,8 +1,8 @@
 #include <vector>
 
 #include "../common/cryptomath.h"
+#include "../common/includes.h"
 #include "../common/integer.h"
-#include "error.h"
 #include "SymAlg.h"
 
 #ifndef __RC6__
@@ -18,10 +18,10 @@ class RC6 : public SymAlg{
 
     public:
         RC6();
-        RC6(std::string KEY, const unsigned int & W = 32, const unsigned int & R = 20);
+        RC6(const std::string & KEY, const unsigned int & W = 32, const unsigned int & R = 20);
         void setkey(std::string KEY, const unsigned int & W = 32, const unsigned int & R = 20);
-        std::string encrypt(std::string DATA);
-        std::string decrypt(std::string DATA);
+        std::string encrypt(const std::string & DATA);
+        std::string decrypt(const std::string & DATA);
         unsigned int blocksize();
 };
 #endif

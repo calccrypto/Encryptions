@@ -1,7 +1,8 @@
+#include <algorithm>
 #include <vector>
 
 #include "../common/cryptomath.h"
-#include "error.h"
+#include "../common/includes.h"
 #include "SymAlg.h"
 
 #ifndef __AES__
@@ -23,10 +24,10 @@ class AES : public SymAlg{
 
     public:
         AES();
-        AES(std::string KEY);
-        void setkey(std::string KEY);
-        std::string encrypt(std::string DATA);
-        std::string decrypt(std::string DATA);
+        AES(const std::string & KEY);
+        void setkey(const std::string & KEY);
+        std::string encrypt(const std::string & DATA);
+        std::string decrypt(const std::string & DATA);
         unsigned int blocksize();
 };
 #endif

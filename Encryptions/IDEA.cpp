@@ -1,4 +1,4 @@
-#include "./IDEA.h"
+#include "IDEA.h"
 
 // ////////////////////////
 // Thanks for the help, Darkerline !
@@ -19,34 +19,17 @@ uint16_t IDEA::mult(uint32_t value1, uint32_t value2){
 }
 // ///////////////////////
 
-// From Wikipedia
-int IDEA::invmod(uint32_t b){
-    //Gets the modular multiplicative inverse for mod 65537
-    int a = 65537;
-    int x = 0, lastx = 1, y = 1, lasty = 0;
-    while (b != 0){
-        int quotient = a / b;
-        int temp = b;
-        b = a % b;
-        a = temp;
-        temp = x;
-        x = lastx-quotient * x;
-        lastx = temp;
-        temp = y;
-        y = lasty-quotient * y;
-        lasty = temp;
-    }
-    while (lasty < 0){
-        lasty += 65537;
-    }
-    return lasty;
-}
-// ////////////////////////////////////////////
-
-std::string IDEA::run(std::string & DATA){
+std::string IDEA::run(const std::string & DATA){
     if (!keyset){
-        error(1);
+        std::cerr << "Error: Key has not been set" << std::endl;
+        throw 1;
     }
+
+    if (DATA.size() != 8){
+        std::cerr << "Error: Key must be 64 bits in length." << std::endl;
+        throw 1;
+    }
+
     uint16_t x1 = toint(DATA.substr(0, 2), 256);
     uint16_t x2 = toint(DATA.substr(2, 2), 256);
     uint16_t x3 = toint(DATA.substr(4, 2), 256);
@@ -79,35 +62,62 @@ IDEA::IDEA(){
     keyset = false;
 }
 
-IDEA::IDEA(std::string KEY){
+IDEA::IDEA(const std::string & KEY){
     keyset = false;
     setkey(KEY);
 }
 
-void IDEA::setkey(std::string KEY){
+void IDEA::setkey(const std::string & KEY){
     if (keyset){
-        error(2);
+        std::cerr << "Error: Key has already been set." << std::endl;
+        throw 1;
     }
-    KEY = hexlify(KEY);
+    if (KEY.size() != 16){
+        std::cerr << "Error: Data must be 128 bits in length." << std::endl;
+        throw 1;
+    }
+
+    std::string key = hexlify(KEY);
     std::vector <std::string> temp;
     for(uint8_t x = 0; x < 7; x++){
-        for(int y  = 0; y < 8; y++)
-            temp.push_back(KEY.substr(y << 2, 4));
-        for(uint8_t y = 0; y < 16; y++)
-            KEY += makebin(toint(KEY.substr(y << 1 , 2), 16), 8);
-        KEY = KEY.substr(32, 128);
-        KEY = KEY.substr(25, 103) + KEY.substr(0, 25);
-        for(uint8_t y = 0; y < 16; y++)
-            KEY += makehex(toint(KEY.substr(y << 3, 8), 2), 2);
-        KEY = KEY.substr(128, 32);
+
+        for(int y  = 0; y < 8; y++){
+            temp.push_back(key.substr(y << 2, 4));
+        }
+
+        for(uint8_t y = 0; y < 16; y++){
+            key += makebin(toint(key.substr(y << 1 , 2), 16), 8);
+        }
+
+        key = key.substr(32, 128);
+        key = key.substr(25, 103) + key.substr(0, 25);
+
+        for(uint8_t y = 0; y < 16; y++){
+            key += makehex(toint(key.substr(y << 3, 8), 2), 2);
+        }
+
+        key = key.substr(128, 32);
     }
+
     temp.erase(temp.begin() + 52, temp.end());
-    for(uint8_t x = 0; x < temp.size(); x++)
+
+    for(uint8_t x = 0; x < temp.size(); x++){
         k.push_back(toint(temp[x], 16));
+    }
     keyset = true;
 }
 
-std::string IDEA::encrypt(std::string DATA){
+std::string IDEA::encrypt(const std::string & DATA){
+    if (!keyset){
+        std::cerr << "Error: Key has not been set." << std::endl;
+        throw 1;
+    }
+
+    if (DATA.size() != 8){
+        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
+        throw 1;
+    }
+
     keys.clear();
     std::vector <uint16_t> t;
     for(uint8_t x = 0; x < 8; x++){
@@ -117,29 +127,41 @@ std::string IDEA::encrypt(std::string DATA){
         keys.push_back(t);
         t.clear();
     }
+
     for(uint8_t x = 48; x < 52; x++){
         t.push_back(k[x]);
     }
+
     keys.push_back(t);
     t.clear();
     return run(DATA);
 }
 
-std::string IDEA::decrypt(std::string DATA){
+std::string IDEA::decrypt(const std::string & DATA){
+    if (!keyset){
+        std::cerr << "Error: Key has not been set." << std::endl;
+        throw 1;
+    }
+
+    if (DATA.size() != 8){
+        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
+        throw 1;
+    }
+
     keys.clear();
     std::vector <uint16_t> t;
     for(uint8_t x = 0; x < 8; x++){
-        k.push_back(invmod(k[48 - 6 * x]));
+        k.push_back(invmod((int) 65537, (int) k[48 - 6 * x]));
         k.push_back(two_comp(k[50 - 6 * x]));
         k.push_back(two_comp(k[49 - 6 * x]));
-        k.push_back(invmod(k[51 - 6 * x]));
+        k.push_back(invmod((int) 65537, (int) k[51 - 6 * x]));
         k.push_back(k[46 - 6 * x]);
         k.push_back(k[47 - 6 * x]);
     }
-    k.push_back(invmod(k[0]));
+    k.push_back(invmod((int) 65537, (int) k[0]));
     k.push_back(two_comp(k[1]));
     k.push_back(two_comp(k[2]));
-    k.push_back(invmod(k[3]));
+    k.push_back(invmod((int) 65537, (int) k[3]));
     k.erase(k.begin(), k.begin() + 52);
 
     for(uint8_t x = 0; x < 8; x++){
@@ -149,6 +171,7 @@ std::string IDEA::decrypt(std::string DATA){
         keys.push_back(t);
         t.clear();
     }
+
     for(uint8_t x = 48; x < 52; x++){
         t.push_back(k[x]);
     }

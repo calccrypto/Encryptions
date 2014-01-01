@@ -1,13 +1,20 @@
-#include "./Blowfish.h"
+#include "Blowfish.h"
 
-uint32_t Blowfish::f(uint32_t & left){
-    uint32_t a = left >> 24, b = (left >> 16) & 255, c = (left >> 8) & 255, d = left & 255;
-    return ((((sbox[0][a] + sbox[1][b]) & mod32) ^ sbox[2][c]) + sbox[3][d]) & mod32;
+uint32_t Blowfish::f(const uint32_t & left){
+    return ((((sbox[0][ left >> 24] + sbox[1][(left >> 16) & 255]) & mod32) ^ sbox[2][(left >> 8) & 255]) + sbox[3][left & 255]) & mod32;
 }
 
-std::string Blowfish::run(std::string & data){
-    if (!keyset ^ settingkey)
-        error(1);
+std::string Blowfish::run(const std::string & data){
+    if (!keyset ^ settingkey){
+        std::cerr << "Error: Key has not been set" << std::endl;
+        throw 1;
+    }
+
+    if (data.size() != 8){
+        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
+        throw 1;
+    }
+
     uint32_t left = toint(data.substr(0, 4), 256), right = toint(data.substr(4, 4), 256);
     for(uint8_t i = 0; i < 16; i++){
         left ^= p[i];
@@ -25,33 +32,52 @@ Blowfish::Blowfish(){
     settingkey = true;
 }
 
-Blowfish::Blowfish(std::string KEY){
+Blowfish::Blowfish(const std::string & KEY){
     keyset = false;
     settingkey = true;
     setkey(KEY);
 }
 
-void Blowfish::setkey(std::string KEY){
-    if (keyset)
-        error(2);
-    for(uint8_t x = 0; x < 18; x++)
+void Blowfish::setkey(const std::string & KEY){
+    if (keyset){
+        std::cerr << "Error: Key has already been set." << std::endl;
+        throw 1;
+    }
+
+    if ((KEY.size() < 4) || (KEY.size() > 112)){
+        std::cerr << "Error: Key size does not fit defined sizes." << std::endl;
+        throw 1;
+    }
+
+    for(uint8_t x = 0; x < 18; x++){
         p[x] = Blowfish_P[x];
-    for(uint8_t x = 0; x < 4; x++)
-        for(uint16_t y = 0; y < 512; y++)
+    }
+
+    for(uint8_t x = 0; x < 4; x++){
+        for(uint16_t y = 0; y < 512; y++){
             sbox[x][y] = Blowfish_SBOX[x][y];
-    uint8_t s = (72 / KEY.size()) + 1;
-    for(uint8_t i = 0; i < s; i++)
-        KEY += KEY;
-    KEY = KEY.substr(0, 72);
-    for(uint8_t x = 0; x < 18; x++)
-        p[x] ^= (uint32_t) toint(KEY.substr(x << 2, 4), 256);
-    std::string ini("/0/0/0/0/0/0/0/0", 8);
+        }
+    }
+
+    std::string key = KEY;
+    uint8_t s = (72 / key.size()) + 1;
+    for(uint8_t i = 0; i < s; i++){
+        key += key;
+    }
+
+    key = key.substr(0, 72);
+    for(uint8_t x = 0; x < 18; x++){
+        p[x] ^= (uint32_t) toint(key.substr(x << 2, 4), 256);
+    }
+
+    std::string ini(8, 0);
     for(uint8_t x = 0; x < 9; x++){
         std::string NEW = run(ini);
         ini = NEW;
         p[x << 1] = toint(NEW.substr(0, 4), 256);
         p[(x << 1) + 1] = toint(NEW.substr(4, 4), 256);
     }
+
     for(uint8_t x = 0; x < 4; x++){
         for(uint8_t y = 0; y < 128; y++){
             std::string NEW = run(ini);
@@ -64,11 +90,11 @@ void Blowfish::setkey(std::string KEY){
     settingkey = false;
 }
 
-std::string Blowfish::encrypt(std::string DATA){
+std::string Blowfish::encrypt(const std::string & DATA){
     return run(DATA);
 }
 
-std::string Blowfish::decrypt(std::string DATA){
+std::string Blowfish::decrypt(const std::string & DATA){
     std::reverse(p, p + 18);
     std::string out = run(DATA);
     std::reverse(p, p + 18);

@@ -1,12 +1,12 @@
-#include "./includes.h"
+#include "includes.h"
 
 uint64_t toint(const std::string & s, const int & base){
     // Changees strings to uint64_t
     uint64_t value = 0;
     switch (base){
         case 2:
-            for(unsigned int x = 0; x < s.size(); x++){
-                value = (value << 1) + (s[x] == '\x31');
+            for(const unsigned char & c : s){
+                value = (value << 1) + ((uint8_t) c - '\x30');
             }
             break;
         case 8:
@@ -19,12 +19,13 @@ uint64_t toint(const std::string & s, const int & base){
             std::stringstream(s) >> std::hex >> value;    // Thanks to Oli Charlesworth @ stackoverflow
             break;
         case 256:
-            for(uint8_t x = 0; x < s.size(); x++)
-                value = (value << 8) + (uint8_t) s[x];
+            for(const unsigned char & c : s){
+                value = (value << 8) + (uint8_t) c;
+            }
             break;
         default:
-            std::cout << "InputError: toint() undefined for base" << std::dec << base << std::endl;
-            exit(1);
+            std::cerr << "InputError: toint() undefined for base: " << std::dec << base << std::endl;
+            throw 1;
             break;
     };
     return value;
@@ -40,46 +41,66 @@ std::string little_end(const std::string & str, const unsigned int & base){
 	return t;
 }
 
-std::string bintohex(const std::string & in){
+std::string bintohex(const std::string & in, bool caps){
     // Changes a binary string to its hexadecimal equivalent
     if (in.size() % 4){
-        std::cout << "Error: input string length not a multiple of 4" << std::endl;
-        exit(1);
+        std::cerr << "Error: input string length not a multiple of 4." << std::endl;
+        throw 1;
     }
     std::string out = "";
     for(unsigned int x = 0; x < (in.size() >> 2); x++){
-        out += makehex(toint(in.substr(x << 2, 4), 2), 1);
+        out += makehex(toint(in.substr(x << 2, 4), 2), 1, caps);
     }
     return out;
 }
 
-std::string hexlify(const std::string & in){
+std::string hexlify(const std::string & in, bool caps){
     // Changes an ASCII string to an ASCII string containing the
     // hexadecimal representation of the orignal chars
     std::string out = "";
     for(unsigned int x = 0; x < in.size(); x++){
-        out += makehex((unsigned char) in[x], 2);
+        out += makehex((unsigned char) in[x], 2, caps);
     }
     return out;
 }
 
-std::string hexlify(const char in){
-    return makehex((uint8_t) in, 2);
+std::string hexlify(const char in, bool caps){
+    return makehex((uint8_t) in, 2, caps);
 }
 
 std::string unhexlify(const std::string & in){
 	// Reverse hexlify
 	if (in.size() & 1){
-		std::cout << "Error: input string of odd length" << std::endl;
-        exit(1);
+		std::cerr << "Error: input string of odd length." << std::endl;
+        throw 1;
     }
-    std::string out = "";
+    std::string out(in.size() >> 1, 0);
 	for(unsigned int x = 0; x < in.size(); x += 2){
-		if (in.substr(x, 2) == "00"){
-			out += zero;
+        if (('0' <= in[x]) && (in[x] <= '9')){
+            out[x >> 1] = (uint8_t) ((in[x] - '0') << 4);
         }
-		else{
-			out += (unsigned char) ((h.find(tolower(in[x])) << 4) + h.find(tolower(in[x + 1])));
+        else if(('a' <= in[x]) && (in[x] <= 'f')){
+            out[x >> 1] = (uint8_t) ((in[x] - 'a' + 10) << 4);
+        }
+        else if(('A' <= in[x]) && (in[x] <= 'F')){
+            out[x >> 1] = (uint8_t) ((in[x] - 'A' + 10) << 4);
+        }
+        else{
+            std::cerr << "Error: Invalid character found: " << (char) in[x] << std::endl;
+            throw 1;
+        }
+        if (('0' <= in[x + 1]) && (in[x + 1] <= '9')){
+            out[x >> 1] |= (uint8_t) (in[x + 1] - '0');
+        }
+        else if(('a' <= in[x + 1]) && (in[x + 1] <= 'f')){
+            out[x >> 1] |= (uint8_t) (in[x + 1] - 'a' + 10);
+        }
+        else if(('A' <= in[x + 1]) && (in[x + 1] <= 'F')){
+            out[x >> 1] |= (uint8_t) (in[x + 1] - 'A' + 10);
+        }
+        else{
+            std::cerr << "Error: Invalid character found: " << (char) in[x + 1] << std::endl;
+            throw 1;
         }
     }
 	return out;
@@ -102,7 +123,7 @@ std::string remove_padding(std::string data){
 }
 
 std::string zfill(std::string str, const unsigned int & n, const std::string & fill){
-    // adds (default "0") bytes to the front of the string so it doesnt change the value if the string is meant to be changed to an int
+    // adds (default "0") octets to the front of the string so it doesnt change the value if the string is meant to be changed to an int
 	while (str.size() < n){
 		str = fill + str;
     }

@@ -266,7 +266,7 @@ class integer{
         integer long_sub(integer & lhs, integer & rhs);
 
 //        // Two's Complement Subtraction
-//        integer two_comp_sub(const integer & lhs, integer & rhs);
+//        integer two_comp_sub(integer & lhs, integer & rhs);
 
         integer sub(integer & lhs, integer & rhs);
 
@@ -274,31 +274,39 @@ class integer{
         template <typename Z> integer operator-(const Z & rhs){return *this - integer(rhs);}
         integer operator-(integer rhs);
         template <typename Z> integer operator-=(const Z & rhs){*this = *this - rhs; return *this;}
-       integer operator-=(const integer & rhs);
+        integer operator-=(const integer & rhs);
 
     private:
-       // Peasant Multiplication
-       integer peasant(integer lhs, integer rhs);
-       // Recurseive Peasant Algorithm
-       integer recursive_peasant(integer lhs, integer rhs);
-       // Recursive Multiplication
-       integer recursive_mult(integer lhs, integer rhs);
-       // Karatsuba Algorithm O(n^log2(3) = n ^ 1.585)
-       // Thanks to kjo @ stackoverflow for fixing up my original Karatsuba Algorithm implementation
-       // which i then converted to C++ and made a few changes
-       // http://stackoverflow.com/questions/7058838/karatsuba-algorithm-too-much-recursion
-       integer karatsuba(integer lhs, integer rhs, integer bm = 0x1000000U);
+//       // Peasant Multiplication
+//       integer peasant(integer lhs, integer rhs);
+//
+//       // Recurseive Peasant Algorithm
+//       integer recursive_peasant(integer lhs, integer rhs);
+//
+//       // Recursive Multiplication
+//       integer recursive_mult(integer lhs, integer rhs);
+//
+//       // Karatsuba Algorithm O(n^log2(3) = n ^ 1.585)
+//       // The peasant function is needed if karatsuba is used.
+//       // Thanks to kjo @ stackoverflow for fixing up my original Karatsuba Algorithm implementation
+//       // which I then converted to C++ and made a few changes.
+//       // http://stackoverflow.com/questions/7058838/karatsuba-algorithm-too-much-recursion
+//       integer karatsuba(integer lhs, integer rhs, integer bm = 0x1000000U);
+//
+//       // Toom–Cook multiplication
+//       // as described at http://en.wikipedia.org/wiki/Toom%E2%80%93Cook_multiplications
+//       // The peasant function is needed if karatsuba is used.
+//       // This implementation is a bit weird. In the pointwise Multiplcation step, using
+//       // operator* and long_mult works, but everything else fails.
+//       // It's also kind of slow.
+//       integer toom_cook_3(integer m, integer n, integer bm = 0x1000000U);
+//
+//       // Long multiplication
+//       integer long_mult(integer lhs, integer rhs);
 
-       // Toom–Cook multiplication
-       // as described at http://en.wikipedia.org/wiki/Toom%E2%80%93Cook_multiplications
-       // This implementation is a bit weird. In the pointwise Multiplcation step, using
-       // operator* and long_mult works, but everything else fails.
-       // It's also kind of slow.
-       integer toom_cook_3(integer m, integer n, integer bm = 0x1000000U);
-       // Long multiplication
-       integer long_mult(integer lhs, integer rhs);
        //Private FFT helper function
        int fft(std::deque<double>& data, bool dir = true);
+
        // FFT-based multiplication
        //Based on the convolution theorem which states that the Fourier
        //transform of a convolution is the pointwise product of their
@@ -314,6 +322,7 @@ class integer{
     private:
 //        // Long Division returning both quotient and remainder
 //        std::pair <integer, integer> long_div(const integer & lhs, const integer & rhs);
+
 //        // Recursive Division that returns both the quotient and remainder
 //        // Recursion took up way too much memory
 //        std::pair <integer, integer> recursive_divmod(integer lhs, const integer & rhs);
@@ -351,19 +360,25 @@ class integer{
 
         // get private values
         bool sign() const;
+
         // get number of bits
         unsigned int bits() const;
+
         // get numboer of bytes
         unsigned int bytes() const;
+
         // get number of digits
         unsigned int digits() const;
+
         // get internal data
         base data() const;
 
         // Miscellaneous Functions
         integer twos_complement(unsigned int b = 0);
+
         // returns positive value of *this
         integer abs() const;
+
         // returns floor(log_b(*this))
         template <typename Z>
         integer log(Z b){
@@ -399,6 +414,7 @@ class integer{
 
         // fills an integer with 1s
         void fill(const uint64_t & b);
+
         // get bit, where 0 is the lsb and bits() - 1 is the msb
         bool operator[](const unsigned int & b);
 
@@ -508,6 +524,7 @@ template <typename Z> Z & operator%=(Z & lhs, integer rhs){
 // IO Operators
 std::ostream & operator<<(std::ostream & stream, integer rhs);
 std::istream & operator>>(std::istream & stream, integer & rhs);
+
 // Special functions
 std::string makebin(integer value, unsigned int size = 1);
 std::string makehex(integer value, unsigned int size = 1);

@@ -1,4 +1,4 @@
-#include "./AES.h"
+#include "AES.h"
 
 void AES::shiftrow(std::vector <uint32_t> & data){
     std::vector <uint32_t> temp;
@@ -126,44 +126,50 @@ AES::AES(){
     keyset = false;
 }
 
-AES::AES(std::string KEY){
+AES::AES(const std::string & KEY){
     keyset = false;
     setkey(KEY);
 }
 
-void AES::setkey(std::string KEY){
+void AES::setkey(const std::string & KEY){
     if (keyset){
-        error(2);
+        std::cerr << "Error: Key has already been set." << std::endl;
+        throw 1;
     }
 
-    if (KEY.size() > 32){
-        KEY = KEY.substr(0, 32);
-    }
-    while ((KEY.size() != 16) & (KEY.size() != 24) & (KEY.size() != 32)){// not part of standard
-        KEY += zero;
-    }
     uint8_t n = KEY.size();
+    if ((n != 16) && (n != 24) && (n != 32)){
+        std::cerr << "Error: Key size does not fit defined sizes." << std::endl;
+        throw 1;
+    }
+
     rounds = n / 4 + 6;
     columns = rounds - 6;
     b = (rounds + 1) << 4;
     n >>= 2;
+
     std::vector <uint32_t> key;
     for(uint8_t x = 0; x < columns; x++){
         key.push_back((uint32_t) toint(KEY.substr(x << 2, 4), 256));
     }
+
     uint8_t i = 1;
     while ((key.size() << 2) < b){
         uint32_t t = ROL(key[key.size() - 1], 8, 32);
         uint32_t s = 0;
+
         for(uint8_t j = 0; j < 4; j++){
             s += AES_Subbytes[(uint8_t) (t >> (j << 3))] << (j << 3);
         }
+
         t = s ^ key[key.size() - n];
         t ^= ((1 << (i++ - 1)) % 229) << 24;
         key.push_back(t);
+
         for(uint8_t j = 0; j < 3; j++){
             key.push_back(key[key.size() - 1]^ key[key.size() - n]);
         }
+
         if (n == 8){
             s = 0;
             for(uint8_t j = 0; j < 4; j++){
@@ -171,10 +177,12 @@ void AES::setkey(std::string KEY){
             }
             key.push_back(s ^ key[key.size() - n]);
         }
+
         for(uint8_t j = 0; j < 0 * (n == 4) + 2 * (n == 6) + 3 * (n == 8); j++){
             key.push_back(key[key.size() - 1] ^ key[key.size() - n]);
         }
     }
+
     for(uint8_t j = 0; j < (b >> 4); j++){
         std::vector <uint32_t> temp;
         for(uint8_t k = 0; k < 4; k++){
@@ -185,9 +193,17 @@ void AES::setkey(std::string KEY){
     keyset = true;
 }
 
-std::string AES::encrypt(std::string DATA){
-    if (!keyset)
-        error(1);
+std::string AES::encrypt(const std::string & DATA){
+    if (!keyset){
+        std::cerr << "Error: Key has not been set." << std::endl;
+        throw 1;
+    }
+
+    if (DATA.size() != 16){
+        std::cerr << "Error: Key must be 128 bits long." << std::endl;
+        throw 1;
+    }
+
     std::vector <uint32_t> data;
     for(uint8_t x = 0; x < 4; x++){
         std::string d = "";
@@ -196,9 +212,11 @@ std::string AES::encrypt(std::string DATA){
         }
         data.push_back((uint32_t) toint(d, 256));
     }
+
     for(uint8_t x = 0; x < 4; x++){
         data[x] ^= keys[0][x];
     }
+
     for(uint8_t r = 1; r < rounds; r++){
         for(uint8_t x = 0; x < 4; x++){
             data[x] = (AES_Subbytes[data[x] >> 24] << 24) + (AES_Subbytes[(data[x] >> 16) & 255] << 16) + (AES_Subbytes[(data[x] >> 8) & 255] << 8) + AES_Subbytes[data[x] & 255];
@@ -209,20 +227,30 @@ std::string AES::encrypt(std::string DATA){
             data[x] ^= keys[r][x];
         }
     }
+
     for(uint8_t x = 0; x < 4; x++){
         data[x] = (AES_Subbytes[data[x] >> 24] << 24) + (AES_Subbytes[(data[x] >> 16) & 255] << 16) + (AES_Subbytes[(data[x] >> 8) & 255] << 8) + AES_Subbytes[data[x] & 255];
     }
+
     shiftrow(data);
+
     for(uint8_t x = 0; x < 4; x++){
         data[x] ^= keys[rounds][x];
     }
     return OUT(data);
 }
 
-std::string AES::decrypt(std::string DATA){
+std::string AES::decrypt(const std::string & DATA){
     if (!keyset){
-        error(1);
+        std::cerr << "Error: Key has not been set." << std::endl;
+        throw 1;
     }
+
+    if (DATA.size() != 16){
+        std::cerr << "Error: Key must be 128 bits long." << std::endl;
+        throw 1;
+    }
+
     std::reverse(keys.begin(), keys.end());
     std::vector <uint32_t> data;
     for(uint8_t x = 0; x < 4; x++){
@@ -232,9 +260,11 @@ std::string AES::decrypt(std::string DATA){
         }
         data.push_back((uint32_t) toint(d, 256));
     }
+
     for(uint8_t x = 0; x < 4; x++){
         data[x] ^= keys[0][x];
     }
+
     for(uint8_t r = 1; r < rounds; r++){
         invshiftrow(data);
         for(uint8_t x = 0; x < 4; x++){
@@ -245,13 +275,17 @@ std::string AES::decrypt(std::string DATA){
         }
         invmixcolumns(data);
     }
+
     invshiftrow(data);
+
     for(uint8_t x = 0; x < 4; x++){
         data[x] = (AES_Inv_Subbytes[data[x] >> 24] << 24) + (AES_Inv_Subbytes[(data[x] >> 16) & 255] << 16) + (AES_Inv_Subbytes[(data[x] >> 8) & 255] << 8) + AES_Inv_Subbytes[data[x] & 255];
     }
+
     for(uint8_t x = 0; x < 4; x++){
         data[x] ^= keys[rounds][x];
     }
+
     std::reverse(keys.begin(), keys.end());
     return OUT(data);
 }
@@ -395,12 +429,11 @@ std::string AES::OUT(std::vector <std::vector <uint8_t> > & data){
     return out;
 }
 
-
 AES::AES(){
     keyset = false;
 }
 
-AES::AES(std::string KEY){
+AES::AES(const std::string & KEY){
     keyset = false;
     setkey(KEY);
 }
@@ -476,7 +509,7 @@ void setkey(std::string KEY){
     keyset = true;
 }
 
-std::string AES::encrypt(std::string DATA){
+std::string AES::encrypt(const std::string & DATA){
     if (!keyset)
         error(1);
     std::vector <std::vector <uint8_t> > data;
@@ -518,7 +551,7 @@ std::string AES::encrypt(std::string DATA){
     return OUT(data);
 }
 
-std::string AES::decrypt(std::string DATA){
+std::string AES::decrypt(const std::string & DATA){
     if (!keyset){
         error(1);
     }

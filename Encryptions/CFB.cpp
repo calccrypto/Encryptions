@@ -1,32 +1,34 @@
 #include "./CFB.h"
-CFB::CFB(SymAlg * instance, std::string iv)
+CFB::CFB(SymAlg * instance, const std::string & iv)
   : algo(instance) {
     blocksize = algo -> blocksize() >> 3;
     const_IV = iv;
     if (const_IV == ""){
-        const_IV = std::string(blocksize, '\x00');
+        const_IV = std::string(blocksize, 0);
     }
 }
 
-std::string CFB::encrypt(std::string data){
-    data = pkcs5(data, blocksize);
+std::string CFB::encrypt(const std::string & data){
+    std::string temp = pkcs5(data, blocksize);
     std::string out = "";
     std::string IV = const_IV;
-    while (data.size()){
-        IV = unhexlify(makehex(integer(hexlify(algo ->encrypt(IV)), 16) ^ integer(hexlify(data.substr(0, blocksize)), 16), blocksize << 1));
+    uint32_t x = 0;
+    while (x < temp.size()){
+        IV = unhexlify(makehex(integer(hexlify(algo -> encrypt(IV)), 16) ^ integer(hexlify(temp.substr(x, blocksize)), 16), blocksize << 1));
         out += IV;
-        data = data.substr(blocksize, data.size() - blocksize);
+        x += blocksize;
     }
     return out;
 }
 
-std::string CFB::decrypt(std::string data){
+std::string CFB::decrypt(const std::string & data){
     std::string out = "";
     std::string IV = const_IV;
+    uint32_t x = 0;
     while (data.size()){
-        out += unhexlify(makehex(integer(hexlify(algo ->encrypt(IV)), 16) ^ integer(hexlify(data.substr(0, blocksize)), 16), blocksize << 1));
-        IV = data.substr(0, blocksize);
-        data = data.substr(blocksize, data.size() - blocksize);
+        out += unhexlify(makehex(integer(hexlify(algo -> encrypt(IV)), 16) ^ integer(hexlify(data.substr(x, blocksize)), 16), blocksize << 1));
+        IV = data.substr(x, blocksize);
+        x += blocksize;
     }
     return remove_padding(out);
 }

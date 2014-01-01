@@ -1,6 +1,6 @@
 #include "./SAFERK64.h"
 
-void SAFERK64::add_bias(std::vector <uint8_t> & key_i, uint8_t b[8]){
+void SAFERK64::add_bias(std::vector <uint8_t> & key_i, const uint8_t b[8]){
     for(uint8_t i = 0; i < 8; i++){
         key_i[i] += b[i];
     }
@@ -123,14 +123,22 @@ SAFERK64::SAFERK64(){
     keyset = false;
 }
 
-SAFERK64::SAFERK64(std::string KEY, const uint8_t & rounds){
+SAFERK64::SAFERK64(const std::string & KEY, const uint8_t & rounds){
     keyset = false;
     setkey(KEY, rounds);
 }
 
-void SAFERK64::setkey(std::string KEY, const uint8_t & rounds){
-    if (keyset)
-        error(2);
+void SAFERK64::setkey(const std::string & KEY, const uint8_t & rounds){
+    if (keyset){
+        std::cerr << "Error: Key has already been set." << std::endl;
+        throw 1;
+    }
+
+    if (KEY.size() != 8){
+        std::cerr << "Error: Key must be 64 bits in length." << std::endl;
+        throw 1;
+    }
+
     r = rounds;
     std::vector <uint8_t> k;
     for(uint8_t i = 0; i < 8; i++){
@@ -144,9 +152,17 @@ void SAFERK64::setkey(std::string KEY, const uint8_t & rounds){
     keyset = true;
 }
 
-std::string SAFERK64::encrypt(std::string DATA){
-    if (!keyset)
-        error(1);
+std::string SAFERK64::encrypt(const std::string & DATA){
+    if (!keyset){
+        std::cerr << "Error: Key has not been set." << std::endl;
+        throw 1;
+    }
+
+    if (DATA.size() != 8){
+        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
+        throw 1;
+    }
+
     std::vector <uint8_t> data;
     for(uint8_t i = 0; i < 8; i++){
         data.push_back(DATA[i]);
@@ -165,10 +181,17 @@ std::string SAFERK64::encrypt(std::string DATA){
     return out;
 }
 
-std::string SAFERK64::decrypt(std::string DATA){
+std::string SAFERK64::decrypt(const std::string & DATA){
     if (!keyset){
-        error(1);
+        std::cerr << "Error: Key has not been set." << std::endl;
+        throw 1;
     }
+
+    if (DATA.size() != 8){
+        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
+        throw 1;
+    }
+
     std::vector <uint8_t> data;
     for(uint8_t i = 0; i < 8; i++){
         data.push_back(DATA[i]);

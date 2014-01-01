@@ -1,7 +1,9 @@
+#include <algorithm>
+#include <cmath>
 #include <vector>
 
 #include "../common/cryptomath.h"
-#include "error.h"
+#include "../common/includes.h"
 #include "SymAlg.h"
 
 #ifndef __RC5__
@@ -17,10 +19,10 @@ class RC5 : public SymAlg{
 
     public:
         RC5();
-        RC5(std::string KEY, const uint64_t & W = 32, const uint64_t & R = 12, const uint64_t & B = 16);
+        RC5(const std::string & KEY, const uint64_t & W = 32, const uint64_t & R = 12, const uint64_t & B = 16);
         void setkey(std::string KEY, const uint64_t & W = 32, const uint64_t & R = 12, const uint64_t & B = 16);
-        std::string encrypt(std::string DATA);
-        std::string decrypt(std::string DATA);
+        std::string encrypt(const std::string & DATA);
+        std::string decrypt(const std::string & DATA);
         unsigned int blocksize();
 };
 #endif

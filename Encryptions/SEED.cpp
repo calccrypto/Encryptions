@@ -14,16 +14,24 @@ uint32_t SEED::G(uint32_t X){
     return (Z3 << 24) + (Z2 << 16) + (Z1 << 8) + Z0;
 }
 
-uint64_t SEED::F(uint64_t & right, std::pair <uint32_t, uint32_t> & K){
+uint64_t SEED::F(const uint64_t & right, const std::pair <uint32_t, uint32_t> & K){
     uint64_t R0 = right >> 32;
     uint64_t R1 = right & mod32;
     uint64_t r = G(G(G((R0 ^ K.first) ^ (R1 ^ K.second)) + (R0 ^ K.first)) + G((R0 ^ K.first) ^ (R1 ^ K.second))) & mod32;
     return ((r + (G(G((R0 ^ K.first) ^ (R1 ^ K.second)) + (R0 ^ K.first)))) << 32) + r;
 }
 
-std::string SEED::run(std::string & DATA){
-    if (!keyset)
-        error(1);
+std::string SEED::run(const std::string & DATA){
+    if (!keyset){
+        std::cerr << "Error: Key has not been set." << std::endl;
+        throw 1;
+    }
+
+    if (DATA.size() != 16){
+        std::cerr << "Error: Data must be 128 bits in length." << std::endl;
+        throw 1;
+    }
+
     uint64_t L = toint(DATA.substr(0, 8), 256), R = toint(DATA.substr(8, 8), 256);
     for(uint8_t i = 0; i < 16; i++){
         uint64_t temp = L;
@@ -37,17 +45,23 @@ SEED::SEED(){
     keyset = false;
 }
 
-SEED::SEED(std::string KEY){
+SEED::SEED(const std::string & KEY){
     keyset = false;
     setkey(KEY);
 }
 
-void SEED::setkey(std::string KEY){
+void SEED::setkey(const std::string & KEY){
     if (keyset){
-        error(2);
+        std::cerr << "Error: Key has already been set." << std::endl;
+        throw 1;
     }
-    KEY = hexlify(KEY.substr(0, std::min((int) KEY.size(), 16)));
-    integer key(KEY, 16);
+
+    if (KEY.size() != 16){
+        std::cerr << "Error: Key must be 128 bits in length." << std::endl;
+        throw 1;
+    }
+
+    integer key(KEY, 256);
     uint64_t K0 = (uint32_t) (key >> 96);
     uint64_t K1 = (uint32_t) (key >> 64);
     uint64_t K2 = (uint32_t) (key >> 32);
@@ -68,11 +82,11 @@ void SEED::setkey(std::string KEY){
     keyset = true;
 }
 
-std::string SEED::encrypt(std::string DATA){
+std::string SEED::encrypt(const std::string & DATA){
     return run(DATA);
 }
 
-std::string SEED::decrypt(std::string DATA){
+std::string SEED::decrypt(const std::string & DATA){
     std::reverse(k, k + 16);
     std::string out = run(DATA);
     std::reverse(k, k + 16);

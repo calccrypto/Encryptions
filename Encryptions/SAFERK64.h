@@ -1,7 +1,6 @@
 #include <vector>
 
 #include "../common/cryptomath.h"
-#include "error.h"
 #include "SymAlg.h"
 
 #ifndef __SAFERK64__
@@ -13,7 +12,7 @@ class SAFERK64 : public SymAlg{
     private:
         uint8_t r;          // 6 <= r <= 10
         std::vector <std::vector <uint8_t> > keys;
-        void add_bias(std::vector <uint8_t> & key_i, uint8_t b[8]);
+        void add_bias(std::vector <uint8_t> & key_i, const uint8_t b[8]);
         std::vector <uint8_t> byte_rotate_3(std::vector <uint8_t> & key_i);
         void xor_add(std::vector <uint8_t> & data, std::vector <uint8_t> & key);
         void add_xor(std::vector <uint8_t> & data, std::vector <uint8_t> & key);
@@ -28,10 +27,10 @@ class SAFERK64 : public SymAlg{
 
     public:
         SAFERK64();
-        SAFERK64(std::string KEY, const uint8_t & rounds = 10);
-        void setkey(std::string KEY, const uint8_t & rounds = 10);
-        std::string encrypt(std::string DATA);
-        std::string decrypt(std::string DATA);
+        SAFERK64(const std::string & KEY, const uint8_t & rounds = 10);
+        void setkey(const std::string & KEY, const uint8_t & rounds = 10);
+        std::string encrypt(const std::string & DATA);
+        std::string decrypt(const std::string & DATA);
         unsigned int blocksize();
 };
 #endif

@@ -4,14 +4,17 @@ RC6::RC6(){
     keyset = false;
 }
 
-RC6::RC6(std::string KEY, const unsigned int & W, const unsigned int & R){
+RC6::RC6(const std::string & KEY, const unsigned int & W, const unsigned int & R){
     keyset = false;
     setkey(KEY, W, R);
 }
 
 void RC6::setkey(std::string KEY, const unsigned int & W, const unsigned int & R){
-    if (keyset)
-        error(2);
+    if (keyset){
+        std::cerr << "Error: Key has already been set." << std::endl;
+        throw 1;
+    }
+
     w = W;
     r = R;
     b = KEY.size();
@@ -45,10 +48,12 @@ void RC6::setkey(std::string KEY, const unsigned int & W, const unsigned int & R
     keyset = true;
 }
 
-std::string RC6::encrypt(std::string DATA){
+std::string RC6::encrypt(const std::string & DATA){
     if (!keyset){
-        error(1);
+        std::cerr << "Error: Key has not been set." << std::endl;
+        throw 1;
     }
+
     uint32_t A = toint(little_end(DATA.substr(0, w >> 3), 256), 256), B = toint(little_end(DATA.substr(w >> 3, w >> 3), 256), 256), C = toint(little_end(DATA.substr(w >> 2, w >> 3), 256), 256), D = toint(little_end(DATA.substr(3 * (w >> 3), w >> 3), 256), 256);
     B += S[0];
     D += S[1];
@@ -64,10 +69,12 @@ std::string RC6::encrypt(std::string DATA){
     return unhexlify(little_end(makehex(A & mod, w >> 2)) + little_end(makehex(B & mod, w >> 2)) + little_end(makehex(C & mod, w >> 2)) + little_end(makehex(D & mod, w >> 2)));
 }
 
-std::string RC6::decrypt(std::string DATA){
+std::string RC6::decrypt(const std::string & DATA){
     if (!keyset){
-        error(1);
+        std::cerr << "Error: Key has not been set." << std::endl;
+        throw 1;
     }
+
     uint32_t A = toint(little_end(DATA.substr(0, w >> 3), 256), 256), B = toint(little_end(DATA.substr(w >> 3, w >> 3), 256), 256), C = toint(little_end(DATA.substr(w >> 2, w >> 3), 256), 256), D = toint(little_end(DATA.substr(3 * (w >> 3), w >> 3), 256), 256);
     C -= S[(r << 1) + 3];
     A -= S[(r << 1) + 2];

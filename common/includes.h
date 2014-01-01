@@ -2,7 +2,6 @@
 A bunch of useful constants and functions.
 Some functions were heavily influenced by python 2.7.2
 */
-#include <algorithm>
 #include <cstdint>
 #include <iostream>
 #include <sstream>
@@ -14,7 +13,8 @@ Some functions were heavily influenced by python 2.7.2
 const std::string zero("\x00", 1);
 const std::string b = "01";
 const std::string d = b + "23456789";
-const std::string h = d + "abcdef";
+const std::string h_lower = d + "abcdef";
+const std::string h_upper = d + "ABCDEF";
 const uint8_t mod8 = 0xffU;
 const uint16_t mod16 = 0xffffU;
 const uint32_t mod32 = 0xffffffffUL;
@@ -22,6 +22,7 @@ const uint64_t mod64 = 0xffffffffffffffffULL;
 
 uint64_t toint(const std::string & s, const int & base = 10);
 std::string little_end(const std::string & str, const unsigned int & base = 16);
+
 template <typename T> std::string makebin(T value, unsigned int size = 8 * sizeof(T)){
     // Changes a value into its binary string
     std::string out(size, '0');
@@ -42,7 +43,7 @@ template <typename T> std::string makebin(T value, unsigned int size = 8 * sizeo
 
 // Thanks to Ben Voigt @ stackoverflow for the makehex function
 // which I then adapted to makebin
-template <typename T> std::string makehex(T value, unsigned int size = 2 * sizeof(T)){
+template <typename T> std::string makehex(T value, unsigned int size = 2 * sizeof(T), bool caps = false){
     // Changes a value to its hexadecimal string
     if (!size){
         std::stringstream out;
@@ -51,15 +52,20 @@ template <typename T> std::string makehex(T value, unsigned int size = 2 * sizeo
     }
     std::string out(size, '0');
     while (value && size){
-        out[--size] = h[value & 15];
+        if (!caps){
+            out[--size] = h_lower[value & 15];
+        }
+        else{
+            out[--size] = h_upper[value & 15];
+        }
         value >>= 4;
     }
     return out;
 }
 
-std::string bintohex(const std::string & in);
-std::string hexlify(const std::string & in);
-std::string hexlify(const char in);
+std::string bintohex(const std::string & in, bool caps = false);
+std::string hexlify(const std::string & in, bool caps = false);
+std::string hexlify(const char in, bool caps = false);
 std::string unhexlify(const std::string & in);
 std::string pkcs5(const std::string & data, const unsigned int & blocksize);
 std::string remove_padding(std::string data);

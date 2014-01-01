@@ -13,8 +13,8 @@ class OFB{
         uint8_t blocksize;
 
     public:
-        OFB(SymAlg * instance, std::string iv = "");
-        std::string encrypt(std::string data);
-        std::string decrypt(std::string data);
+        OFB(SymAlg * instance, const std::string & iv = "");
+        std::string encrypt(const std::string & data);
+        std::string decrypt(const std::string & data);
 };
 #endif

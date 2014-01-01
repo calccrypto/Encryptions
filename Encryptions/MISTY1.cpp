@@ -1,6 +1,6 @@
 #include "./MISTY1.h"
 
-uint16_t MISTY1::FI(uint16_t FI_IN, uint16_t FI_KEY){
+uint16_t MISTY1::FI(const uint16_t FI_IN, const uint16_t FI_KEY){
     uint16_t d9 = FI_IN >> 7;
     uint16_t d7 = FI_IN & 0x7f;
     d9 = MISTY1_S9[d9] ^ d7;
@@ -12,7 +12,7 @@ uint16_t MISTY1::FI(uint16_t FI_IN, uint16_t FI_KEY){
     return ((uint16_t) (d7 & 0xffffU) << 9) | d9;
 }
 
-uint32_t MISTY1::FO(uint32_t FO_IN, uint16_t k){
+uint32_t MISTY1::FO(const uint32_t FO_IN, const uint16_t k){
     uint16_t t0 = FO_IN >> 16;
     uint16_t t1 = FO_IN & 0xffff;
     t0 ^= EK[k];
@@ -28,7 +28,7 @@ uint32_t MISTY1::FO(uint32_t FO_IN, uint16_t k){
     return (t1 << 16) | t0;
 }
 
-uint32_t MISTY1::FL(uint32_t FL_IN, uint32_t k){
+uint32_t MISTY1::FL(const uint32_t FL_IN, const uint32_t k){
     uint16_t d0 = FL_IN >> 16;
     uint16_t d1 = FL_IN & 0xffff;
     if (!(k & 1)){
@@ -42,7 +42,7 @@ uint32_t MISTY1::FL(uint32_t FL_IN, uint32_t k){
     return (d0 << 16) | d1;
 }
 
-uint32_t MISTY1::FLINV(uint32_t FL_IN, uint32_t k){
+uint32_t MISTY1::FLINV(const uint32_t FL_IN, const uint32_t k){
     uint16_t d0 = FL_IN >> 16;
     uint16_t d1 = FL_IN & 0xffff;
     if (!(k & 1)){
@@ -60,15 +60,22 @@ MISTY1::MISTY1(){
     keyset = false;
 }
 
-MISTY1::MISTY1(std::string KEY){
+MISTY1::MISTY1(const std::string & KEY){
     keyset = false;
     setkey(KEY);
 }
 
-void MISTY1::setkey(std::string KEY){
+void MISTY1::setkey(const std::string & KEY){
     if (keyset){
-        error(2);
+        std::cerr << "Error: Key has already been set." << std::endl;
+        throw 1;
     }
+
+    if (KEY.size() != 16){
+        std::cerr << "Error: Key must be 128 bits in length." << std::endl;
+        throw 1;
+    }
+
     for(uint8_t i = 0; i < 8; i++){
         EK[i] = ((KEY[i*2]*256) & 0xffff) + (KEY[i*2+1] & 0xff);
     }
@@ -80,10 +87,17 @@ void MISTY1::setkey(std::string KEY){
     keyset = true;
 }
 
-std::string MISTY1::encrypt(std::string DATA){
+std::string MISTY1::encrypt(const std::string & DATA){
     if (!keyset){
-        error(1);
+        std::cerr << "Error: Key has not been set." << std::endl;
+        throw 1;
     }
+
+    if (DATA.size() != 8){
+        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
+        throw 1;
+    }
+
     uint32_t D0 = toint(DATA.substr(0, 4), 256);
     uint32_t D1 = toint(DATA.substr(4, 4), 256);
     // 0 round
@@ -116,10 +130,17 @@ std::string MISTY1::encrypt(std::string DATA){
     return unhexlify(makehex(D1, 8) + makehex(D0, 8));
 }
 
-std::string MISTY1::decrypt(std::string DATA){
+std::string MISTY1::decrypt(const std::string & DATA){
     if (!keyset){
-        error(1);
+        std::cerr << "Error: Key has not been set." << std::endl;
+        throw 1;
     }
+
+    if (DATA.size() != 8){
+        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
+        throw 1;
+    }
+
     uint32_t D0 = toint(DATA.substr(4, 4), 256);
     uint32_t D1 = toint(DATA.substr(0, 4), 256);
     D0 = FLINV(D0, 8);

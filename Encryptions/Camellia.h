@@ -1,8 +1,9 @@
+#include <algorithm>
 #include <vector>
 
-#include "../common/integer.h"
 #include "../common/cryptomath.h"
-#include "error.h"
+#include "../common/includes.h"
+#include "../common/integer.h"
 #include "SymAlg.h"
 
 #ifndef __CAMELLIA__
@@ -16,20 +17,20 @@ class Camellia : public SymAlg{
     // Corporation. See:http://info.isl.ntt.co.jp/crypt/eng/camellia/index.html
 
     private:
-        uint16_t size;
+        uint16_t keysize;
         std::vector <uint64_t> keys;
-        unsigned int SBOX(uint8_t s, uint8_t value);
-        uint64_t FL(uint64_t & FL_IN, uint64_t & KE);
-        uint64_t FLINV(uint64_t & FLINV_IN, uint64_t & KE);
-        uint64_t F(uint64_t & F_IN, const uint64_t & KE);
-        std::string run(std::string & data);
+        unsigned int SBOX(const uint8_t s, const uint8_t value);
+        uint64_t FL(const uint64_t & FL_IN, const uint64_t & KE);
+        uint64_t FLINV(const uint64_t & FLINV_IN, const uint64_t & KE);
+        uint64_t F(const uint64_t & F_IN, const uint64_t & KE);
+        std::string run(const std::string & data);
 
     public:
         Camellia();
-        Camellia(std::string KEY);
-        void setkey(std::string KEY);
-        std::string encrypt(std::string DATA);
-        std::string decrypt(std::string DATA);
+        Camellia(const std::string & KEY);
+        void setkey(const std::string & KEY);
+        std::string encrypt(const std::string & DATA);
+        std::string decrypt(const std::string & DATA);
         unsigned int blocksize();
 };
 #endif

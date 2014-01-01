@@ -1,6 +1,6 @@
 #include "./Encryptions.h"
 
-bool validate_symalg(std::ostream & stream, bool do_1000000_check){
+bool validate_symalg(std::ostream & stream, const bool do_1000000_check){
     // Known Answer Test (KAT) to check if all the algorihtms are correct
     std::string data, key, ciphertext, e = "e", d = "d";
     bool all_correct = true, correct;
@@ -148,10 +148,10 @@ bool validate_symalg(std::ostream & stream, bool do_1000000_check){
         std::string a = unhexlify("0123456712345678234567893456789A");
         std::string b = unhexlify("0123456712345678234567893456789A");
         for(uint32_t x = 0; x < 1000000; x++){;
-            a = CAST128(b).encrypt(a.substr(0,8)) + a.substr(8,8);;
-            a = a.substr(0,8) + CAST128(b).encrypt(a.substr(8,8));;
-            b = CAST128(a).encrypt(b.substr(0,8)) + b.substr(8,8);;
-            b = b.substr(0,8) + CAST128(a).encrypt(b.substr(8,8));;
+            a = CAST128(b).encrypt(a.substr(0,8)) + a.substr(8,8);
+            a = a.substr(0,8) + CAST128(b).encrypt(a.substr(8,8));
+            b = CAST128(a).encrypt(b.substr(0,8)) + b.substr(8,8);
+            b = b.substr(0,8) + CAST128(a).encrypt(b.substr(8,8));
         };
         correct = ((a == unhexlify("EEA9D0A249FD3BA6B3436FB89D6DCA92")) && (b == unhexlify("B2C95EB00C31AD7180AC05B8E83D696E")));
         stream << "CAST-128 Full Maintenence Test: \t" << (correct?"Passed":"Failed") << std::endl;
@@ -576,7 +576,7 @@ bool validate_symalg(std::ostream & stream, bool do_1000000_check){
     return all_correct;
 }
 
-std::vector <std::string> test_all(uint64_t bytes){
+std::vector <std::string> test_all(const uint64_t & bytes){
     // Results are in MB/s
     std::vector <std::string> out;
     std::stringstream stream;

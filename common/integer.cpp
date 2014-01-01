@@ -1,4 +1,4 @@
-#include "./../common/integer.h"
+#include "integer.h"
 
 void integer::trim(){                             // remove 0 bytes from top of deque to save memory
     while (!value.empty() && !value[0]){
@@ -459,11 +459,11 @@ integer integer::long_sub(integer & lhs, integer & rhs){
     return lhs;
 }
 
-//        // Two's Complement Subtraction
-//        integer integer::two_comp_sub(const integer & lhs, integer & rhs){
-//            rhs = rhs.twos_complement(lhs.bits());
-//            return add(lhs, rhs) & (~(integer(1) << lhs.bits()));   // Flip bits to get max of 1 << x
-//        }
+//// Two's Complement Subtraction
+//integer integer::two_comp_sub(integer & lhs, integer & rhs){
+//    rhs = rhs.twos_complement(lhs.bits());
+//    return add(lhs, rhs) & (~(integer(1) << lhs.bits()));   // Flip bits to get max of 1 << x
+//}
 
 integer integer::sub(integer & lhs, integer & rhs){
     if (!rhs){
@@ -517,138 +517,135 @@ integer integer::operator-=(const integer & rhs){
     return *this;
 }
 
-// Peasant Multiplication
-integer integer::peasant(integer lhs, integer rhs){
-    integer SUM = 0;
-    for(d_size x = 0; x < lhs.bits(); x++){
-       if (lhs[x]){
-           SUM += rhs;
-        }
-       rhs <<= 1;
-    }
-    return SUM;
-}
+//// Peasant Multiplication
+//integer integer::peasant(integer lhs, integer rhs){
+//    integer SUM = 0;
+//    for(d_size x = 0; x < lhs.bits(); x++){
+//       if (lhs[x]){
+//           SUM += rhs;
+//        }
+//       rhs <<= 1;
+//    }
+//    return SUM;
+//}
 
-// Recurseive Peasant Algorithm
-integer integer::recursive_peasant(integer lhs, integer rhs){
-    if (!rhs){
-        return 0;
-    }
-    if (rhs & 1){
-        return lhs + recursive_peasant(lhs << 1, rhs >> 1);
-    }
-    return recursive_peasant(lhs << 1, rhs >> 1);
-}
-
-// Recursive Multiplication
-integer integer::recursive_mult(integer lhs, integer rhs){
-    if (!rhs){
-       return 0;
-    }
-    integer z = recursive_mult(lhs, rhs >> 1);
-    if (!(rhs & 1)){
-       return z << 1;
-    }
-    return lhs + (z << 1);
-}
-
-// Karatsuba Algorithm O(n^log2(3) = n ^ 1.585)
-// Thanks to kjo @ stackoverflow for fixing up my original Karatsuba Algorithm implementation
-// which i then converted to C++ and made a few changes
-// http://stackoverflow.com/questions/7058838/karatsuba-algorithm-too-much-recursion
-integer integer::karatsuba(integer lhs, integer rhs, integer bm){
-   // b is base = 256
-   // m is chars = 4
-   // bm is max value = b ^ m
-
-   if ((lhs <= bm) | (rhs <= bm))
-       return peasant(lhs, rhs);
-
-   std::pair <integer, integer> x = dm(lhs, bm);
-   std::pair <integer, integer> y = dm(rhs, bm);
-   integer x0 = x.second;
-   integer x1 = x.first;
-   integer y0 = y.second;
-   integer y1 = y.first;
-
-   integer z0 = karatsuba(x0, y0);
-   integer z2 = karatsuba(x1, y1);
-   integer z1 = karatsuba(x1 + x0, y1 + y0) - z2 - z0;
-   return karatsuba(karatsuba(z2, bm) + z1, bm) + z0;
-}
-
+//// Recurseive Peasant Algorithm
+//integer integer::recursive_peasant(integer lhs, integer rhs){
+//    if (!rhs){
+//        return 0;
+//    }
+//    if (rhs & 1){
+//        return lhs + recursive_peasant(lhs << 1, rhs >> 1);
+//    }
+//    return recursive_peasant(lhs << 1, rhs >> 1);
+//}
+//
+//// Recursive Multiplication
+//integer integer::recursive_mult(integer lhs, integer rhs){
+//    if (!rhs){
+//       return 0;
+//    }
+//    integer z = recursive_mult(lhs, rhs >> 1);
+//    if (!(rhs & 1)){
+//       return z << 1;
+//    }
+//    return lhs + (z << 1);
+//}
+//
+//// Karatsuba Algorithm
+//integer integer::karatsuba(integer lhs, integer rhs, integer bm){
+//   // b is base = 256
+//   // m is chars = 4
+//   // bm is max value = b ^ m
+//
+//   if ((lhs <= bm) | (rhs <= bm))
+//       return peasant(lhs, rhs);
+//
+//   std::pair <integer, integer> x = dm(lhs, bm);
+//   std::pair <integer, integer> y = dm(rhs, bm);
+//   integer x0 = x.second;
+//   integer x1 = x.first;
+//   integer y0 = y.second;
+//   integer y1 = y.first;
+//
+//   integer z0 = karatsuba(x0, y0);
+//   integer z2 = karatsuba(x1, y1);
+//   integer z1 = karatsuba(x1 + x0, y1 + y0) - z2 - z0;
+//   return karatsuba(karatsuba(z2, bm) + z1, bm) + z0;
+//}
+//
 // Toom–Cook multiplication
 // as described at http://en.wikipedia.org/wiki/Toom%E2%80%93Cook_multiplications
 // This implementation is a bit weird. In the pointwise Multiplcation step, using
 // operator* and long_mult works, but everything else fails.
 // It's also kind of slow.
-integer integer::toom_cook_3(integer m, integer n, integer bm){
-   if ((m <= bm) | (n <= bm)){
-       return peasant(m, n);
-    }
-
-   // Splitting
-   integer i = integer(std::max(m.log(3), n.log(3))) / 3 + 1;
-   integer bi = integer(3).pow(i);
-   integer B = 1;
-   integer base = 10;
-   while (B < bi){
-       B *= base;
-    }
-
-   integer M[3], N[3];
-   for(uint8_t i = 0; i < 3; i++){
-       std::pair <integer, integer> tm = dm(m, B);
-       std::pair <integer, integer> tn = dm(n, B);
-       m = tm.first;
-       n = tn.first;
-       M[i] = tm.second;
-       N[i] = tn.second;
-   }
-
-   // Evaluation
-   //             {0,             1,                 -1,                         -2,                             inf}
-   integer p[5] = {M[0], M[0] + M[1] + M[2], M[0] - M[1] + M[2], M[0] - M[1] - M[1] + M[2] + M[2] + M[2] + M[2], M[2]};
-   integer q[5] = {N[0], N[0] + N[1] + N[2], N[0] - N[1] + N[2], N[0] - N[1] - N[1] + N[2] + N[2] + N[2] + N[2], N[2]};
-
-   // Pointwise Multiplication
-   integer r[5];
-   for(uint8_t i = 0; i < 5; i++)
-       r[i] = p[i] * q[i];                 // dont understand why only operator* and long_mult can be used here
-
-   // Interpolation
-   integer r0 = r[0];
-   integer r4 = r[4];
-   integer r3 = (r[3] - r[1]) / 3;
-   integer r1 = (r[1] - r[2]) / 2;
-   integer r2 = r[2] - r[0];
-   r3 = (r2 - r3) / 2 + r4 + r4;
-   r2 = r2 + r1 - r4;
-   r1 = r1 - r3;
-
-   // Recomposition
-   return peasant(peasant(peasant(peasant(r4, B) + r3, B) + r2, B) + r1, B) + r0;
-}
-
-// Long multiplication
-integer integer::long_mult(integer lhs, integer rhs){
-    unsigned int zeros = 0;
-    integer row, out = 0;
-    for(base::reverse_iterator i = lhs.value.rbegin(); i != lhs.value.rend(); i++){
-        row.value = base(zeros++, 0); // zeros on the right hand side
-        digit carry = 0;
-        for(base::reverse_iterator j = rhs.value.rbegin(); j != rhs.value.rend(); j++){
-            double_digit prod = (double_digit) *i * (double_digit) *j + carry;// multiply through
-            row.value.push_front(prod & NEG1);
-            carry = prod >> BITS;
-        }
-        if (carry){
-            row.value.push_front(carry);
-        }
-        out = add(out, row);
-    }
-    return out;
-}
+//integer integer::toom_cook_3(integer m, integer n, integer bm){
+//   if ((m <= bm) | (n <= bm)){
+//       return peasant(m, n);
+//    }
+//
+//   // Splitting
+//   integer i = integer(std::max(m.log(3), n.log(3))) / 3 + 1;
+//   integer bi = integer(3).pow(i);
+//   integer B = 1;
+//   integer base = 10;
+//   while (B < bi){
+//       B *= base;
+//    }
+//
+//   integer M[3], N[3];
+//   for(uint8_t i = 0; i < 3; i++){
+//       std::pair <integer, integer> tm = dm(m, B);
+//       std::pair <integer, integer> tn = dm(n, B);
+//       m = tm.first;
+//       n = tn.first;
+//       M[i] = tm.second;
+//       N[i] = tn.second;
+//   }
+//
+//   // Evaluation
+//   //             {0,             1,                 -1,                         -2,                             inf}
+//   integer p[5] = {M[0], M[0] + M[1] + M[2], M[0] - M[1] + M[2], M[0] - M[1] - M[1] + M[2] + M[2] + M[2] + M[2], M[2]};
+//   integer q[5] = {N[0], N[0] + N[1] + N[2], N[0] - N[1] + N[2], N[0] - N[1] - N[1] + N[2] + N[2] + N[2] + N[2], N[2]};
+//
+//   // Pointwise Multiplication
+//   integer r[5];
+//   for(uint8_t i = 0; i < 5; i++)
+//       r[i] = p[i] * q[i];                 // dont understand why only operator* and long_mult can be used here
+//
+//   // Interpolation
+//   integer r0 = r[0];
+//   integer r4 = r[4];
+//   integer r3 = (r[3] - r[1]) / 3;
+//   integer r1 = (r[1] - r[2]) / 2;
+//   integer r2 = r[2] - r[0];
+//   r3 = (r2 - r3) / 2 + r4 + r4;
+//   r2 = r2 + r1 - r4;
+//   r1 = r1 - r3;
+//
+//   // Recomposition
+//   return peasant(peasant(peasant(peasant(r4, B) + r3, B) + r2, B) + r1, B) + r0;
+//}
+//
+//// Long multiplication
+//integer integer::long_mult(integer lhs, integer rhs){
+//    unsigned int zeros = 0;
+//    integer row, out = 0;
+//    for(base::reverse_iterator i = lhs.value.rbegin(); i != lhs.value.rend(); i++){
+//        row.value = base(zeros++, 0); // zeros on the right hand side
+//        digit carry = 0;
+//        for(base::reverse_iterator j = rhs.value.rbegin(); j != rhs.value.rend(); j++){
+//            double_digit prod = (double_digit) *i * (double_digit) *j + carry;// multiply through
+//            row.value.push_front(prod & NEG1);
+//            carry = prod >> BITS;
+//        }
+//        if (carry){
+//            row.value.push_front(carry);
+//        }
+//        out = add(out, row);
+//    }
+//    return out;
+//}
 
 //Private FFT helper function
 int integer::fft(std::deque<double>& data, bool dir)
@@ -812,12 +809,12 @@ integer integer::operator*(integer rhs){
         rhs >>= 1;
         out <<= 1;
     }
-//            out = peasant(out, rhs);
-//            out = recursive_peasant(out, rhs);
-//            out = recursive_mult(out, rhs);
-//            out = karatsuba(out, rhs);
-//            out = toom_cook_3(out, rhs);
-//            out = long_mult(out, rhs);
+//    out = peasant(out, rhs);
+//    out = recursive_peasant(out, rhs);
+//    out = recursive_mult(out, rhs);
+//    out = karatsuba(out, rhs);
+//    out = toom_cook_3(out, rhs);
+//    out = long_mult(out, rhs);
     out = fft_mult(out, rhs);
     out._sign = s;
     out.trim();
@@ -829,49 +826,48 @@ integer integer::operator*=(const integer & rhs){
     return *this;
 }
 
-
-//        // Long Division returning both quotient and remainder
-//        std::pair <integer, integer> integer::long_div(const integer & lhs, const integer & rhs){
-//            std::pair <integer, integer> qr;
-//            qr.first = 0;
-//            qr.second = lhs;
-//            integer copyd = rhs;
-//            integer adder = 1;
-//            while (qr.second > copyd){
-//                copyd <<= 1;
-//                adder <<= 1;
-//            }
-//            while (qr.second >= rhs){
-//                if (qr.second >= copyd){
-//                    qr.second -= copyd;
-//                    qr.first |= adder;
-//                }
-//                copyd >>= 1;
-//                adder >>= 1;
-//            }
-//            return qr;
+//// Long Division returning both quotient and remainder
+//std::pair <integer, integer> integer::long_div(const integer & lhs, const integer & rhs){
+//    std::pair <integer, integer> qr;
+//    qr.first = 0;
+//    qr.second = lhs;
+//    integer copyd = rhs;
+//    integer adder = 1;
+//    while (qr.second > copyd){
+//        copyd <<= 1;
+//        adder <<= 1;
+//    }
+//    while (qr.second >= rhs){
+//        if (qr.second >= copyd){
+//            qr.second -= copyd;
+//            qr.first |= adder;
 //        }
-
-//        // Recursive Division that returns both the quotient and remainder
-//        // Recursion took up way too much memory
-//        std::pair <integer, integer> integer::recursive_divmod(integer lhs, const integer & rhs){
-//            std::pair <integer, integer> qr;
-//            if (!lhs){
-//                qr.first = 0;
-//                qr.second = 0;
-//                return qr;
-//            }
-//            qr = recursive_divmod(lhs >> 1, rhs);
-//            qr.first <<= 1;
-//            qr.second <<= 1;
-//            if (lhs & 1)
-//                qr.second++;
-//            if (qr.second >= rhs){
-//                qr.second -= rhs;
-//                qr.first++;
-//            }
-//            return qr;
-//        }
+//        copyd >>= 1;
+//        adder >>= 1;
+//    }
+//    return qr;
+//}
+//
+//// Recursive Division that returns both the quotient and remainder
+//// Recursion took up way too much memory
+//std::pair <integer, integer> integer::recursive_divmod(integer lhs, const integer & rhs){
+//    std::pair <integer, integer> qr;
+//    if (!lhs){
+//        qr.first = 0;
+//        qr.second = 0;
+//        return qr;
+//    }
+//    qr = recursive_divmod(lhs >> 1, rhs);
+//    qr.first <<= 1;
+//    qr.second <<= 1;
+//    if (lhs & 1)
+//        qr.second++;
+//    if (qr.second >= rhs){
+//        qr.second -= rhs;
+//        qr.first++;
+//    }
+//    return qr;
+//}
 
 // Non-Recursive version of above algorithm
 std::pair <integer, integer> integer::non_recursive_divmod(integer & lhs, integer & rhs){
@@ -935,8 +931,8 @@ std::pair <integer, integer> integer::dm(integer & lhs, integer & rhs){
         }
     }
     ////////////////////////////////////////////////
-//            return long_div(lhs, rhs);
-//            return recursive_divmod(lhs, rhs);
+//    return long_div(lhs, rhs);
+//    return recursive_divmod(lhs, rhs);
     return non_recursive_divmod(lhs, rhs);
 }
 
@@ -1038,6 +1034,7 @@ unsigned int integer::bits() const{
     return out;
 }
 
+// get number of bytes
 unsigned int integer::bytes() const{
     if (value.empty()){
         return 0;

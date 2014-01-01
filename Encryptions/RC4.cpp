@@ -4,7 +4,9 @@ void RC4::ksa(std::vector <uint8_t> & k){
     for(uint16_t x = 0; x < 256; x++){
         s[x] = x;
     }
+
     int y = 0;
+
     for(uint16_t x = 0; x < 256; x++){
         y = (y + s[x] + k[x % k.size()]) & 255;
         std::swap(s[x], s[y]);
@@ -18,23 +20,30 @@ int RC4::prga(uint8_t & i, uint8_t & j){
     return s[(s[i] + s[j]) & 255];
 }
 
-RC4::RC4(std::string KEY){
+RC4::RC4(const std::string & KEY){
     i_e = j_e = i_d = j_d = 0;
     keyset = false;
     setkey(KEY);
 }
 
-void RC4::setkey(std::string KEY){
+void RC4::setkey(const std::string & KEY){
+    if (keyset){
+        std::cerr << "Error: Key has already been set." << std::endl;
+        throw 1;
+    }
+
     for(unsigned int x = 0; x < KEY.size(); x++){
         key.push_back((uint8_t) KEY[x]);
     }
     keyset = true;
 }
 
-std::string RC4::encrypt(std::string DATA){
+std::string RC4::encrypt(const std::string & DATA){
     if (!keyset){
-        error(1);
+        std::cerr << "Error: Key has not been set." << std::endl;
+        throw 1;
     }
+
     ksa(key);
     std::string out = "";
     for(uint8_t x = 0; x < DATA.size(); x++){
@@ -43,10 +52,12 @@ std::string RC4::encrypt(std::string DATA){
     return out;
 }
 
-std::string RC4::decrypt(std::string DATA){
+std::string RC4::decrypt(const std::string & DATA){
     if (!keyset){
-        error(1);
+        std::cerr << "Error: Key has not been set." << std::endl;
+        throw 1;
     }
+
     ksa(key);
     std::string out = "";
     for(uint8_t x = 0; x < DATA.size(); x++){

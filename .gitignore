@@ -1,13 +1,37 @@
-# Compiled Object files
-*.slo
-*.lo
+# Build results
+
+[Dd]ebug/
+[Rr]elease/
+x64/
+build/
+[Bb]in/
+[Oo]bj/
 *.o
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
+#############
+## Windows detritus
+#############
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+#############
+## Python
+#############
+
+*.py[co]
+
+#############
+## Code::Blocks stuff
+#############
+
+*.depend
+*.layout
+*.cbTemp
