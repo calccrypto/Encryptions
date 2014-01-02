@@ -200,7 +200,7 @@ std::string AES::encrypt(const std::string & DATA){
     }
 
     if (DATA.size() != 16){
-        std::cerr << "Error: Key must be 128 bits long." << std::endl;
+        std::cerr << "Error: Data must be 128 bits long." << std::endl;
         throw 1;
     }
 
@@ -247,7 +247,7 @@ std::string AES::decrypt(const std::string & DATA){
     }
 
     if (DATA.size() != 16){
-        std::cerr << "Error: Key must be 128 bits long." << std::endl;
+        std::cerr << "Error: Data must be 128 bits long." << std::endl;
         throw 1;
     }
 

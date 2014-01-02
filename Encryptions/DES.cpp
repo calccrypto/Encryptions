@@ -71,7 +71,6 @@ std::string DES::run(const std::string & DATA){
     return unhexlify(makehex(out, 16));
 }
 
-
 DES::DES(){
     keyset = false;
 }
