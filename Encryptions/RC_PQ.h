@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sstream>
+#include <stdexcept>
 
 #ifndef __RC_PQ__
 #define __RC_PQ__

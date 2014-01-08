@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdexcept>
 
 #ifndef __SYMALG__
 #define __SYMALG__

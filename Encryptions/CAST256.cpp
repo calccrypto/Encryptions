@@ -63,13 +63,11 @@ void CAST256::QBAR(const uint8_t & i){
 
 std::string CAST256::run(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     if (DATA.size() != 16){
-        std::cerr << "Error: Data must be 128 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 128 bits in length.");
     }
 
     A = toint(DATA.substr(0, 4), 256);
@@ -96,13 +94,11 @@ CAST256::CAST256(const std::string & KEY){
 
 void CAST256::setkey(std::string KEY){
     if (keyset){
-        std::cerr << "Error: Key has already been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has already been set.");
     }
 
     if ((KEY.size() != 16) && (KEY.size() != 20) && (KEY.size() != 24) && (KEY.size() != 28) && (KEY.size() != 32)){
-        std::cerr << "Error: Key must be 128, 160, 192, 224, or 256 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key must be 128, 160, 192, 224, or 256 bits in length.");
     }
 
     KEY += std::string(32 - KEY.size(), 0);

@@ -11,8 +11,7 @@ RC5::RC5(const std::string & KEY, const uint64_t & W, const uint64_t & R, const 
 
 void RC5::setkey(std::string KEY, const uint64_t & W, const uint64_t & R, const uint64_t & B){
     if (keyset){
-        std::cerr << "Error: Key has already been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has already been set.");
     }
 
     w = W;
@@ -47,8 +46,7 @@ void RC5::setkey(std::string KEY, const uint64_t & W, const uint64_t & R, const 
 
 std::string RC5::encrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
     uint64_t A = toint(DATA.substr(0, w >> 3), 256), B = toint(DATA.substr(w >> 3, (w >> 3)), 256);
     A = (A + S[0]) & mod;
@@ -62,8 +60,7 @@ std::string RC5::encrypt(const std::string & DATA){
 
 std::string RC5::decrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
     uint64_t A = toint(DATA.substr(0, w >> 3), 256), B = toint(DATA.substr(w >> 3, (w >> 3)), 256);
     for(uint8_t i = r; i > 0; i--){

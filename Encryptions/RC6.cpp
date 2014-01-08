@@ -11,8 +11,7 @@ RC6::RC6(const std::string & KEY, const unsigned int & W, const unsigned int & R
 
 void RC6::setkey(std::string KEY, const unsigned int & W, const unsigned int & R){
     if (keyset){
-        std::cerr << "Error: Key has already been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has already been set.");
     }
 
     w = W;
@@ -50,8 +49,7 @@ void RC6::setkey(std::string KEY, const unsigned int & W, const unsigned int & R
 
 std::string RC6::encrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     uint32_t A = toint(little_end(DATA.substr(0, w >> 3), 256), 256), B = toint(little_end(DATA.substr(w >> 3, w >> 3), 256), 256), C = toint(little_end(DATA.substr(w >> 2, w >> 3), 256), 256), D = toint(little_end(DATA.substr(3 * (w >> 3), w >> 3), 256), 256);
@@ -71,8 +69,7 @@ std::string RC6::encrypt(const std::string & DATA){
 
 std::string RC6::decrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     uint32_t A = toint(little_end(DATA.substr(0, w >> 3), 256), 256), B = toint(little_end(DATA.substr(w >> 3, w >> 3), 256), 256), C = toint(little_end(DATA.substr(w >> 2, w >> 3), 256), 256), D = toint(little_end(DATA.substr(3 * (w >> 3), w >> 3), 256), 256);

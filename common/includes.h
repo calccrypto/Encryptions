@@ -2,9 +2,11 @@
 A bunch of useful constants and functions.
 Some functions were heavily influenced by python 2.7.2
 */
+
 #include <cstdint>
 #include <iostream>
 #include <sstream>
+#include <stdexcept>
 
 #ifndef __INCLUDES__
 #define __INCLUDES__

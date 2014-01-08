@@ -31,12 +31,10 @@ uint32_t CAST128::F(const uint8_t & round, const uint32_t & D, const uint32_t & 
 
 std::string CAST128::run(const std::string & DATA, const uint8_t start, const uint8_t stop, const uint8_t step){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
     if (DATA.size() != 8){
-        std::cerr << "Error: Key must be 64 bits long." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key must be 64 bits long.");
     }
     uint32_t left = toint(DATA.substr(0, 4), 256);
     uint32_t right = toint(DATA.substr(4, 4), 256);
@@ -61,8 +59,7 @@ CAST128::CAST128(const std::string & KEY){
 
 void CAST128::setkey(std::string KEY){
     if (keyset){
-        std::cerr << "Error: Key has already been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has already been set.");
     }
     rounds = 12 + ((KEY.size() > 10) << 2);
     while (KEY.size() < 16){

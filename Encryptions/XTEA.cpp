@@ -11,13 +11,11 @@ XTEA::XTEA(const std::string & KEY, const uint8_t & ROUNDS, const uint32_t & DEL
 
 void XTEA::setkey(const std::string & KEY, const uint8_t & ROUNDS, const uint32_t & DELTA){
     if (keyset){
-        std::cerr << "Error: Key has already been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has already been set.");
     }
 
     if (KEY.size() != 16){
-        std::cerr << "Error: Key must be 128 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key must be 128 bits in length.");
     }
 
     delta = DELTA;
@@ -30,13 +28,11 @@ void XTEA::setkey(const std::string & KEY, const uint8_t & ROUNDS, const uint32_
 
 std::string XTEA::encrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     if (DATA.size() != 8){
-        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
     uint32_t data[2] = {(uint32_t) toint(DATA.substr(0, 4), 256), (uint32_t) toint(DATA.substr(4, 4), 256)};
@@ -51,13 +47,11 @@ std::string XTEA::encrypt(const std::string & DATA){
 
 std::string XTEA::decrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     if (DATA.size() != 8){
-        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
     uint32_t data[2] = {(uint32_t) toint(DATA.substr(0, 4), 256), (uint32_t) toint(DATA.substr(4, 4), 256)};

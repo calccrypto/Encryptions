@@ -66,13 +66,11 @@ uint64_t Camellia::F(const uint64_t & F_IN, const uint64_t & KE){
 
 std::string Camellia::run(const std::string & data){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     if (data.size() != 16){
-        std::cerr << "Error: Data must be 128 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 128 bits in length.");
     }
 
     uint64_t D1 = toint(data.substr(0, 8), 256);
@@ -215,14 +213,12 @@ Camellia::Camellia(const std::string & KEY){
 
 void Camellia::setkey(const std::string & KEY){
     if (keyset){
-        std::cerr << "Error: Key has already been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has already been set.");
     }
 
     keysize = KEY.size();
     if ((keysize != 16) && (keysize != 24) && (keysize != 32)){
-        std::cerr << "Error: Key size does not fit defined sizes." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key size does not fit defined sizes.");
     }
 
     integer KL, KR;

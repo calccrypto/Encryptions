@@ -6,13 +6,11 @@ uint32_t Blowfish::f(const uint32_t & left){
 
 std::string Blowfish::run(const std::string & data){
     if (!keyset ^ settingkey){
-        std::cerr << "Error: Key has not been set" << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set");
     }
 
     if (data.size() != 8){
-        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
     uint32_t left = toint(data.substr(0, 4), 256), right = toint(data.substr(4, 4), 256);
@@ -40,13 +38,11 @@ Blowfish::Blowfish(const std::string & KEY){
 
 void Blowfish::setkey(const std::string & KEY){
     if (keyset){
-        std::cerr << "Error: Key has already been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has already been set.");
     }
 
     if ((KEY.size() < 4) || (KEY.size() > 112)){
-        std::cerr << "Error: Key size does not fit defined sizes." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key size does not fit defined sizes.");
     }
 
     for(uint8_t x = 0; x < 18; x++){

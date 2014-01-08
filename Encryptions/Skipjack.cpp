@@ -71,13 +71,11 @@ Skipjack::Skipjack(const std::string & KEY){
 
 void Skipjack::setkey(const std::string & KEY){
     if (keyset){
-        std::cerr << "Error: Key has already been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has already been set.");
     }
 
     if (KEY.size() != 10){
-        std::cerr << "Error: Key must be 80 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key must be 80 bits in length.");
     }
 
     key = hexlify(KEY);
@@ -90,13 +88,11 @@ void Skipjack::setkey(const std::string & KEY){
 
 std::string Skipjack::encrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set" << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set");
     }
 
     if (DATA.size() != 8){
-        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
     uint16_t w1 = toint(DATA.substr(0, 2), 256);
@@ -125,13 +121,11 @@ std::string Skipjack::encrypt(const std::string & DATA){
 
 std::string Skipjack::decrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set" << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set");
     }
 
     if (DATA.size() != 8){
-        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
     uint16_t w1 = toint(DATA.substr(0, 2), 256);

@@ -30,8 +30,7 @@ RC2::RC2(const std::string & KEY, const uint32_t & t1){
 
 void RC2::setkey(const std::string & KEY, const uint32_t & t1){
     if (keyset){
-        std::cerr << "Error: Key has already been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has already been set.");
     }
 
     T1 = t1;
@@ -83,13 +82,11 @@ void RC2::setkey(const std::string & KEY, const uint32_t & t1){
 
 std::string RC2::encrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     if (DATA.size() != 8){
-        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
     for(uint8_t x = 0; x < 4; x++){
@@ -118,13 +115,11 @@ std::string RC2::encrypt(const std::string & DATA){
 
 std::string RC2::decrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     if (DATA.size() != 8){
-        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
     for(uint8_t x = 0; x < 4; x++){

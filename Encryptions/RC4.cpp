@@ -28,8 +28,7 @@ RC4::RC4(const std::string & KEY){
 
 void RC4::setkey(const std::string & KEY){
     if (keyset){
-        std::cerr << "Error: Key has already been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has already been set.");
     }
 
     for(unsigned int x = 0; x < KEY.size(); x++){
@@ -40,8 +39,7 @@ void RC4::setkey(const std::string & KEY){
 
 std::string RC4::encrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     ksa(key);
@@ -54,8 +52,7 @@ std::string RC4::encrypt(const std::string & DATA){
 
 std::string RC4::decrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     ksa(key);

@@ -40,13 +40,11 @@ GOST::GOST(const std::string & KEY, const uint8_t sbox[8][16]){
 
 void GOST::setkey(const std::string & KEY, const uint8_t sbox[8][16]){
     if (keyset){
-        std::cerr << "Error: Key has already been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has already been set.");
     }
 
     if (KEY.size() != 32){
-        std::cerr << "Error: Key must be 256 bits long." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key must be 256 bits long.");
     }
 
     C1 = 0b00000001000000010000000100000100UL;
@@ -62,13 +60,11 @@ void GOST::setkey(const std::string & KEY, const uint8_t sbox[8][16]){
 
 std::string GOST::encrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     if (DATA.size() != 8){
-        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
     for(uint8_t x = 0; x < 2; x++){
@@ -91,13 +87,11 @@ std::string GOST::encrypt(const std::string & DATA){
 
 std::string GOST::decrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     if (DATA.size() != 8){
-        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
     for(uint8_t x = 0; x < 2; x++){

@@ -130,13 +130,11 @@ SAFERK64::SAFERK64(const std::string & KEY, const uint8_t & rounds){
 
 void SAFERK64::setkey(const std::string & KEY, const uint8_t & rounds){
     if (keyset){
-        std::cerr << "Error: Key has already been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has already been set.");
     }
 
     if (KEY.size() != 8){
-        std::cerr << "Error: Key must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key must be 64 bits in length.");
     }
 
     r = rounds;
@@ -154,13 +152,11 @@ void SAFERK64::setkey(const std::string & KEY, const uint8_t & rounds){
 
 std::string SAFERK64::encrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     if (DATA.size() != 8){
-        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
     std::vector <uint8_t> data;
@@ -183,13 +179,11 @@ std::string SAFERK64::encrypt(const std::string & DATA){
 
 std::string SAFERK64::decrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     if (DATA.size() != 8){
-        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
     std::vector <uint8_t> data;

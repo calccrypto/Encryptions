@@ -21,13 +21,11 @@ uint16_t IDEA::mult(uint32_t value1, uint32_t value2){
 
 std::string IDEA::run(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set" << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set");
     }
 
     if (DATA.size() != 8){
-        std::cerr << "Error: Key must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key must be 64 bits in length.");
     }
 
     uint16_t x1 = toint(DATA.substr(0, 2), 256);
@@ -69,12 +67,10 @@ IDEA::IDEA(const std::string & KEY){
 
 void IDEA::setkey(const std::string & KEY){
     if (keyset){
-        std::cerr << "Error: Key has already been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has already been set.");
     }
     if (KEY.size() != 16){
-        std::cerr << "Error: Data must be 128 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 128 bits in length.");
     }
 
     std::string key = hexlify(KEY);
@@ -109,13 +105,11 @@ void IDEA::setkey(const std::string & KEY){
 
 std::string IDEA::encrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     if (DATA.size() != 8){
-        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
     keys.clear();
@@ -139,13 +133,11 @@ std::string IDEA::encrypt(const std::string & DATA){
 
 std::string IDEA::decrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     if (DATA.size() != 8){
-        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
     keys.clear();

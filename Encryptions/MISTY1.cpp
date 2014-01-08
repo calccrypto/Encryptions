@@ -67,13 +67,11 @@ MISTY1::MISTY1(const std::string & KEY){
 
 void MISTY1::setkey(const std::string & KEY){
     if (keyset){
-        std::cerr << "Error: Key has already been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has already been set.");
     }
 
     if (KEY.size() != 16){
-        std::cerr << "Error: Key must be 128 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key must be 128 bits in length.");
     }
 
     for(uint8_t i = 0; i < 8; i++){
@@ -89,13 +87,11 @@ void MISTY1::setkey(const std::string & KEY){
 
 std::string MISTY1::encrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     if (DATA.size() != 8){
-        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
     uint32_t D0 = toint(DATA.substr(0, 4), 256);
@@ -132,13 +128,11 @@ std::string MISTY1::encrypt(const std::string & DATA){
 
 std::string MISTY1::decrypt(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     if (DATA.size() != 8){
-        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
     uint32_t D0 = toint(DATA.substr(4, 4), 256);

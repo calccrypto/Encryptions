@@ -23,13 +23,11 @@ uint64_t SEED::F(const uint64_t & right, const std::pair <uint32_t, uint32_t> & 
 
 std::string SEED::run(const std::string & DATA){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     if (DATA.size() != 16){
-        std::cerr << "Error: Data must be 128 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 128 bits in length.");
     }
 
     uint64_t L = toint(DATA.substr(0, 8), 256), R = toint(DATA.substr(8, 8), 256);
@@ -52,13 +50,11 @@ SEED::SEED(const std::string & KEY){
 
 void SEED::setkey(const std::string & KEY){
     if (keyset){
-        std::cerr << "Error: Key has already been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has already been set.");
     }
 
     if (KEY.size() != 16){
-        std::cerr << "Error: Key must be 128 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key must be 128 bits in length.");
     }
 
     integer key(KEY, 256);

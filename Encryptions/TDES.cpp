@@ -2,13 +2,11 @@
 
 std::string TDES::run(const std::string & data, const std::string & key, const bool & mode){
     if (!keyset){
-        std::cerr << "Error: Key has not been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has not been set.");
     }
 
     if (data.size() != 8){
-        std::cerr << "Error: Data must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
     if (!mode){
@@ -28,23 +26,19 @@ TDES::TDES(const std::string & key1, const std::string & mode1, const std::strin
 
 void TDES::setkey(const std::string & key1, const std::string & mode1, const std::string & key2, const std::string & mode2, const std::string & key3, const std::string & mode3){
     if (keyset){
-        std::cerr << "Error: Key has already been set." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key has already been set.");
     }
 
     if (key1.size() != 8){
-        std::cerr << "Error: Key must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key must be 64 bits in length.");
     }
 
     if (key2.size() != 8){
-        std::cerr << "Error: Key must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key must be 64 bits in length.");
     }
 
     if (key3.size() != 8){
-        std::cerr << "Error: Key must be 64 bits in length." << std::endl;
-        throw 1;
+        throw std::runtime_error("Error: Key must be 64 bits in length.");
     }
 
     k1 = key1;
