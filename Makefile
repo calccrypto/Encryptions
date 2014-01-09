@@ -11,4 +11,5 @@ Encryptions:
 	$(MAKE) -C Encryptions
 
 clean:
-	rm -f common/*.o Encryptions/*.o
+	$(MAKE) -C common clean
+	$(MAKE) -C Encryptions clean
