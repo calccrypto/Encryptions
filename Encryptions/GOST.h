@@ -1,9 +1,9 @@
+#ifndef __GOST__
+#define __GOST__
+
 #include "../common/cryptomath.h"
 #include "../common/includes.h"
 #include "SymAlg.h"
-
-#ifndef __GOST__
-#define __GOST__
 
 #include "GOST_Const.h"
 

@@ -1,10 +1,10 @@
+#ifndef __BLOWFISH__
+#define __BLOWFISH__
+
 #include <algorithm>
 
 #include "../common/includes.h"
 #include "SymAlg.h"
-
-#ifndef __BLOWFISH__
-#define __BLOWFISH__
 
 #include "Blowfish_Const.h"
 

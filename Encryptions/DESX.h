@@ -1,7 +1,7 @@
-#include "SymAlg.h"
-
 #ifndef __DESX__
 #define __DESX__
+
+#include "SymAlg.h"
 
 #include "DES.h"
 

@@ -1,10 +1,10 @@
+#ifndef __DES__
+#define __DES__
+
 #include <algorithm>
 
 #include "../common/includes.h"
 #include "SymAlg.h"
-
-#ifndef __DES__
-#define __DES__
 
 #include "DES_Const.h"
 

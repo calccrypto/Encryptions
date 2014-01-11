@@ -1,11 +1,11 @@
 // Cipher Feedback
+#ifndef __CFB__
+#define __CFB__
 
 #include "../common/includes.h"
 #include "../common/integer.h"
 #include "SymAlg.h"
 
-#ifndef __CFB__
-#define __CFB__
 class CFB{
   private:
     SymAlg * algo;

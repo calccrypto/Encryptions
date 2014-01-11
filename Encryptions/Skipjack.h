@@ -1,8 +1,8 @@
-#include "../common/includes.h"
-#include "SymAlg.h"
-
 #ifndef __SKIPJACK__
 #define __SKIPJACK__
+
+#include "../common/includes.h"
+#include "SymAlg.h"
 
 #include "Skipjack_Const.h"
 

@@ -1,8 +1,9 @@
+#ifndef __XTEA__
+#define __XTEA__
+
 #include "../common/includes.h"
 #include "SymAlg.h"
 
-#ifndef __XTEA__
-#define __XTEA__
 class XTEA : public SymAlg{
     private:
         uint32_t delta, cycles, total, key[4];

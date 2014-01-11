@@ -1,11 +1,11 @@
 // Counter
+#ifndef __CTR__
+#define __CTR__
 
 #include "../common/includes.h"
 #include "../common/integer.h"
 #include "SymAlg.h"
 
-#ifndef __CTR__
-#define __CTR__
 class CTR{
   private:
     SymAlg * algo;

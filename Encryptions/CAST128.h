@@ -1,9 +1,9 @@
+#ifndef __CAST128__
+#define __CAST128__
+
 #include "../common/cryptomath.h"
 #include "../common/includes.h"
 #include "SymAlg.h"
-
-#ifndef __CAST128__
-#define __CAST128__
 
 #include "CAST_Const.h"
 #include "CAST128_Const.h"

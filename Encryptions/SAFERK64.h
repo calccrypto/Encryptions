@@ -1,10 +1,10 @@
+#ifndef __SAFERK64__
+#define __SAFERK64__
+
 #include <vector>
 
 #include "../common/cryptomath.h"
 #include "SymAlg.h"
-
-#ifndef __SAFERK64__
-#define __SAFERK64__
 
 #include "SAFERK64_Const.h"
 

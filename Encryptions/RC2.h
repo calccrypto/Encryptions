@@ -1,11 +1,11 @@
+#ifndef __RC2__
+#define __RC2__
+
 #include <vector>
 
 #include "../common/cryptomath.h"
 #include "../common/includes.h"
 #include "SymAlg.h"
-
-#ifndef __RC2__
-#define __RC2__
 
 #include "RC2_Const.h"
 

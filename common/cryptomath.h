@@ -8,10 +8,11 @@ they are still useful for integer types
 that do not have these functions defined.
 */
 
-#include <iostream>
-
 #ifndef __CRYPTO_MATH__
 #define __CRYPTO_MATH__
+
+#include <iostream>
+
 // Greatest Common Divisor
 template <typename T> T gcd(T a, T b){
 	T c = 1;

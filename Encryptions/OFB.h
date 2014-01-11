@@ -1,11 +1,11 @@
 // Output Feedback
+#ifndef __OFB__
+#define __OFB__
 
 #include "../common/includes.h"
 #include "../common/integer.h"
 #include "SymAlg.h"
 
-#ifndef __OFB__
-#define __OFB__
 class OFB{
     private:
         SymAlg * algo;

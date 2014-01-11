@@ -1,12 +1,12 @@
+#ifndef __SEED__
+#define __SEED__
+
 #include <algorithm>
 
 #include "../common/cryptomath.h"
 #include "../common/includes.h"
 #include "../common/integer.h"
 #include "SymAlg.h"
-
-#ifndef __SEED__
-#define __SEED__
 
 #include "SEED_Const.h"
 

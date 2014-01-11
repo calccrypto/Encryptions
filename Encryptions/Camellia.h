@@ -1,3 +1,6 @@
+#ifndef __CAMELLIA__
+#define __CAMELLIA__
+
 #include <algorithm>
 #include <vector>
 
@@ -5,9 +8,6 @@
 #include "../common/includes.h"
 #include "../common/integer.h"
 #include "SymAlg.h"
-
-#ifndef __CAMELLIA__
-#define __CAMELLIA__
 
 #include "Camellia_Const.h"
 

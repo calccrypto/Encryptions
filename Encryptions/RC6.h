@@ -1,12 +1,12 @@
+#ifndef __RC6__
+#define __RC6__
+
 #include <vector>
 
 #include "../common/cryptomath.h"
 #include "../common/includes.h"
 #include "../common/integer.h"
 #include "SymAlg.h"
-
-#ifndef __RC6__
-#define __RC6__
 
 #include "RC_PQ.h"
 

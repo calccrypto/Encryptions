@@ -1,8 +1,9 @@
+#ifndef __SYMALG__
+#define __SYMALG__
+
 #include <iostream>
 #include <stdexcept>
 
-#ifndef __SYMALG__
-#define __SYMALG__
 class SymAlg{
     protected:
         bool keyset;

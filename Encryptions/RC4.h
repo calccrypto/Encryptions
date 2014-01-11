@@ -1,9 +1,10 @@
+#ifndef __RC4__
+#define __RC4__
+
 #include <vector>
 
 #include "SymAlg.h"
 
-#ifndef __RC4__
-#define __RC4__
 class RC4 : public SymAlg{
     private:
         std::vector <uint8_t> key;

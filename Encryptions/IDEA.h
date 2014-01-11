@@ -1,11 +1,12 @@
+#ifndef __IDEA__
+#define __IDEA__
+
 #include <vector>
 
 #include "../common/cryptomath.h"
 #include "../common/includes.h"
 #include "SymAlg.h"
 
-#ifndef __IDEA__
-#define __IDEA__
 class IDEA : public SymAlg{
     private:
         std::string mode;

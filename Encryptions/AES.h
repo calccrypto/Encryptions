@@ -1,12 +1,12 @@
 #include <algorithm>
 #include <vector>
 
+#ifndef __AES__
+#define __AES__
+
 #include "../common/cryptomath.h"
 #include "../common/includes.h"
 #include "SymAlg.h"
-
-#ifndef __AES__
-#define __AES__
 
 #include "AES_Const.h"
 

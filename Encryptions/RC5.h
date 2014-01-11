@@ -1,3 +1,6 @@
+#ifndef __RC5__
+#define __RC5__
+
 #include <algorithm>
 #include <cmath>
 #include <vector>
@@ -5,9 +8,6 @@
 #include "../common/cryptomath.h"
 #include "../common/includes.h"
 #include "SymAlg.h"
-
-#ifndef __RC5__
-#define __RC5__
 
 #include "RC_PQ.h"
 

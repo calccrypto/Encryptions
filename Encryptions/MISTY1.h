@@ -1,8 +1,8 @@
-#include "../common/includes.h"
-#include "SymAlg.h"
-
 #ifndef __MISTY1__
 #define __MISTY1__
+
+#include "../common/includes.h"
+#include "SymAlg.h"
 
 #include "MISTY1_Const.h"
 

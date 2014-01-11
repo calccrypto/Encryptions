@@ -1,8 +1,9 @@
+#ifndef __TEA__
+#define __TEA__
+
 #include "../common/includes.h"
 #include "SymAlg.h"
 
-#ifndef __TEA__
-#define __TEA__
 class TEA : public SymAlg{
     private:
         bool keyset;

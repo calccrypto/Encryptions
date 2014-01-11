@@ -1,8 +1,9 @@
+#ifndef __TDES__
+#define __TDES__
+
 #include "DES.h"
 #include "SymAlg.h"
 
-#ifndef __TDES__
-#define __TDES__
 class TDES : public SymAlg{
     private:
         std::string k1, k2, k3;

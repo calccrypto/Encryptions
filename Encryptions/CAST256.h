@@ -1,12 +1,12 @@
+#ifndef __CAST256__
+#define __CAST256__
+
 #include <algorithm>
 #include <vector>
 
 #include "../common/cryptomath.h"
 #include "../common/includes.h"
 #include "SymAlg.h"
-
-#ifndef __CAST256__
-#define __CAST256__
 
 #include "CAST_Const.h"
 

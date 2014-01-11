@@ -1,11 +1,11 @@
 // Propagating Cipher - Block Chaining
+#ifndef __PCPB__
+#define __PCPB__
 
 #include "../common/includes.h"
 #include "../common/integer.h"
 #include "SymAlg.h"
 
-#ifndef __PCPB__
-#define __PCPB__
 class PCPB{
   private:
     SymAlg * algo;

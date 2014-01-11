@@ -1,10 +1,10 @@
 // Electronic Codebook
+#ifndef __ECB__
+#define __ECB__
 
 #include "../common/includes.h"
 #include "SymAlg.h"
 
-#ifndef __ECB__
-#define __ECB__
 class ECB{
   private:
     SymAlg * algo;
