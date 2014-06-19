@@ -56,7 +56,7 @@ std::string TDES::encrypt(const std::string & DATA){
 }
 
 std::string TDES::decrypt(const std::string & DATA){
-    return run(run(run(DATA, k1, ~m1), k2, ~m2), k3, ~m3);
+    return run(run(run(DATA, k1, !m1), k2, !m2), k3, !m3);
 }
 
 unsigned int TDES::blocksize(){

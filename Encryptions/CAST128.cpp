@@ -34,7 +34,7 @@ std::string CAST128::run(const std::string & DATA, const uint8_t start, const ui
         throw std::runtime_error("Error: Key has not been set.");
     }
     if (DATA.size() != 8){
-        throw std::runtime_error("Error: Key must be 64 bits long.");
+        throw std::runtime_error("Error: Data must be 64 bits long.");
     }
     uint32_t left = toint(DATA.substr(0, 4), 256);
     uint32_t right = toint(DATA.substr(4, 4), 256);

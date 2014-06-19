@@ -5,6 +5,9 @@
 uint16_t IDEA::mult(uint32_t value1, uint32_t value2){
     //Special condition used by IDEA
     //where 0 is equivalent to 65536//
+    if (value1 == 0 && value2 == 0){
+        return 1;
+    }
     if (value1 == 0){
         value1 = 65536;
     }
@@ -25,7 +28,7 @@ std::string IDEA::run(const std::string & DATA){
     }
 
     if (DATA.size() != 8){
-        throw std::runtime_error("Error: Key must be 64 bits in length.");
+        throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
     uint16_t x1 = toint(DATA.substr(0, 2), 256);
@@ -70,7 +73,7 @@ void IDEA::setkey(const std::string & KEY){
         throw std::runtime_error("Error: Key has already been set.");
     }
     if (KEY.size() != 16){
-        throw std::runtime_error("Error: Data must be 128 bits in length.");
+        throw std::runtime_error("Error: Key must be 128 bits in length.");
     }
 
     std::string key = hexlify(KEY);
