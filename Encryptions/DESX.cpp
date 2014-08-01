@@ -27,6 +27,6 @@ std::string DESX::decrypt(const std::string & DATA, const std::string & KEY3){
     return unhexlify(makehex(toint(des.decrypt(DATA), 256) ^ toint(KEY3, 256), 16));
 }
 
-unsigned int DESX::blocksize(){
+unsigned int DESX::blocksize() const{
     return 64;
 }

@@ -23,6 +23,6 @@ class RC5 : public SymAlg{
         void setkey(std::string KEY, const uint64_t & W = 32, const uint64_t & R = 12, const uint64_t & B = 16);
         std::string encrypt(const std::string & DATA);
         std::string decrypt(const std::string & DATA);
-        unsigned int blocksize();
+        unsigned int blocksize() const;
 };
 #endif

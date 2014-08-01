@@ -22,6 +22,6 @@ class RC6 : public SymAlg{
         void setkey(std::string KEY, const unsigned int & W = 32, const unsigned int & R = 20);
         std::string encrypt(const std::string & DATA);
         std::string decrypt(const std::string & DATA);
-        unsigned int blocksize();
+        unsigned int blocksize() const;
 };
 #endif

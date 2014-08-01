@@ -1,11 +1,14 @@
 #include "./XTEA.h"
 
-XTEA::XTEA(){
-    keyset = false;
+XTEA::XTEA():
+    SymAlg(),
+    delta(0), cycles(0), total(0), key()
+{
 }
 
-XTEA::XTEA(const std::string & KEY, const uint8_t & ROUNDS, const uint32_t & DELTA){//, const uint32_t & TOTAL = 0xc6ef3720){
-    keyset = false;
+XTEA::XTEA(const std::string & KEY, const uint8_t & ROUNDS, const uint32_t & DELTA): //, const uint32_t & TOTAL = 0xc6ef3720){
+    XTEA()
+{
     setkey(KEY, ROUNDS, DELTA);
 }
 
@@ -21,7 +24,7 @@ void XTEA::setkey(const std::string & KEY, const uint8_t & ROUNDS, const uint32_
     delta = DELTA;
     cycles = ROUNDS >> 1;
     for(uint8_t x = 0; x < 4; x++){
-        key[x] = (uint32_t) toint(KEY.substr(x << 2, 4), 256);
+        key[x] = static_cast <uint32_t> (toint(KEY.substr(x << 2, 4), 256));
     }
     keyset = true;
 }
@@ -35,7 +38,7 @@ std::string XTEA::encrypt(const std::string & DATA){
         throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
-    uint32_t data[2] = {(uint32_t) toint(DATA.substr(0, 4), 256), (uint32_t) toint(DATA.substr(4, 4), 256)};
+    uint32_t data[2] = {static_cast <uint32_t> (toint(DATA.substr(0, 4), 256)), static_cast <uint32_t> (toint(DATA.substr(4, 4), 256))};
     total = 0;
     for(uint8_t i = 0; i < cycles; i++){
         data[0] += (((data[1] << 4) ^ (data[1] >> 5)) + data[1]) ^ (total + key[total & 3]);
@@ -54,7 +57,7 @@ std::string XTEA::decrypt(const std::string & DATA){
         throw std::runtime_error("Error: Data must be 64 bits in length.");
     }
 
-    uint32_t data[2] = {(uint32_t) toint(DATA.substr(0, 4), 256), (uint32_t) toint(DATA.substr(4, 4), 256)};
+    uint32_t data[2] = {static_cast <uint32_t> (toint(DATA.substr(0, 4), 256)), static_cast <uint32_t> (toint(DATA.substr(4, 4), 256))};
     total = delta * cycles;
     for(uint8_t i = 0; i < cycles; i++){
         data[1] -= (((data[0] << 4) ^ (data[0] >> 5)) + data[0]) ^ (total + key[(total >> 11) & 3]);
@@ -64,6 +67,6 @@ std::string XTEA::decrypt(const std::string & DATA){
     return unhexlify(makehex(data[0], 8) + makehex(data[1], 8));
 }
 
-unsigned int XTEA::blocksize(){
+unsigned int XTEA::blocksize() const{
     return 64;
 }

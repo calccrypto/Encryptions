@@ -15,6 +15,6 @@ class DESX : public SymAlg{
         DESX(const std::string & KEY, const std::string & KEY2);
         std::string encrypt(const std::string & data, const std::string & KEY3);
         std::string decrypt(const std::string & data, const std::string & KEY3);
-        unsigned int blocksize();
+        unsigned int blocksize() const;
 };
 #endif

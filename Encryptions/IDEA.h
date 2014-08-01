@@ -9,7 +9,6 @@
 
 class IDEA : public SymAlg{
     private:
-        std::string mode;
         std::vector <std::vector <uint16_t> > keys;
         std::vector <uint16_t> k;
         uint16_t mult(uint32_t value1, uint32_t value2);
@@ -21,6 +20,6 @@ class IDEA : public SymAlg{
         void setkey(const std::string & KEY);
         std::string encrypt(const std::string & DATA);
         std::string decrypt(const std::string & DATA);
-        unsigned int blocksize();
+        unsigned int blocksize() const;
 };
 #endif

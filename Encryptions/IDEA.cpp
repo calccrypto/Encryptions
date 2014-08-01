@@ -18,7 +18,7 @@ uint16_t IDEA::mult(uint32_t value1, uint32_t value2){
     if (value1 == 65536){
         value1 = 0;
     }
-    return (uint16_t) value1;
+    return static_cast <uint16_t> (value1);
 }
 // ///////////////////////
 
@@ -37,15 +37,15 @@ std::string IDEA::run(const std::string & DATA){
     uint16_t x4 = toint(DATA.substr(6, 2), 256);
     for(uint8_t x = 0; x < 8; x++){
         uint16_t t1 = mult(x1, keys[x][0]);
-        uint16_t t2 = (uint16_t) (x2 + keys[x][1]);
-        uint16_t t3 = (uint16_t) (x3 + keys[x][2]);
+        uint16_t t2 = static_cast <uint16_t> (x2 + keys[x][1]);
+        uint16_t t3 = static_cast <uint16_t> (x3 + keys[x][2]);
         uint16_t t4 = mult(x4, keys[x][3]);
         uint16_t t5 = t1 ^ t3;
         uint16_t t6 = t2 ^ t4;
         uint16_t t7 = mult(t5, keys[x][4]);
-        uint16_t t8 = (uint16_t) (t6 + t7);
+        uint16_t t8 = static_cast <uint16_t> (t6 + t7);
         uint16_t t9 = mult(t8, keys[x][5]);
-        uint16_t t10 = (uint16_t) (t7 + t9);
+        uint16_t t10 = static_cast <uint16_t> (t7 + t9);
         x1 = t1 ^ t9;
         x2 = t3 ^ t9;
         x3 = t2 ^ t10;
@@ -53,18 +53,22 @@ std::string IDEA::run(const std::string & DATA){
     }
     std::swap(x2, x3);
     x1 = mult(x1, keys[8][0]);
-    x2 = (uint16_t) (x2 + keys[8][1]);
-    x3 = (uint16_t) (x3 + keys[8][2]);
+    x2 = static_cast <uint16_t> (x2 + keys[8][1]);
+    x3 = static_cast <uint16_t> (x3 + keys[8][2]);
     x4 = mult(x4, keys[8][3]);
     return unhexlify(makehex(x1, 4) + makehex(x2, 4) + makehex(x3, 4) + makehex(x4, 4));
 }
 
-IDEA::IDEA(){
-    keyset = false;
+IDEA::IDEA() :
+    SymAlg(),
+    keys(),
+    k()
+{
 }
 
-IDEA::IDEA(const std::string & KEY){
-    keyset = false;
+IDEA::IDEA(const std::string & KEY) :
+    IDEA()
+{
     setkey(KEY);
 }
 
@@ -146,17 +150,17 @@ std::string IDEA::decrypt(const std::string & DATA){
     keys.clear();
     std::vector <uint16_t> t;
     for(uint8_t x = 0; x < 8; x++){
-        k.push_back(invmod((int) 65537, (int) k[48 - 6 * x]));
+        k.push_back(invmod(static_cast <int> (65537), static_cast <int> (k[48 - 6 * x])));
         k.push_back(two_comp(k[50 - 6 * x]));
         k.push_back(two_comp(k[49 - 6 * x]));
-        k.push_back(invmod((int) 65537, (int) k[51 - 6 * x]));
+        k.push_back(invmod(static_cast <int> (65537), static_cast <int> (k[51 - 6 * x])));
         k.push_back(k[46 - 6 * x]);
         k.push_back(k[47 - 6 * x]);
     }
-    k.push_back(invmod((int) 65537, (int) k[0]));
+    k.push_back(invmod(static_cast <int> (65537), static_cast <int> (k[0])));
     k.push_back(two_comp(k[1]));
     k.push_back(two_comp(k[2]));
-    k.push_back(invmod((int) 65537, (int) k[3]));
+    k.push_back(invmod(static_cast <int> (65537), static_cast <int> (k[3])));
     k.erase(k.begin(), k.begin() + 52);
 
     for(uint8_t x = 0; x < 8; x++){
@@ -176,6 +180,6 @@ std::string IDEA::decrypt(const std::string & DATA){
     return run(DATA);
 }
 
-unsigned int IDEA::blocksize(){
+unsigned int IDEA::blocksize() const{
     return 64;
 }

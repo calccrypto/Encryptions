@@ -32,6 +32,7 @@ Algorithms:
     Skipjack
     Triple DES
     TEA
+    Twofish
     XTEA
 
 Modes of Operation (mod_op):
@@ -67,16 +68,13 @@ Notes:
         The default Initialization Vector is just a series of 0s.
 
 Build:
-	make (creates the object files only)
+	make (creates the object files and static library)
 
 	or
 
 	g++ -std=c++11 main.cpp common/*.cpp Encryptions/*.cpp
 
 	or some equivalent
-
-        The main function has to be provided since this is a library,
-	not a fully functioning program.
 
 Usage:
     'instance' is an instance of an algorithm

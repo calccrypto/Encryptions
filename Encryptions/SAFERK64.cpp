@@ -119,12 +119,16 @@ void SAFERK64::inv_pht_layer(std::vector <uint8_t> & data){
     }
 }
 
-SAFERK64::SAFERK64(){
-    keyset = false;
+SAFERK64::SAFERK64(): 
+    SymAlg(),
+    r(0),
+    keys(0)
+{
 }
 
-SAFERK64::SAFERK64(const std::string & KEY, const uint8_t & rounds){
-    keyset = false;
+SAFERK64::SAFERK64(const std::string & KEY, const uint8_t & rounds):
+    SAFERK64()
+{
     setkey(KEY, rounds);
 }
 
@@ -204,6 +208,6 @@ std::string SAFERK64::decrypt(const std::string & DATA){
     return out;
 }
 
-unsigned int SAFERK64::blocksize(){
+unsigned int SAFERK64::blocksize() const{
     return 128;
 }

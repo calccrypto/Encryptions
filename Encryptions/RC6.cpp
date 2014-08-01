@@ -1,11 +1,15 @@
 #include "./RC6.h"
 
-RC6::RC6(){
-    keyset = false;
+RC6::RC6():
+    SymAlg(),
+    w(0), r(0), b(0), lgw(0),
+    S(0)
+{
 }
 
-RC6::RC6(const std::string & KEY, const unsigned int & W, const unsigned int & R){
-    keyset = false;
+RC6::RC6(const std::string & KEY, const unsigned int & W, const unsigned int & R):
+    RC6()
+{
     setkey(KEY, W, R);
 }
 
@@ -87,6 +91,6 @@ std::string RC6::decrypt(const std::string & DATA){
     return unhexlify(little_end(makehex(A & mod, w >> 2)) + little_end(makehex(B & mod, w >> 2)) + little_end(makehex(C & mod, w >> 2)) + little_end(makehex(D & mod, w >> 2)));
 }
 
-unsigned int RC6::blocksize(){
+unsigned int RC6::blocksize() const{
     return w << 2;
 }

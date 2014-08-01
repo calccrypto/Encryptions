@@ -48,12 +48,16 @@ std::string CAST128::run(const std::string & DATA, const uint8_t start, const ui
     return unhexlify(makehex(right, 8) + makehex(left, 8));
 }
 
-CAST128::CAST128(){
-    keyset = false;
+CAST128::CAST128() :
+    SymAlg(),
+    rounds(0),
+    kr(), km()
+{
 }
 
-CAST128::CAST128(const std::string & KEY){
-    keyset = false;
+CAST128::CAST128(const std::string & KEY) :
+    CAST128()
+{
     setkey(KEY);
 }
 
@@ -66,22 +70,22 @@ void CAST128::setkey(std::string KEY){
         KEY += zero;
     }
 
-    uint32_t x0 = (uint8_t) KEY[0];
-    uint32_t x1 = (uint8_t) KEY[1];
-    uint32_t x2 = (uint8_t) KEY[2];
-    uint32_t x3 = (uint8_t) KEY[3];
-    uint32_t x4 = (uint8_t) KEY[4];
-    uint32_t x5 = (uint8_t) KEY[5];
-    uint32_t x6 = (uint8_t) KEY[6];
-    uint32_t x7 = (uint8_t) KEY[7];
-    uint32_t x8 = (uint8_t) KEY[8];
-    uint32_t x9 = (uint8_t) KEY[9];
-    uint32_t xA = (uint8_t) KEY[10];
-    uint32_t xB = (uint8_t) KEY[11];
-    uint32_t xC = (uint8_t) KEY[12];
-    uint32_t xD = (uint8_t) KEY[13];
-    uint32_t xE = (uint8_t) KEY[14];
-    uint32_t xF = (uint8_t) KEY[15];
+    uint32_t x0 = static_cast <uint8_t> (KEY[0]);
+    uint32_t x1 = static_cast <uint8_t> (KEY[1]);
+    uint32_t x2 = static_cast <uint8_t> (KEY[2]);
+    uint32_t x3 = static_cast <uint8_t> (KEY[3]);
+    uint32_t x4 = static_cast <uint8_t> (KEY[4]);
+    uint32_t x5 = static_cast <uint8_t> (KEY[5]);
+    uint32_t x6 = static_cast <uint8_t> (KEY[6]);
+    uint32_t x7 = static_cast <uint8_t> (KEY[7]);
+    uint32_t x8 = static_cast <uint8_t> (KEY[8]);
+    uint32_t x9 = static_cast <uint8_t> (KEY[9]);
+    uint32_t xA = static_cast <uint8_t> (KEY[10]);
+    uint32_t xB = static_cast <uint8_t> (KEY[11]);
+    uint32_t xC = static_cast <uint8_t> (KEY[12]);
+    uint32_t xD = static_cast <uint8_t> (KEY[13]);
+    uint32_t xE = static_cast <uint8_t> (KEY[14]);
+    uint32_t xF = static_cast <uint8_t> (KEY[15]);
 
     uint32_t z0, z1, z2, z3, z4, z5, z6, z7, z8, z9, zA, zB, zC, zD, zE, zF, temp;
 
@@ -193,6 +197,6 @@ std::string CAST128::decrypt(const std::string & DATA){
     return run(DATA, rounds, 0, -1);
 }
 
-unsigned int CAST128::blocksize(){
+unsigned int CAST128::blocksize() const{
     return 64;
 }

@@ -1,6 +1,8 @@
 # Encryptions Library Makefile
+AR=ar
+TARGET=libEncryptions.a
 
-all: common Encryptions
+all: $(TARGET)
 
 .PHONY: common Encryptions
 
@@ -10,6 +12,10 @@ common:
 Encryptions:
 	$(MAKE) -C Encryptions
 
+$(TARGET): common Encryptions
+	$(AR) -r $(TARGET) ./common/*.o ./Encryptions/*.o
+
 clean:
+	rm -f *.a
 	$(MAKE) -C common clean
 	$(MAKE) -C Encryptions clean

@@ -39,12 +39,16 @@ std::string SEED::run(const std::string & DATA){
     return unhexlify(makehex(R, 16) + makehex(L, 16));
 }
 
-SEED::SEED(){
-    keyset = false;
+SEED::SEED():
+    SymAlg(),
+    mode(""),
+    k()
+{
 }
 
-SEED::SEED(const std::string & KEY){
-    keyset = false;
+SEED::SEED(const std::string & KEY):
+    SEED()
+{
     setkey(KEY);
 }
 
@@ -58,10 +62,10 @@ void SEED::setkey(const std::string & KEY){
     }
 
     integer key(KEY, 256);
-    uint64_t K0 = (uint32_t) (key >> 96);
-    uint64_t K1 = (uint32_t) (key >> 64);
-    uint64_t K2 = (uint32_t) (key >> 32);
-    uint64_t K3 = (uint32_t) key;
+    uint64_t K0 = static_cast <uint32_t> (key >> 96);
+    uint64_t K1 = static_cast <uint32_t> (key >> 64);
+    uint64_t K2 = static_cast <uint32_t> (key >> 32);
+    uint64_t K3 = static_cast <uint32_t> (key);
     uint64_t T;
     for(uint8_t i = 1; i < 17; i++){
         k[i - 1].first = G((K0 + K2 - SEED_KC[i - 1]));
@@ -89,6 +93,6 @@ std::string SEED::decrypt(const std::string & DATA){
     return out;
 }
 
-unsigned int SEED::blocksize(){
+unsigned int SEED::blocksize() const{
     return 128;
 }

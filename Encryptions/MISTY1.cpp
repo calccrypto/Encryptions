@@ -9,7 +9,7 @@ uint16_t MISTY1::FI(const uint16_t FI_IN, const uint16_t FI_KEY){
     d7 ^= (FI_KEY >> 9);
     d9 ^= (FI_KEY & 0x1ff);
     d9 = MISTY1_S9[d9] ^ d7;
-    return ((uint16_t) (d7 & 0xffffU) << 9) | d9;
+    return (static_cast <uint16_t> (d7 & 0xffffU) << 9) | d9;
 }
 
 uint32_t MISTY1::FO(const uint32_t FO_IN, const uint16_t k){
@@ -56,12 +56,15 @@ uint32_t MISTY1::FLINV(const uint32_t FL_IN, const uint32_t k){
     return (d0 << 16) | d1;
 }
 
-MISTY1::MISTY1(){
-    keyset = false;
+MISTY1::MISTY1():
+    SymAlg(),
+    EK()
+{
 }
 
-MISTY1::MISTY1(const std::string & KEY){
-    keyset = false;
+MISTY1::MISTY1(const std::string & KEY):
+    MISTY1()
+{
     setkey(KEY);
 }
 
@@ -158,6 +161,6 @@ std::string MISTY1::decrypt(const std::string & DATA){
     return unhexlify(makehex(D0, 8) + makehex(D1));
 }
 
-unsigned int MISTY1::blocksize(){
+unsigned int MISTY1::blocksize() const{
     return 64;
 };

@@ -22,6 +22,6 @@ class Skipjack : public SymAlg{
         void setkey(const std::string & KEY);
         std::string encrypt(const std::string & DATA);
         std::string decrypt(const std::string & DATA);
-        unsigned int blocksize();
+        unsigned int blocksize() const;
 };
 #endif

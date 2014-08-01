@@ -31,6 +31,6 @@ class SAFERK64 : public SymAlg{
         void setkey(const std::string & KEY, const uint8_t & rounds = 10);
         std::string encrypt(const std::string & DATA);
         std::string decrypt(const std::string & DATA);
-        unsigned int blocksize();
+        unsigned int blocksize() const;
 };
 #endif

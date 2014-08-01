@@ -15,12 +15,16 @@ std::string TDES::run(const std::string & data, const std::string & key, const b
     return DES(key).decrypt(data);
 }
 
-TDES::TDES(){
-    keyset = false;
+TDES::TDES() :
+    SymAlg(),
+    k1(), k2(), k3(),
+    m1(), m2(), m3()
+{
 }
 
-TDES::TDES(const std::string & key1, const std::string & mode1, const std::string & key2, const std::string & mode2, const std::string & key3, const std::string & mode3){
-    keyset = false;
+TDES::TDES(const std::string & key1, const std::string & mode1, const std::string & key2, const std::string & mode2, const std::string & key3, const std::string & mode3) :
+    TDES()
+{
     setkey(key1, mode1, key2, mode2, key3, mode3);
 }
 
@@ -59,6 +63,6 @@ std::string TDES::decrypt(const std::string & DATA){
     return run(run(run(DATA, k1, !m1), k2, !m2), k3, !m3);
 }
 
-unsigned int TDES::blocksize(){
+unsigned int TDES::blocksize() const{
     return 64;
 }

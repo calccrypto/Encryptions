@@ -14,6 +14,6 @@ class XTEA : public SymAlg{
         void setkey(const std::string & KEY, const uint8_t & ROUNDS = 64, const uint32_t & DELTA = 0x9e3779b9);
         std::string encrypt(const std::string & DATA);
         std::string decrypt(const std::string & DATA);
-        unsigned int blocksize();
+        unsigned int blocksize() const;
 };
 #endif

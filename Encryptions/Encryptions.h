@@ -28,6 +28,7 @@
 #include "Skipjack.h"
 #include "TDES.h"
 #include "TEA.h"
+#include "Twofish.h"
 #include "XTEA.h"
 
 // Modes of Operation

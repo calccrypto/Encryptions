@@ -25,14 +25,16 @@ std::string Blowfish::run(const std::string & data){
     return unhexlify(makehex(right, 8) + makehex(left, 8));
 }
 
-Blowfish::Blowfish(){
-    keyset = false;
-    settingkey = true;
+Blowfish::Blowfish() :
+    SymAlg(),
+    settingkey(true),
+    p(), sbox()
+{
 }
 
-Blowfish::Blowfish(const std::string & KEY){
-    keyset = false;
-    settingkey = true;
+Blowfish::Blowfish(const std::string & KEY) :
+    Blowfish()
+{
     setkey(KEY);
 }
 
@@ -63,7 +65,7 @@ void Blowfish::setkey(const std::string & KEY){
 
     key = key.substr(0, 72);
     for(uint8_t x = 0; x < 18; x++){
-        p[x] ^= (uint32_t) toint(key.substr(x << 2, 4), 256);
+        p[x] ^= static_cast <uint32_t> (toint(key.substr(x << 2, 4), 256));
     }
 
     std::string ini(8, 0);
@@ -97,6 +99,6 @@ std::string Blowfish::decrypt(const std::string & DATA){
     return out;
 }
 
-unsigned int Blowfish::blocksize(){
+unsigned int Blowfish::blocksize() const{
     return 64;
 }

@@ -18,13 +18,17 @@ void RC2::r_mash(const uint8_t i){
     R[i] = (R[i] - K[R[(i + 3) & 3] & 63] + mod16 + 1) & mod16;
 }
 
-RC2::RC2(){
-    keyset = false;
+RC2::RC2():
+    SymAlg(),
+    K(), R(),
+    T1(64)
+{
 }
 
-RC2::RC2(const std::string & KEY, const uint32_t & t1){
+RC2::RC2(const std::string & KEY, const uint32_t & t1):
+    RC2()
+{
     T1 = t1;
-    keyset = false;
     setkey(KEY);
 }
 
@@ -38,7 +42,7 @@ void RC2::setkey(const std::string & KEY, const uint32_t & t1){
     unsigned int T = KEY.size();
     std::vector <uint8_t> L;
     for(unsigned int x = 0; x < T; x++){
-        L.push_back((uint8_t) KEY[x]);
+        L.push_back(static_cast <uint8_t> (KEY[x]));
     }
 
     while (L.size() < 128){
@@ -90,7 +94,7 @@ std::string RC2::encrypt(const std::string & DATA){
     }
 
     for(uint8_t x = 0; x < 4; x++){
-        R[x] = (uint16_t) toint(DATA.substr(x << 1, 2), 256);
+        R[x] = static_cast <uint16_t> (toint(DATA.substr(x << 1, 2), 256));
     }
 
     for(uint8_t j = 0; j < 16; j++){
@@ -123,7 +127,7 @@ std::string RC2::decrypt(const std::string & DATA){
     }
 
     for(uint8_t x = 0; x < 4; x++){
-        R[x] = (uint16_t) toint(DATA.substr(x << 1, 2), 256);
+        R[x] = static_cast <uint16_t> (toint(DATA.substr(x << 1, 2), 256));
     }
 
     for(int8_t j = 15; j > -1; j--){
@@ -146,7 +150,7 @@ std::string RC2::decrypt(const std::string & DATA){
     return out;
 }
 
-unsigned int RC2::blocksize(){
+unsigned int RC2::blocksize() const{
     return 64;
 }
 

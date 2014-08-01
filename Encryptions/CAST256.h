@@ -31,6 +31,6 @@ class CAST256 : public SymAlg{
         void setkey(std::string KEY);
         std::string encrypt(const std::string & DATA);
         std::string decrypt(const std::string & DATA);
-        unsigned int blocksize();
+        unsigned int blocksize() const;
 };
 #endif

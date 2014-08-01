@@ -122,12 +122,16 @@ std::string AES::OUT(std::vector <uint32_t> & data){
     return unhexlify(out);
 }
 
-AES::AES(){
-    keyset = false;
+AES::AES() :
+    SymAlg(),
+    b(0), rounds(0), columns(0),
+    keys()
+{
 }
 
-AES::AES(const std::string & KEY){
-    keyset = false;
+AES::AES(const std::string & KEY) :
+    AES()
+{
     setkey(KEY);
 }
 
@@ -148,7 +152,7 @@ void AES::setkey(const std::string & KEY){
 
     std::vector <uint32_t> key;
     for(uint8_t x = 0; x < columns; x++){
-        key.push_back((uint32_t) toint(KEY.substr(x << 2, 4), 256));
+        key.push_back(static_cast <uint32_t> (toint(KEY.substr(x << 2, 4), 256)));
     }
 
     uint8_t i = 1;
@@ -157,7 +161,7 @@ void AES::setkey(const std::string & KEY){
         uint32_t s = 0;
 
         for(uint8_t j = 0; j < 4; j++){
-            s += AES_Subbytes[(uint8_t) (t >> (j << 3))] << (j << 3);
+            s += AES_Subbytes[static_cast <uint8_t> (t >> (j << 3))] << (j << 3);
         }
 
         t = s ^ key[key.size() - n];
@@ -171,7 +175,7 @@ void AES::setkey(const std::string & KEY){
         if (n == 8){
             s = 0;
             for(uint8_t j = 0; j < 4; j++){
-                s += AES_Subbytes[(uint8_t) (key[key.size() - 1] >> (j << 3))] << (j << 3);
+                s += AES_Subbytes[static_cast <uint8_t> (key[key.size() - 1] >> (j << 3))] << (j << 3);
             }
             key.push_back(s ^ key[key.size() - n]);
         }
@@ -206,7 +210,7 @@ std::string AES::encrypt(const std::string & DATA){
         for(uint8_t y = 0; y < 4; y++){
             d += DATA[(x << 2) + y];
         }
-        data.push_back((uint32_t) toint(d, 256));
+        data.push_back(static_cast <uint32_t> (toint(d, 256)));
     }
 
     for(uint8_t x = 0; x < 4; x++){
@@ -252,7 +256,7 @@ std::string AES::decrypt(const std::string & DATA){
         for(uint8_t y = 0; y < 4; y++){
             d += DATA[(x << 2) + y];
         }
-        data.push_back((uint32_t) toint(d, 256));
+        data.push_back(static_cast <uint32_t> (toint(d, 256)));
     }
 
     for(uint8_t x = 0; x < 4; x++){
@@ -284,11 +288,11 @@ std::string AES::decrypt(const std::string & DATA){
     return OUT(data);
 }
 
-unsigned int AES::blocksize(){
+unsigned int AES::blocksize() const{
     return 128;
 }
 /*
-// More readable/easier to understant version of AES
+// More readable/easier to understand version of AES
 // slightly less efficient though
 
 void AES::shiftrow(std::vector <std::vector <uint8_t> > & data){

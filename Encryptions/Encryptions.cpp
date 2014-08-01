@@ -143,7 +143,7 @@ bool validate_symalg(std::ostream & stream, const bool do_1000000_check){
     stream << "CAST-128 128-bit Key Decrypt: \t\t" << (correct?"Passed":"Failed") << std::endl;
     all_correct &= correct;
 
-    // Full Maintanence Test
+    // Full Maintenance Test
     if (do_1000000_check){
         std::string a = unhexlify("0123456712345678234567893456789A");
         std::string b = unhexlify("0123456712345678234567893456789A");
@@ -154,7 +154,7 @@ bool validate_symalg(std::ostream & stream, const bool do_1000000_check){
             b = b.substr(0,8) + CAST128(a).encrypt(b.substr(8,8));
         };
         correct = ((a == unhexlify("EEA9D0A249FD3BA6B3436FB89D6DCA92")) && (b == unhexlify("B2C95EB00C31AD7180AC05B8E83D696E")));
-        stream << "CAST-128 Full Maintenence Test: \t" << (correct?"Passed":"Failed") << std::endl;
+        stream << "CAST-128 Full Maintenance Test: \t" << (correct?"Passed":"Failed") << std::endl;
         all_correct &= correct;
     }
 
@@ -559,6 +559,42 @@ bool validate_symalg(std::ostream & stream, const bool do_1000000_check){
     stream << "TEA Decrypt Test 1: \t\t\t" << (correct?"Passed":"Failed") << std::endl;
     all_correct &= correct;
 
+    // Twofish
+    // https://github.com/calccrypto/OpenPGP/blob/master/tests/testcases/test_twofish_ecb.cpp
+    // -> https://www.schneier.com/code/twofish-kat.zip
+    data = "00000000000000000000000000000000";
+    key = "00000000000000000000000000000000";
+    ciphertext = "9F589F5CF6122C32B6BFEC2F2AE8C35A";
+    Twofish twofish(unhexlify(key));
+    correct = (twofish.encrypt(unhexlify(data)) == unhexlify(ciphertext));
+    stream << "Twofish 128 Encrypt: \t\t\t" << (correct?"Passed":"Failed") << std::endl;
+    all_correct &= correct;
+    correct = (twofish.decrypt(unhexlify(ciphertext)) == unhexlify(data));
+    stream << "Twofish 128 Decrypt: \t\t\t" << (correct?"Passed":"Failed") << std::endl;
+    all_correct &= correct;
+
+    data = "00000000000000000000000000000000";
+    key = "0123456789ABCDEFFEDCBA98765432100011223344556677";
+    ciphertext = "CFD1D2E5A9BE9CDF501F13B892BD2248";
+    twofish = Twofish(unhexlify(key));
+    correct = (twofish.encrypt(unhexlify(data)) == unhexlify(ciphertext));
+    stream << "Twofish 192 Encrypt: \t\t\t" << (correct?"Passed":"Failed") << std::endl;
+    all_correct &= correct;
+    correct = (twofish.decrypt(unhexlify(ciphertext)) == unhexlify(data));
+    stream << "Twofish 192 Decrypt: \t\t\t" << (correct?"Passed":"Failed") << std::endl;
+    all_correct &= correct;
+
+    data = "00000000000000000000000000000000";
+    key = "0123456789ABCDEFFEDCBA987654321000112233445566778899AABBCCDDEEFF";
+    ciphertext = "37527BE0052334B89F0CFCCAE87CFA20";
+    twofish = Twofish(unhexlify(key));
+    correct = (twofish.encrypt(unhexlify(data)) == unhexlify(ciphertext));
+    stream << "Twofish 256 Encrypt: \t\t\t" << (correct?"Passed":"Failed") << std::endl;
+    all_correct &= correct;
+    correct = (twofish.decrypt(unhexlify(ciphertext)) == unhexlify(data));
+    stream << "Twofish 256 Decrypt: \t\t\t" << (correct?"Passed":"Failed") << std::endl;
+    all_correct &= correct;
+
 
     // XTEA
     // http://www.3amsystems.com/monetics/vectors.htm
@@ -613,6 +649,8 @@ std::vector <std::string> test_all(const uint64_t & bytes){
     stream << "Skipjack..............." << benchmark<Skipjack>(bytes);
     out.push_back(stream.str()); stream.str("");
     stream << "TEA...................." << benchmark<TEA>(bytes);
+    out.push_back(stream.str()); stream.str("");
+    stream << "Twofish................" << benchmark<Twofish>(bytes);
     out.push_back(stream.str()); stream.str("");
     stream << "XTEA..................." << benchmark<XTEA>(bytes);
     out.push_back(stream.str());

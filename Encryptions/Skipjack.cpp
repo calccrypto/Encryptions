@@ -60,12 +60,15 @@ void Skipjack::invB(uint16_t & w1, uint16_t & w2, uint16_t & w3, uint16_t & w4, 
     w4 = w5;
 }
 
-Skipjack::Skipjack(){
-    keyset = false;
+Skipjack::Skipjack():
+    SymAlg(),
+    key("")
+{
 }
 
-Skipjack::Skipjack(const std::string & KEY){
-    keyset = false;
+Skipjack::Skipjack(const std::string & KEY):
+    Skipjack()
+{
     setkey(KEY);
 }
 
@@ -152,6 +155,6 @@ std::string Skipjack::decrypt(const std::string & DATA){
     return unhexlify(makehex(w1, 4) + makehex(w2, 4) + makehex(w3, 4) + makehex(w4, 4));
 }
 
-unsigned int Skipjack::blocksize(){
+unsigned int Skipjack::blocksize() const{
     return 64;
 }

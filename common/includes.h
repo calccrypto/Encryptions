@@ -65,6 +65,10 @@ template <typename T> std::string makehex(T value, unsigned int size = 2 * sizeo
     return out;
 }
 
+template <typename T> uint8_t byte(const T & value, const uint16_t & n){
+    return (value >> (n * 8)) & 0xff;
+}
+
 std::string bintohex(const std::string & in, bool caps = false);
 std::string hexlify(const std::string & in, bool caps = false);
 std::string hexlify(const char in, bool caps = false);

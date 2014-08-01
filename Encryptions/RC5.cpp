@@ -1,11 +1,15 @@
 #include "./RC5.h"
 
-RC5::RC5(){
-    keyset = false;
+RC5::RC5():
+    SymAlg(),
+    w(0), r(0), b(0),
+    mod(0)
+{
 }
 
-RC5::RC5(const std::string & KEY, const uint64_t & W, const uint64_t & R, const uint64_t & B){
-    keyset = false;
+RC5::RC5(const std::string & KEY, const uint64_t & W, const uint64_t & R, const uint64_t & B):
+    RC5()
+{
     setkey(KEY, W, R, B);
 }
 
@@ -36,8 +40,8 @@ void RC5::setkey(std::string KEY, const uint64_t & W, const uint64_t & R, const 
     }
     uint64_t a = 0, b = 0, i = 0, j = 0, v = 3 * std::max(c, t);
     for(unsigned int x = 0; x < v; x++){
-        a = S[i] = ROL((uint32_t) (S[i] + a + b) & mod, 3, w);
-        b = L[j] = ROL((uint32_t) (L[j] + a + b) & mod, (a + b) % w, w);
+        a = S[i] = ROL(static_cast <uint32_t> (S[i] + a + b) & mod, 3, w);
+        b = L[j] = ROL(static_cast <uint32_t> (L[j] + a + b) & mod, (a + b) % w, w);
         i = (i + 1) % t;
         j = (j + 1) % c;
     }
@@ -72,6 +76,6 @@ std::string RC5::decrypt(const std::string & DATA){
     return unhexlify(makehex(A & mod, w >> 2) + makehex(B & mod, w >> 2));
 }
 
-unsigned int RC5::blocksize(){
+unsigned int RC5::blocksize() const{
     return w << 1;
 }

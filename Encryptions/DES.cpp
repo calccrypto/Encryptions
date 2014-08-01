@@ -11,7 +11,7 @@ std::string DES::run(const std::string & DATA){
 
     std::string data = "", temp = "";
     for(uint8_t x = 0; x < 8; x++){
-        data += makebin((uint8_t) DATA[x], 8);
+        data += makebin(static_cast <uint8_t> (DATA[x]), 8);
     }
     // IP
     for(uint8_t x = 0; x < 64; x++){
@@ -64,17 +64,20 @@ std::string DES::run(const std::string & DATA){
     // IP^-1
     uint64_t out = 0;
     for(uint8_t x = 0; x < 64; x++){
-        out += ((uint64_t) (data[DES_INVIP[x] - 1] == '1')) << (63 - x);
+        out += static_cast <uint64_t> (data[DES_INVIP[x] - 1] == '1') << (63 - x);
     }
     return unhexlify(makehex(out, 16));
 }
 
-DES::DES(){
-    keyset = false;
+DES::DES() :
+    SymAlg(),
+    keys()
+{
 }
 
-DES::DES(const std::string & KEY){
-    keyset = false;
+DES::DES(const std::string & KEY) :
+    DES()
+{
     setkey(KEY);
 }
 
@@ -88,7 +91,7 @@ void DES::setkey(const std::string & KEY){
 
     std::string key = "";
     for(int x = 0; x < 8; x++){
-        key += makebin((uint8_t) KEY[x], 8);
+        key += makebin(static_cast <uint8_t> (KEY[x]), 8);
     }
 
     std::string left = "", right = "";
@@ -120,6 +123,6 @@ std::string DES::decrypt(const std::string & DATA){
     return out;
 }
 
-unsigned int DES::blocksize(){
+unsigned int DES::blocksize() const{
     return 64;
 }

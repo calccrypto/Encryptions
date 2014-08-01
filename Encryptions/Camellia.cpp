@@ -202,12 +202,16 @@ std::string Camellia::run(const std::string & data){
     return unhexlify(makehex(D2, 16) + makehex(D1, 16));
 }
 
-Camellia::Camellia(){
-    keyset = false;
+Camellia::Camellia() :
+    SymAlg(),
+    keysize(0),
+    keys()
+{
 }
 
-Camellia::Camellia(const std::string & KEY){
-    keyset = false;
+Camellia::Camellia(const std::string & KEY) :
+    Camellia()
+{
     setkey(KEY);
 }
 
@@ -235,144 +239,144 @@ void Camellia::setkey(const std::string & KEY){
         KR = integer(KEY.substr(16, 16), 256);
     }
 
-    uint64_t D1 = (uint64_t) ((KL ^ KR) >> 64);
-    uint64_t D2 = (uint64_t) (KL ^ KR);
+    uint64_t D1 = static_cast <uint64_t> ((KL ^ KR) >> 64);
+    uint64_t D2 = static_cast <uint64_t> (KL ^ KR);
     D2 ^= F(D1, Camellia_Sigma1);
     D1 ^= F(D2, Camellia_Sigma2);
-    D1 ^= (uint64_t) (KL >> 64);
-    D2 ^= (uint64_t) KL;
+    D1 ^= static_cast <uint64_t> (KL >> 64);
+    D2 ^= static_cast <uint64_t> (KL);
     D2 ^= F(D1, Camellia_Sigma3);
     D1 ^= F(D2, Camellia_Sigma4);
     integer KA = (integer(D1) << 64) + D2;
-    D1 = (uint64_t) ((KA ^ KR) >> 64);
-    D2 = (uint64_t) (KA ^ KR);
+    D1 = static_cast <uint64_t> ((KA ^ KR) >> 64);
+    D2 = static_cast <uint64_t> (KA ^ KR);
     D2 ^= F(D1, Camellia_Sigma5);
     D1 ^= F(D2, Camellia_Sigma6);
     integer KB = (integer(D1) << 64) + D2;
     integer T;
     if (keysize == 16){
         T = ROL(KL, 0, 128);
-        keys.push_back((uint64_t) (T >> 64));               // kw1
-        keys.push_back((uint64_t) T);                       // kw2
+        keys.push_back(static_cast <uint64_t> (T >> 64));               // kw1
+        keys.push_back(static_cast <uint64_t> (T));                     // kw2
         T = ROL(KA, 0, 128);
-        keys.push_back((uint64_t) (T >> 64));               // k1
-        keys.push_back((uint64_t) T);                       // k2
+        keys.push_back(static_cast <uint64_t> (T >> 64));               // k1
+        keys.push_back(static_cast <uint64_t> (T));                     // k2
         T = ROL(KL, 15, 128);
-        keys.push_back((uint64_t) (T >> 64));               // k3
-        keys.push_back((uint64_t) T);                       // k4
+        keys.push_back(static_cast <uint64_t> (T >> 64));               // k3
+        keys.push_back(static_cast <uint64_t> (T));                     // k4
         T = ROL(KA, 15, 128);
-        keys.push_back((uint64_t) (T >> 64));               // k5
-        keys.push_back((uint64_t) T);                       // k6
+        keys.push_back(static_cast <uint64_t> (T >> 64));               // k5
+        keys.push_back(static_cast <uint64_t> (T));                     // k6
         T = ROL(KL, 45, 128);
-        keys.push_back((uint64_t) (T >> 64));               // k7
-        keys.push_back((uint64_t) T);                       // k8
+        keys.push_back(static_cast <uint64_t> (T >> 64));               // k7
+        keys.push_back(static_cast <uint64_t> (T));                     // k8
         T = ROL(KA, 45, 128);
-        keys.push_back((uint64_t) (T >> 64));               // k9
+        keys.push_back(static_cast <uint64_t> (T >> 64));               // k9
         T = ROL(KA, 30, 128);
-        keys.push_back((uint64_t) (T >> 64));               // ke1
-        keys.push_back((uint64_t) ROL(KA, 30, 128));        // ke2
+        keys.push_back(static_cast <uint64_t> (T >> 64));               // ke1
+        keys.push_back(static_cast <uint64_t> (ROL(KA, 30, 128)));      // ke2
         T = ROL(KL, 77, 128);
-        keys.push_back((uint64_t) (T >> 64));               // ke3
-        keys.push_back((uint64_t) T);                       // ke4
+        keys.push_back(static_cast <uint64_t> (T >> 64));               // ke3
+        keys.push_back(static_cast <uint64_t> (T));                     // ke4
         T = ROL(KL, 60, 128);
-        keys.push_back((uint64_t) T);                       // k10
+        keys.push_back(static_cast <uint64_t> (T));                     // k10
         T = ROL(KA, 60, 128);
-        keys.push_back((uint64_t) (T >> 64));               // k11
-        keys.push_back((uint64_t) T);                       // k12
+        keys.push_back(static_cast <uint64_t> (T >> 64));               // k11
+        keys.push_back(static_cast <uint64_t> (T));                     // k12
         T = ROL(KL, 94, 128);
-        keys.push_back((uint64_t) (T >> 64));               // k13
-        keys.push_back((uint64_t) T);                       // k14
+        keys.push_back(static_cast <uint64_t> (T >> 64));               // k13
+        keys.push_back(static_cast <uint64_t> (T));                     // k14
         T = ROL(KA, 94, 128);
-        keys.push_back((uint64_t) (T >> 64));               // k15
-        keys.push_back((uint64_t) T);                       // k16
+        keys.push_back(static_cast <uint64_t> (T >> 64));               // k15
+        keys.push_back(static_cast <uint64_t> (T));                     // k16
         T = ROL(KL, 111, 128);
-        keys.push_back((uint64_t) (T >> 64));               // k17
-        keys.push_back((uint64_t) T);                       // k18
+        keys.push_back(static_cast <uint64_t> (T >> 64));               // k17
+        keys.push_back(static_cast <uint64_t> (T));                     // k18
         T = ROL(KA, 111, 128);
-        keys.push_back((uint64_t) T);                       // kw4
-        keys.push_back((uint64_t) (T >> 64));               // kw3
+        keys.push_back(static_cast <uint64_t> (T));                     // kw4
+        keys.push_back(static_cast <uint64_t> (T >> 64));               // kw3
     }
     else{
         T = ROL(KL, 0, 128);
-        keys.push_back((uint64_t) (T >> 64));               //kw1
-        keys.push_back((uint64_t) T);                       //kw2
+        keys.push_back(static_cast <uint64_t> (T >> 64));               //kw1
+        keys.push_back(static_cast <uint64_t> (T));                     //kw2
         T = ROL(KB, 0, 128);
-        keys.push_back((uint64_t) (T >> 64));               //k1
-        keys.push_back((uint64_t) T);                       //k2
+        keys.push_back(static_cast <uint64_t> (T >> 64));               //k1
+        keys.push_back(static_cast <uint64_t> (T));                     //k2
         T = ROL(KR, 15, 128);
-        keys.push_back((uint64_t) (T >> 64));               //k3
-        keys.push_back((uint64_t) T);                       //k4
+        keys.push_back(static_cast <uint64_t> (T >> 64));               //k3
+        keys.push_back(static_cast <uint64_t> (T));                     //k4
         T = ROL(KA, 15, 128);
-        keys.push_back((uint64_t) (T >> 64));               //k5
-        keys.push_back((uint64_t) T);                       //k6
+        keys.push_back(static_cast <uint64_t> (T >> 64));               //k5
+        keys.push_back(static_cast <uint64_t> (T));                     //k6
         T = ROL(KB, 30, 128);
-        keys.push_back((uint64_t) (T >> 64));               //k7
-        keys.push_back((uint64_t) T);                       //k8
+        keys.push_back(static_cast <uint64_t> (T >> 64));               //k7
+        keys.push_back(static_cast <uint64_t> (T));                     //k8
         T = ROL(KL, 45, 128);
-        keys.push_back((uint64_t) (T >> 64));               //k9
-        keys.push_back((uint64_t) T);                       //k10
+        keys.push_back(static_cast <uint64_t> (T >> 64));               //k9
+        keys.push_back(static_cast <uint64_t> (T));                     //k10
         T = ROL(KA, 45, 128);
-        keys.push_back((uint64_t) (T >> 64));               //k11
-        keys.push_back((uint64_t) T);                       //k12
+        keys.push_back(static_cast <uint64_t> (T >> 64));               //k11
+        keys.push_back(static_cast <uint64_t> (T));                     //k12
         T = ROL(KR, 30, 128);
-        keys.push_back((uint64_t) (T >> 64));               //ke1
-        keys.push_back((uint64_t) T);                       //ke2
+        keys.push_back(static_cast <uint64_t> (T >> 64));               //ke1
+        keys.push_back(static_cast <uint64_t> (T));                     //ke2
         T = ROL(KL, 60, 128);
-        keys.push_back((uint64_t) (T >> 64));               //ke3
-        keys.push_back((uint64_t) T);                       //ke4
+        keys.push_back(static_cast <uint64_t> (T >> 64));               //ke3
+        keys.push_back(static_cast <uint64_t> (T));                     //ke4
         T = ROL(KA, 77, 128);
-        keys.push_back((uint64_t) (T >> 64));               //ke5
-        keys.push_back((uint64_t) T);                       //ke6
+        keys.push_back(static_cast <uint64_t> (T >> 64));               //ke5
+        keys.push_back(static_cast <uint64_t> (T));                     //ke6
         T = ROL(KR, 60, 128);
-        keys.push_back((uint64_t) (T >> 64));               //k13
-        keys.push_back((uint64_t) T);                       //k14
+        keys.push_back(static_cast <uint64_t> (T >> 64));               //k13
+        keys.push_back(static_cast <uint64_t> (T));                     //k14
         T = ROL(KB, 60, 128);
-        keys.push_back((uint64_t) (T >> 64));               //k15
-        keys.push_back((uint64_t) T);                       //k16
+        keys.push_back(static_cast <uint64_t> (T >> 64));               //k15
+        keys.push_back(static_cast <uint64_t> (T));                     //k16
         T = ROL(KL, 77, 128);
-        keys.push_back((uint64_t) (T >> 64));               //k17
-        keys.push_back((uint64_t) T);                       //k18
+        keys.push_back(static_cast <uint64_t> (T >> 64));               //k17
+        keys.push_back(static_cast <uint64_t> (T));                     //k18
         T = ROL(KR, 94, 128);
-        keys.push_back((uint64_t) (T >> 64));               //k19
-        keys.push_back((uint64_t) T);                       //k20
+        keys.push_back(static_cast <uint64_t> (T >> 64));               //k19
+        keys.push_back(static_cast <uint64_t> (T));                     //k20
         T = ROL(KA, 94, 128);
-        keys.push_back((uint64_t) (T >> 64));               //k21
-        keys.push_back((uint64_t) T);                       //k22
+        keys.push_back(static_cast <uint64_t> (T >> 64));               //k21
+        keys.push_back(static_cast <uint64_t> (T));                     //k22
         T = ROL(KL, 111, 128);
-        keys.push_back((uint64_t) (T >> 64));               //k23
-        keys.push_back((uint64_t) T);                       //k24
+        keys.push_back(static_cast <uint64_t> (T >> 64));               //k23
+        keys.push_back(static_cast <uint64_t> (T));                     //k24
         T = ROL(KB, 111, 128);
-        keys.push_back((uint64_t) T);                       //kw4
-        keys.push_back((uint64_t) (T >> 64));               //kw3
+        keys.push_back(static_cast <uint64_t> (T));                     //kw4
+        keys.push_back(static_cast <uint64_t> (T >> 64));               //kw3
     }
 //// More clear way of implementing
 //    if (keysize == 16){
-//        uint64_t kw1 = (uint64_t) (ROL(KL, 0, 128) >> 64);
-//        uint64_t kw2 = (uint64_t) (ROL(KL, 0, 128));
-//        uint64_t k1 = (uint64_t) (ROL(KA, 0, 128) >> 64);
-//        uint64_t k2 = (uint64_t) (ROL(KA, 0, 128));
-//        uint64_t k3 = (uint64_t) (ROL(KL, 15, 128) >> 64);
-//        uint64_t k4 = (uint64_t) (ROL(KL, 15, 128));
-//        uint64_t k5 = (uint64_t) (ROL(KA, 15, 128) >> 64);
-//        uint64_t k6 = (uint64_t) (ROL(KA, 15, 128));
-//        uint64_t ke1 = (uint64_t) (ROL(KA, 30, 128) >> 64);
-//        uint64_t ke2 = (uint64_t) (ROL(KA, 30, 128));
-//        uint64_t k7 = (uint64_t) (ROL(KL, 45, 128) >> 64);
-//        uint64_t k8 = (uint64_t) (ROL(KL, 45, 128));
-//        uint64_t k9 = (uint64_t) (ROL(KA, 45, 128) >> 64);
-//        uint64_t k10 = (uint64_t) (ROL(KL, 60, 128));
-//        uint64_t k11 = (uint64_t) (ROL(KA, 60, 128) >> 64);
-//        uint64_t k12 = (uint64_t) (ROL(KA, 60, 128));
-//        uint64_t ke3 = (uint64_t) (ROL(KL, 77, 128) >> 64);
-//        uint64_t ke4 = (uint64_t) (ROL(KL, 77, 128));
-//        uint64_t k13 = (uint64_t) (ROL(KL, 94, 128) >> 64);
-//        uint64_t k14 = (uint64_t) (ROL(KL, 94, 128));
-//        uint64_t k15 = (uint64_t) (ROL(KA, 94, 128) >> 64);
-//        uint64_t k16 = (uint64_t) (ROL(KA, 94, 128));
-//        uint64_t k17 = (uint64_t) (ROL(KL, 111, 128) >> 64);
-//        uint64_t k18 = (uint64_t) (ROL(KL, 111, 128));
-//        uint64_t kw4 = (uint64_t) (ROL(KA, 111, 128));
-//        uint64_t kw3 = (uint64_t) (ROL(KA, 111, 128) >> 64);
+//        uint64_t kw1 = static_cast <uint64_t> (ROL(KL, 0, 128) >> 64);
+//        uint64_t kw2 = static_cast <uint64_t> (ROL(KL, 0, 128));
+//        uint64_t k1 = static_cast <uint64_t> (ROL(KA, 0, 128) >> 64);
+//        uint64_t k2 = static_cast <uint64_t> (ROL(KA, 0, 128));
+//        uint64_t k3 = static_cast <uint64_t> (ROL(KL, 15, 128) >> 64);
+//        uint64_t k4 = static_cast <uint64_t> (ROL(KL, 15, 128));
+//        uint64_t k5 = static_cast <uint64_t> (ROL(KA, 15, 128) >> 64);
+//        uint64_t k6 = static_cast <uint64_t> (ROL(KA, 15, 128));
+//        uint64_t ke1 = static_cast <uint64_t> (ROL(KA, 30, 128) >> 64);
+//        uint64_t ke2 = static_cast <uint64_t> (ROL(KA, 30, 128));
+//        uint64_t k7 = static_cast <uint64_t> (ROL(KL, 45, 128) >> 64);
+//        uint64_t k8 = static_cast <uint64_t> (ROL(KL, 45, 128));
+//        uint64_t k9 = static_cast <uint64_t> (ROL(KA, 45, 128) >> 64);
+//        uint64_t k10 = static_cast <uint64_t> (ROL(KL, 60, 128));
+//        uint64_t k11 = static_cast <uint64_t> (ROL(KA, 60, 128) >> 64);
+//        uint64_t k12 = static_cast <uint64_t> (ROL(KA, 60, 128));
+//        uint64_t ke3 = static_cast <uint64_t> (ROL(KL, 77, 128) >> 64);
+//        uint64_t ke4 = static_cast <uint64_t> (ROL(KL, 77, 128));
+//        uint64_t k13 = static_cast <uint64_t> (ROL(KL, 94, 128) >> 64);
+//        uint64_t k14 = static_cast <uint64_t> (ROL(KL, 94, 128));
+//        uint64_t k15 = static_cast <uint64_t> (ROL(KA, 94, 128) >> 64);
+//        uint64_t k16 = static_cast <uint64_t> (ROL(KA, 94, 128));
+//        uint64_t k17 = static_cast <uint64_t> (ROL(KL, 111, 128) >> 64);
+//        uint64_t k18 = static_cast <uint64_t> (ROL(KL, 111, 128));
+//        uint64_t kw4 = static_cast <uint64_t> (ROL(KA, 111, 128));
+//        uint64_t kw3 = static_cast <uint64_t> (ROL(KA, 111, 128) >> 64);
 //
 //        keys.push_back(kw1);
 //        keys.push_back(kw2);
@@ -402,40 +406,40 @@ void Camellia::setkey(const std::string & KEY){
 //        keys.push_back(kw3);
 //    }
 //    else{
-//        uint64_t kw1 = (uint64_t) (ROL(KL, 0, 128) >> 64);
-//        uint64_t kw2 = (uint64_t) (ROL(KL, 0, 128));
-//        uint64_t k1 = (uint64_t) (ROL(KB, 0, 128) >> 64);
-//        uint64_t k2 = (uint64_t) (ROL(KB, 0, 128));
-//        uint64_t k3 = (uint64_t) (ROL(KR, 15, 128) >> 64);
-//        uint64_t k4 = (uint64_t) (ROL(KR, 15, 128));
-//        uint64_t k5 = (uint64_t) (ROL(KA, 15, 128) >> 64);
-//        uint64_t k6 = (uint64_t) (ROL(KA, 15, 128));
-//        uint64_t ke1 = (uint64_t) (ROL(KR, 30, 128) >> 64);
-//        uint64_t ke2 = (uint64_t) (ROL(KR, 30, 128));
-//        uint64_t k7 = (uint64_t) (ROL(KB, 30, 128) >> 64);
-//        uint64_t k8 = (uint64_t) (ROL(KB, 30, 128));
-//        uint64_t k9 = (uint64_t) (ROL(KL, 45, 128) >> 64);
-//        uint64_t k10 = (uint64_t) (ROL(KL, 45, 128));
-//        uint64_t k11 = (uint64_t) (ROL(KA, 45, 128) >> 64);
-//        uint64_t k12 = (uint64_t) (ROL(KA, 45, 128));
-//        uint64_t ke3 = (uint64_t) (ROL(KL, 60, 128) >> 64);
-//        uint64_t ke4 = (uint64_t) (ROL(KL, 60, 128));
-//        uint64_t k13 = (uint64_t) (ROL(KR, 60, 128) >> 64);
-//        uint64_t k14 = (uint64_t) (ROL(KR, 60, 128));
-//        uint64_t k15 = (uint64_t) (ROL(KB, 60, 128) >> 64);
-//        uint64_t k16 = (uint64_t) (ROL(KB, 60, 128));
-//        uint64_t k17 = (uint64_t) (ROL(KL, 77, 128) >> 64);
-//        uint64_t k18 = (uint64_t) (ROL(KL, 77, 128));
-//        uint64_t ke5 = (uint64_t) (ROL(KA, 77, 128) >> 64);
-//        uint64_t ke6 = (uint64_t) (ROL(KA, 77, 128));
-//        uint64_t k19 = (uint64_t) (ROL(KR, 94, 128) >> 64);
-//        uint64_t k20 = (uint64_t) (ROL(KR, 94, 128));
-//        uint64_t k21 = (uint64_t) (ROL(KA, 94, 128) >> 64);
-//        uint64_t k22 = (uint64_t) (ROL(KA, 94, 128));
-//        uint64_t k23 = (uint64_t) (ROL(KL, 111, 128) >> 64);
-//        uint64_t k24 = (uint64_t) (ROL(KL, 111, 128));
-//        uint64_t kw3 = (uint64_t) (ROL(KB, 111, 128) >> 64);
-//        uint64_t kw4 = (uint64_t) (ROL(KB, 111, 128));
+//        uint64_t kw1 = static_cast <uint64_t> (ROL(KL, 0, 128) >> 64);
+//        uint64_t kw2 = static_cast <uint64_t> (ROL(KL, 0, 128));
+//        uint64_t k1 = static_cast <uint64_t> (ROL(KB, 0, 128) >> 64);
+//        uint64_t k2 = static_cast <uint64_t> (ROL(KB, 0, 128));
+//        uint64_t k3 = static_cast <uint64_t> (ROL(KR, 15, 128) >> 64);
+//        uint64_t k4 = static_cast <uint64_t> (ROL(KR, 15, 128));
+//        uint64_t k5 = static_cast <uint64_t> (ROL(KA, 15, 128) >> 64);
+//        uint64_t k6 = static_cast <uint64_t> (ROL(KA, 15, 128));
+//        uint64_t ke1 = static_cast <uint64_t> (ROL(KR, 30, 128) >> 64);
+//        uint64_t ke2 = static_cast <uint64_t> (ROL(KR, 30, 128));
+//        uint64_t k7 = static_cast <uint64_t> (ROL(KB, 30, 128) >> 64);
+//        uint64_t k8 = static_cast <uint64_t> (ROL(KB, 30, 128));
+//        uint64_t k9 = static_cast <uint64_t> (ROL(KL, 45, 128) >> 64);
+//        uint64_t k10 = static_cast <uint64_t> (ROL(KL, 45, 128));
+//        uint64_t k11 = static_cast <uint64_t> (ROL(KA, 45, 128) >> 64);
+//        uint64_t k12 = static_cast <uint64_t> (ROL(KA, 45, 128));
+//        uint64_t ke3 = static_cast <uint64_t> (ROL(KL, 60, 128) >> 64);
+//        uint64_t ke4 = static_cast <uint64_t> (ROL(KL, 60, 128));
+//        uint64_t k13 = static_cast <uint64_t> (ROL(KR, 60, 128) >> 64);
+//        uint64_t k14 = static_cast <uint64_t> (ROL(KR, 60, 128));
+//        uint64_t k15 = static_cast <uint64_t> (ROL(KB, 60, 128) >> 64);
+//        uint64_t k16 = static_cast <uint64_t> (ROL(KB, 60, 128));
+//        uint64_t k17 = static_cast <uint64_t> (ROL(KL, 77, 128) >> 64);
+//        uint64_t k18 = static_cast <uint64_t> (ROL(KL, 77, 128));
+//        uint64_t ke5 = static_cast <uint64_t> (ROL(KA, 77, 128) >> 64);
+//        uint64_t ke6 = static_cast <uint64_t> (ROL(KA, 77, 128));
+//        uint64_t k19 = static_cast <uint64_t> (ROL(KR, 94, 128) >> 64);
+//        uint64_t k20 = static_cast <uint64_t> (ROL(KR, 94, 128));
+//        uint64_t k21 = static_cast <uint64_t> (ROL(KA, 94, 128) >> 64);
+//        uint64_t k22 = static_cast <uint64_t> (ROL(KA, 94, 128));
+//        uint64_t k23 = static_cast <uint64_t> (ROL(KL, 111, 128) >> 64);
+//        uint64_t k24 = static_cast <uint64_t> (ROL(KL, 111, 128));
+//        uint64_t kw3 = static_cast <uint64_t> (ROL(KB, 111, 128) >> 64);
+//        uint64_t kw4 = static_cast <uint64_t> (ROL(KB, 111, 128));
 //        keys.push_back(kw1);
 //        keys.push_back(kw2);
 //        keys.push_back(k1);
@@ -485,6 +489,6 @@ std::string Camellia::decrypt(const std::string & DATA){
     return out;
 }
 
-unsigned int Camellia::blocksize(){
+unsigned int Camellia::blocksize() const{
     return 128;
 }
