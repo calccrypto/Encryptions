@@ -2,6 +2,7 @@ A C++ library of encryption alogorithms
 Copyright (c) 2013, 2014 Jason Lee @ calccrypto at gmail.com
 
 Please see LICENSE file for license.
+
 [![Build Status](https://travis-ci.org/calccrypto/Encryptions.svg?branch=master)](https://travis-ci.org/calccrypto/OpenPGP)
 <pre>
 

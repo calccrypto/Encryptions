@@ -118,12 +118,20 @@ std::string remove_padding(std::string data){
 	return data;
 }
 
-std::string zfill(std::string str, const unsigned int & n, const std::string & fill){
-    // adds (default "0") octets to the front of the string so it doesnt change the value if the string is meant to be changed to an int
-	while (str.size() < n){
-		str = fill + str;
+// adds characters to the front of the string
+std::string zfill(const std::string & str, const unsigned int & n, const char fill){
+    if ((n - str.size()) > 0){
+        return std::string(n - str.size(), fill) + str;
     }
-	return str;
+    return str;
+}
+
+// adds characters to the back of the string
+std::string pad(const std::string & str, const unsigned int & n, const char fill){
+    if ((n - str.size()) > 0){
+        return str + std::string(n - str.size(), fill);
+    }
+    return str;
 }
 
 nullbuf null_obj;

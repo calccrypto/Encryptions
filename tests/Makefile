@@ -2,7 +2,7 @@
 CXX?=g++
 LFLAGS=-lEncryptions -L..
 CFLAGS=-std=c++11 -Wall
-TARGET=test
+TARGET=tests
 
 debug: CFLAGS += -g
 debug: all
@@ -14,8 +14,8 @@ all: $(TARGET)
 lib:
 	$(MAKE) -C ..
 
-$(TARGET): test.cpp lib
-	$(CXX) $(CFLAGS) test.cpp $(LFLAGS) -o $(TARGET)
+$(TARGET): tests.cpp lib
+	$(CXX) $(CFLAGS) tests.cpp $(LFLAGS) -o $(TARGET)
 
 clean:
 	rm -f $(TARGET)

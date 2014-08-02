@@ -39,13 +39,23 @@
 #include "OFB.h"
 #include "PCPB.h"
 
+// check if a symmetric algorithm outputs expected values 
+template <typename Alg> bool validate_symalg(const std::string & plaintext, const std::string & key, const std::string & ciphertext, std::ostream & stream = null_out, const std::string & name = "", const unsigned int & linew = 40){
+    Alg alg(unhexlify(key));
+    bool correct = (alg.encrypt(unhexlify(plaintext)) == unhexlify(ciphertext));
+    stream << pad(name + " Encrypt:", linew, ' ') << (correct?"Passed":"Failed") << std::endl;
+    correct &= (alg.decrypt(unhexlify(ciphertext)) == unhexlify(plaintext));
+    stream << pad(name + " Decrypt:", linew, ' ') << (correct?"Passed":"Failed") << std::endl;
+    return correct;
+}
+
 // Check if all symmetric algorithms pass some Known Value Tests
-bool validate_symalg(std::ostream & stream = null_out, const bool do_1000000_check = false);
+bool validate_all_symalg(std::ostream & stream = null_out, const bool do_1000000_check = false, const unsigned int & linew = 40);
 
 // Do a simple benchmark of a symmetric algorithm
-template <class algorithm> double benchmark(const uint64_t & bytes = 1024){
+template <class Alg> double benchmark(const uint64_t & bytes = 1024){
     std::string key(32, 0xff);
-    algorithm current(key);
+    Alg current(key);
     uint8_t blocksize = current.blocksize() >> 3;
     std::string data(blocksize, 0);
     uint64_t loops = bytes / blocksize;

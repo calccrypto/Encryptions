@@ -7,7 +7,7 @@ A few Known Answer Tests for the Symmetric Algorithms
 
 int main(){
     std::cout << "\n\n"
-              << (validate_symalg(std::cout)?std::string("Passed"):std::string("Failed"))
+              << (validate_all_symalg(std::cout)?std::string("Passed"):std::string("Failed"))
               << std::endl;
     return 0;
 }

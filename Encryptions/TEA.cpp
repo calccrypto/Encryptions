@@ -6,7 +6,9 @@ TEA::TEA():
 {
 }
 
-TEA::TEA(const std::string & KEY, const uint32_t & ROUNDS, const uint32_t & DELTA, const uint32_t & TOTAL){
+TEA::TEA(const std::string & KEY, const uint32_t & ROUNDS, const uint32_t & DELTA, const uint32_t & TOTAL):
+    TEA()
+{
     setkey(KEY, ROUNDS, DELTA, TOTAL);
 }
 

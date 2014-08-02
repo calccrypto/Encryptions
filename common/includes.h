@@ -75,7 +75,8 @@ std::string hexlify(const char in, bool caps = false);
 std::string unhexlify(const std::string & in);
 std::string pkcs5(const std::string & data, const unsigned int & blocksize);
 std::string remove_padding(std::string data);
-std::string zfill(std::string str, const unsigned int & n, const std::string & fill = "0");
+std::string zfill(const std::string & str, const unsigned int & n, const char fill = 0); // add to front of string
+std::string pad(const std::string & str, const unsigned int & n, const char fill = 0); // adds to back of string
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Thanks to Xeo @ stackoverflow

@@ -6,7 +6,6 @@
 
 class TEA : public SymAlg{
     private:
-        bool keyset;
         uint32_t delta, cycles, total, key[4];
 
     public:
