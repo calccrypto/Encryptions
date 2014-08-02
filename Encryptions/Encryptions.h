@@ -40,6 +40,7 @@
 #include "PCPB.h"
 
 // check if a symmetric algorithm outputs expected values 
+// plaintext, key, and ciphertext should be in hex
 template <typename Alg> bool validate_symalg(const std::string & plaintext, const std::string & key, const std::string & ciphertext, std::ostream & stream = null_out, const std::string & name = "", const unsigned int & linew = 40){
     Alg alg(unhexlify(key));
     bool correct = (alg.encrypt(unhexlify(plaintext)) == unhexlify(ciphertext));
