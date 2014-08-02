@@ -99,4 +99,4 @@ XTEA.o: XTEA.cpp XTEA.h ./SymAlg.h
 	$(CXX) $(CFLAGS) XTEA.cpp
 
 clean:
-	rm -f *.o *.a
+	rm -f *.o
