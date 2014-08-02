@@ -1,7 +1,9 @@
 A C++ library of encryption alogorithms
-by Jason Lee @ calccrypto at gmail.com
+Copyright (c) 2013, 2014 Jason Lee @ calccrypto at gmail.com
 
 Please see LICENSE file for license.
+[![Build Status](https://travis-ci.org/calccrypto/Encryptions.svg?branch=master)](https://travis-ci.org/calccrypto/OpenPGP)
+<pre>
 
 IMPORTANT:
     This library was not written for actual use.
@@ -68,13 +70,15 @@ Notes:
         The default Initialization Vector is just a series of 0s.
 
 Build:
-	make (creates the object files and static library)
+	make (creates the object files and libEncryptions.a)
 
 	or
 
 	g++ -std=c++11 main.cpp common/*.cpp Encryptions/*.cpp
 
 	or some equivalent
+    
+    Test code and its makefile are included in the test folder.
 
 Usage:
     'instance' is an instance of an algorithm
@@ -102,3 +106,4 @@ Usage:
             SymAlg * instance = new AES(key)
             data = CBC(instance, IV).encrypt(plaintext1 + plaintext2 + ... + plaintextN)
             free(instance)
+</pre>
