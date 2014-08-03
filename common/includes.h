@@ -77,6 +77,7 @@ std::string pkcs5(const std::string & data, const unsigned int & blocksize);
 std::string remove_padding(std::string data);
 std::string zfill(const std::string & str, const unsigned int & n, const char fill = 0); // add to front of string
 std::string pad(const std::string & str, const unsigned int & n, const char fill = 0); // adds to back of string
+std::string xor_strings(const std::string & str1, const std::string & str2); // xor the contents of 2 strings, up to the last character of the shorter string
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Thanks to Xeo @ stackoverflow

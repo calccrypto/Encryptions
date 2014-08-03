@@ -11,7 +11,7 @@ all: SymAlg.o AES.o Blowfish.o Camellia.o CAST128.o CAST256.o CBC.o CFB.o CTR.o 
 SymAlg.o: SymAlg.h SymAlg.cpp
 	$(CXX) $(CFLAGS) SymAlg.cpp
 
-AES.o: AES.cpp AES.h AES_Const.h ../common/cryptomath.h SymAlg.h
+AES.o: AES.cpp AES.h AES_Const.h ../common/cryptomath.h ../common/includes.h SymAlg.h
 	$(CXX) $(CFLAGS) AES.cpp
 
 Blowfish.o: Blowfish.cpp Blowfish.h Blowfish_Const.h SymAlg.h
@@ -38,7 +38,7 @@ CTR.o: CTR.cpp CTR.h ../common/includes.h ../common/integer.h SymAlg.h
 DES.o: DES.cpp DES.h DES_Const.h ./SymAlg.h
 	$(CXX) $(CFLAGS) DES.cpp
 
-DESX.o: DESX.cpp DESX.h ./SymAlg.h
+DESX.o: DESX.cpp DESX.h ../common/includes.h ./SymAlg.h
 	$(CXX) $(CFLAGS) DESX.cpp
 
 ECB.o: ECB.cpp ECB.h ../common/includes.h ../common/integer.h SymAlg.h
