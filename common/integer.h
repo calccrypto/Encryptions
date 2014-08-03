@@ -101,12 +101,12 @@ class integer{
         integer();
         integer(const bool & b);
         integer(const integer & rhs);
-        template <typename Z> integer(Z val){setFromZ(val);}
+        template <typename Z> integer(Z val) : integer() {setFromZ(val);}
         integer(base & val, bool s = false);
 
         // Written by Corbin
         // Slightly modified by me
-        template <typename Iterator> integer(Iterator start, const Iterator& end, uint16_t b){
+        template <typename Iterator> integer(Iterator start, const Iterator& end, uint16_t b) : integer() {
             bool s = false;
             if (start == end)
                 return;
@@ -152,7 +152,7 @@ class integer{
                     break;
                 case 256:
                     while (start != end){
-                        *this = (*this << 8) + (uint8_t) *start;
+                        *this = (*this << 8) + static_cast <uint8_t> (*start);
                         ++start;
                     }
                     break;
@@ -203,12 +203,12 @@ class integer{
 
         // Bit Shift Operators
         // left bit shift. sign is maintained
-        template <typename Z> integer operator<<(const Z & shift){return *this << ((uint64_t) shift);}
+        template <typename Z> integer operator<<(const Z & shift){return *this << static_cast <uint64_t> (shift);}
         integer operator<<(uint64_t shift);
         integer operator<<(integer shift);
 
         // right bit shift. sign is maintained
-        template <typename Z> integer operator>>(const Z & shift){return *this >> ((uint64_t) shift);}
+        template <typename Z> integer operator>>(const Z & shift){return *this >> static_cast <uint64_t> (shift);}
         integer operator>>(uint64_t shift);
         integer operator>>(integer shift);
 
@@ -219,10 +219,6 @@ class integer{
 
         // Logical Operators
         bool operator!();
-        template <typename Z> bool operator&&(const Z & rhs){return (bool) *this && (bool) rhs;}
-        bool operator&&(integer rhs);
-        template <typename Z> bool operator||(const Z & rhs){return ((bool) *this) || (bool) rhs;}
-        bool operator||(integer rhs);
 
         // Comparison Operators
         template <typename Z> bool operator==(const Z & rhs){return (*this == integer(rhs));}
@@ -293,7 +289,7 @@ class integer{
 //       // http://stackoverflow.com/questions/7058838/karatsuba-algorithm-too-much-recursion
 //       integer karatsuba(integer lhs, integer rhs, integer bm = 0x1000000U);
 //
-//       // Toom–Cook multiplication
+//       // Toom-Cook multiplication
 //       // as described at http://en.wikipedia.org/wiki/Toom%E2%80%93Cook_multiplications
 //       // The peasant function is needed if karatsuba is used.
 //       // This implementation is a bit weird. In the pointwise Multiplcation step, using
@@ -425,29 +421,29 @@ class integer{
 
 // Bitwise Operators
 template <typename Z> Z operator&(const Z & lhs, integer rhs){
-    return (Z) (rhs & lhs);
+    return static_cast <Z> (rhs & lhs);
 }
 
 template <typename Z> Z operator|(const Z & lhs, integer rhs){
-    return (Z) (rhs | lhs);
+    return static_cast <Z> (rhs | lhs);
 }
 
 template <typename Z> Z operator^(const Z & lhs, integer rhs){
-    return (Z) (rhs ^ lhs);
+    return static_cast <Z> (rhs ^ lhs);
 }
 
 template <typename Z> Z operator&=(Z & lhs, integer rhs){
-    lhs = (Z) (rhs & lhs);
+    lhs = static_cast <Z> (rhs & lhs);
     return lhs;
 }
 
 template <typename Z> Z operator|=(Z & lhs, integer rhs){
-    lhs = (Z) (rhs | lhs);
+    lhs = static_cast <Z> (rhs | lhs);
     return lhs;
 }
 
 template <typename Z> Z operator^=(Z & lhs, integer rhs){
-    lhs = (Z) (rhs ^ lhs);
+    lhs = static_cast <Z> (rhs ^ lhs);
     return lhs;
 }
 
@@ -478,16 +474,16 @@ template <typename Z> bool operator<=(const Z & lhs, integer rhs){
 
 // Arithmetic Operators
 template <typename Z> Z operator+(const Z & lhs, integer rhs){
-    return (Z) (rhs + lhs);
+    return static_cast <Z> (rhs + lhs);
 }
 
 template <typename Z> Z & operator+=(Z & lhs, integer rhs){
-    lhs = (Z) (rhs + lhs);
+    lhs = static_cast <Z> (rhs + lhs);
     return lhs;
 }
 
 template <typename Z> Z operator-(const Z & lhs, integer rhs){
-    return (Z) (integer(lhs) - rhs);
+    return static_cast <Z> (integer(lhs) - rhs);
 }
 
 template <typename Z> Z & operator-=(Z & lhs, integer rhs){
@@ -496,16 +492,16 @@ template <typename Z> Z & operator-=(Z & lhs, integer rhs){
 }
 
 template <typename Z> Z operator*(const Z & lhs, integer rhs){
-    return (Z) (rhs * lhs);
+    return static_cast <Z> (rhs * lhs);
 }
 
 template <typename Z> Z & operator*=(Z & lhs, integer rhs){
-    lhs = (Z) (rhs * lhs);
+    lhs = static_cast <Z> (rhs * lhs);
     return lhs;
 }
 
 template <typename Z> Z operator/(const Z & lhs, integer rhs){
-    return (Z) (integer(lhs) / rhs);
+    return static_cast <Z> (integer(lhs) / rhs);
 }
 
 template <typename Z> Z & operator/=(Z & lhs, integer rhs){
@@ -513,7 +509,7 @@ template <typename Z> Z & operator/=(Z & lhs, integer rhs){
     return lhs;
 }
 template <typename Z> Z operator%(const Z & lhs, integer rhs){
-    return (Z) (integer(lhs) % rhs);
+    return static_cast <Z> (integer(lhs) % rhs);
 }
 
 template <typename Z> Z & operator%=(Z & lhs, integer rhs){

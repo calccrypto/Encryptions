@@ -10,24 +10,38 @@ void integer::trim(){                             // remove 0 bytes from top of 
 }
 
 // Constructors
-integer::integer(): _sign(false){}
+integer::integer() :
+    _sign(false),
+    value()
+{}
 
-integer::integer(const bool & b): _sign(false), value(1, b){
+integer::integer(const bool & b) :
+    _sign(false),
+    value(1, b)
+{
     trim();
 }
 
-integer::integer(const integer & rhs): _sign(rhs._sign), value(rhs.value){
+integer::integer(const integer & copy) :
+    _sign(copy._sign),
+    value(copy.value)
+{
     trim();
 }
 
-integer::integer(base & val, bool s): _sign(s), value(val){
+integer::integer(base & val, bool s) :
+    _sign(s),
+    value(val)
+{
     trim();
 }
 
 // need at least gcc 4.7 to compile next line, otherwise use uncommented version
 // integer(const std::string & val, uint16_t base): integer(val.begin(), val.end(), base){}
 
-integer::integer(const std::string & val, uint16_t b){
+integer::integer(const std::string & val, uint16_t b) :
+    integer()
+{
     *this = integer(val.begin(), val.end(), b);
 }
 
@@ -49,7 +63,7 @@ integer::operator bool(){
 integer::operator char(){
     if (value.empty())
         return 0;
-    return (char) (value.back() & 255);
+    return static_cast <char> (value.back() & 255);
 }
 
 integer::operator uint8_t(){
@@ -61,7 +75,7 @@ integer::operator uint8_t(){
 integer::operator uint16_t(){
     uint16_t out = 0;
     for(uint8_t x = 0; x < std::min(value.size(), 2 / sizeof(digit)); x++){
-        out += (uint16_t) value[value.size() - x - 1] << (x * BITS);
+        out += static_cast <uint16_t> (value[value.size() - x - 1]) << (x * BITS);
     }
     return out;
 }
@@ -69,7 +83,7 @@ integer::operator uint16_t(){
 integer::operator uint32_t(){
     uint32_t out = 0;
     for(uint8_t x = 0; x < std::min(value.size(), 4 / sizeof(digit)); x++){
-        out += (uint32_t) value[value.size() - x - 1] << (x * BITS);
+        out += static_cast <uint32_t> (value[value.size() - x - 1]) << (x * BITS);
     }
     return out;
 }
@@ -77,7 +91,7 @@ integer::operator uint32_t(){
 integer::operator uint64_t(){
     uint64_t out = 0;
     for(uint8_t x = 0; x < std::min(value.size(), 8 / sizeof(digit)); x++){
-        out += (uint64_t) value[value.size() - x - 1] << (x * BITS);
+        out += static_cast <uint64_t> (value[value.size() - x - 1]) << (x * BITS);
     }
     return out;
 }
@@ -96,7 +110,7 @@ integer::operator int8_t(){
 integer::operator int16_t(){
     int16_t out = 0;
     for(uint8_t x = 0; x < std::min(value.size(), 2 / sizeof(digit)); x++){
-        out += (int16_t) value[value.size() - x - 1] << (x * BITS);
+        out += static_cast <int16_t> (value[value.size() - x - 1]) << (x * BITS);
     }
     if (_sign){
         out = -out;
@@ -107,7 +121,7 @@ integer::operator int16_t(){
 integer::operator int32_t(){
     int32_t out = 0;
     for(uint8_t x = 0; x < std::min(value.size(), 4 / sizeof(digit)); x++){
-        out += (int32_t) value[value.size() - x - 1] << (x * BITS);
+        out += static_cast <int32_t> (value[value.size() - x - 1]) << (x * BITS);
     }
     if (_sign){
         out = -out;
@@ -118,7 +132,7 @@ integer::operator int32_t(){
 integer::operator int64_t(){
     int64_t out = 0;
     for(uint8_t x = 0; x < std::min(value.size(), 8 / sizeof(digit)); x++){
-        out += (int64_t) value[value.size() - x - 1] << (x * BITS);
+        out += static_cast <int64_t> (value[value.size() - x - 1]) << (x * BITS);
     }
     if (_sign){
         out = -out;
@@ -220,7 +234,7 @@ integer integer::operator<<(integer shift){
     for(integer i = 0, s = shift / BITS; i < s; ++i){
        out.value.push_back(0);
     }
-    return out << (uint64_t) (shift % BITS);
+    return out << static_cast <uint64_t> (shift % BITS);
 }
 
 // right bit shift. sign is maintained
@@ -249,7 +263,7 @@ integer integer::operator>>(integer shift){
     for(integer i = 0, s = shift / BITS; i < s; ++i){
        out.value.pop_back();
     }
-    return out >> (uint64_t) (shift % BITS);
+    return out >> static_cast <uint64_t> (shift % BITS);
 }
 
 integer integer::operator<<=(const integer & shift){
@@ -264,15 +278,7 @@ integer integer::operator>>=(const integer & shift){
 
 // Logical Operators
 bool integer::operator!(){
-    return !((bool) *this);
-}
-
-bool integer::operator&&(integer rhs){
-    return (bool) *this && (bool) rhs;
-}
-
-bool integer::operator||(integer rhs){
-    return ((bool) *this) || (bool) rhs;
+    return !static_cast <bool> (*this);
 }
 
 // Comparison Operators
@@ -365,17 +371,17 @@ integer integer::add(integer & lhs, integer & rhs){
     bool carry = false;
     double_digit sum;
     for(; ((i != lhs.value.rend()) && (j != rhs.value.rend())); i++, j++){
-        sum = (double_digit) *i + (double_digit) *j + carry;
+        sum = static_cast <double_digit> (*i) + static_cast <double_digit> (*j) + carry;
         out.push_front(sum);
         carry = (sum > NEG1);
     }
     for(; i != lhs.value.rend(); i++){
-        sum = (double_digit) *i + carry;
+        sum = static_cast <double_digit> (*i) + carry;
         out.push_front(sum);
         carry = (sum > NEG1);
     }
     for(; j != rhs.value.rend(); j++){
-        sum = (double_digit) *j + carry;
+        sum = static_cast <double_digit> (*j) + carry;
         out.push_front(sum);
         carry = (sum > NEG1);
     }
@@ -453,7 +459,7 @@ integer integer::long_sub(integer & lhs, integer & rhs){
             for(; y < lsize - x; y++){
                 lhs.value[y] = NEG1;
             }
-            lhs.value[y] = ((double_digit) lhs.value[y]) + ((uint64_t) 1 << BITS) - rhs.value[rsize - x];
+            lhs.value[y] = static_cast <double_digit> (lhs.value[y]) + (static_cast <uint64_t> (1) << BITS) - rhs.value[rsize - x];
         }
     }
     return lhs;
@@ -574,7 +580,7 @@ integer integer::operator-=(const integer & rhs){
 //   return karatsuba(karatsuba(z2, bm) + z1, bm) + z0;
 //}
 //
-// Toom–Cook multiplication
+// Toom-Cook multiplication
 // as described at http://en.wikipedia.org/wiki/Toom%E2%80%93Cook_multiplications
 // This implementation is a bit weird. In the pointwise Multiplcation step, using
 // operator* and long_mult works, but everything else fails.
@@ -1063,7 +1069,7 @@ integer integer::twos_complement(unsigned int b){
     while (!(out[0] & mask)){
         mask >>= 1;
     }
-    integer top = integer(1) << ((uint64_t) (out.size() - 1) * BITS);
+    integer top = integer(1) << (static_cast <uint64_t> (out.size() - 1) * BITS);
     while (mask){
         out[0] ^= mask;
         mask >>= 1;
