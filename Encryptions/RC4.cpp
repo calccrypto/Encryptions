@@ -17,7 +17,7 @@ void RC4::ksa(const std::string & k){
     }
 }
 
-int RC4::prga(const char mode){
+uint8_t RC4::prga(const char mode){
     if (mode == 'e'){
         i_e++;
         j_e += s_e[i_e];
