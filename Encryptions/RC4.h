@@ -7,10 +7,11 @@
 
 class RC4 : public SymAlg{
     private:
-        std::vector <uint8_t> key;
-        uint8_t s[256], i_e, j_e, i_d, j_d;
-        void ksa(std::vector <uint8_t> & key);
-        int prga(uint8_t & i, uint8_t & j);
+        uint8_t s_e[256], i_e, j_e,         // encryption SBox and "pointers"
+                s_d[256], i_d, j_d;         // decryption SBox and "pointers"
+
+        void ksa(const std::string & k);    // key scheduling algorithm
+        int prga(const char mode);          // pseudo random generation algorithm
 
     public:
         RC4();
