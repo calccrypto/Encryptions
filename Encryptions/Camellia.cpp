@@ -232,7 +232,7 @@ void Camellia::setkey(const std::string & KEY){
     }
     else if (keysize == 24){
         KL = integer(KEY.substr(0, 16), 256);
-        KR = integer(KEY.substr(16, 8), 256); KR = (KR << 64) + (KR ^ 0xffffffffffffffffULL);
+        KR = integer(KEY.substr(16, 8), 256); KR = (KR << 64) + (KR ^ integer("ffffffffffffffff", 16));
     }
     else if (keysize == 32){
         KL = integer(KEY.substr(0, 16), 256);

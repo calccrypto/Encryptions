@@ -1,20 +1,19 @@
 #ifndef __RC6__
 #define __RC6__
 
+#include <cmath>
 #include <vector>
 
 #include "../common/cryptomath.h"
 #include "../common/includes.h"
-#include "../common/integer.h"
-#include "SymAlg.h"
 
+#include "SymAlg.h"
 #include "RC_PQ.h"
 
 class RC6 : public SymAlg{
     private:
-        unsigned int w, r, b, lgw;
+        uint32_t w, r, b, lgw;
         std::vector <uint32_t> S;
-        integer mod;
 
     public:
         RC6();

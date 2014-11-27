@@ -71,7 +71,7 @@ RC4.o: RC4.cpp RC4.h ./SymAlg.h
 RC5.o: RC5.cpp RC5.h ../common/cryptomath.h ./SymAlg.h
 	$(CXX) $(CFLAGS) RC5.cpp
 
-RC6.o: RC6.cpp RC6.h ../common/cryptomath.h ../common/integer.h ./SymAlg.h
+RC6.o: RC6.cpp RC6.h ../common/cryptomath.h ../common/includes.h ./SymAlg.h
 	$(CXX) $(CFLAGS) RC6.cpp
 
 RC_PQ.o: RC_PQ.cpp RC_PQ.h
