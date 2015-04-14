@@ -22,11 +22,17 @@ const uint16_t mod16 = 0xffffU;
 const uint32_t mod32 = 0xffffffffUL;
 const uint64_t mod64 = 0xffffffffffffffffULL;
 
+// string to integer
 uint64_t toint(const std::string & s, const int & base = 10);
+
+// flip the order of the octets
+// base = 2 for binary source
+//        16 for hex source
+//        256 for ASCII source
 std::string little_end(const std::string & str, const unsigned int & base = 16);
 
+// Changes a numeric value into its binary string
 template <typename T> std::string makebin(T value, unsigned int size = 8 * sizeof(T)){
-    // Changes a value into its binary string
     std::string out(size, '0');
     if (!size){
         out = "";
@@ -45,8 +51,8 @@ template <typename T> std::string makebin(T value, unsigned int size = 8 * sizeo
 
 // Thanks to Ben Voigt @ stackoverflow for the makehex function
 // which I then adapted to makebin
+// Changes a  numeric value to its hexadecimal string
 template <typename T> std::string makehex(T value, unsigned int size = 2 * sizeof(T), bool caps = false){
-    // Changes a value to its hexadecimal string
     if (!size){
         std::stringstream out;
         out << std::hex << value;
@@ -65,19 +71,44 @@ template <typename T> std::string makehex(T value, unsigned int size = 2 * sizeo
     return out;
 }
 
+// extract 8 bits from a numeric value
 template <typename T> uint8_t byte(const T & value, const uint16_t & n){
-    return (value >> (n * 8)) & 0xff;
+    return (value >> (n << 3)) & 0xff;
 }
 
+// direct binary to hex string
 std::string bintohex(const std::string & in, bool caps = false);
+
+// convert an ASCII string into a string of 0s and 1s
+std::string binify(const std::string & in, unsigned int size = 0);
+
+// character to string of 0s and 1s
+std::string binify(unsigned char c);
+
+// string of 0s and 1s to ASCII
+std::string unbinify(const std::string & in);
+
+// ASCII string to hex string
 std::string hexlify(const std::string & in, bool caps = false);
+
+// character to hex string
 std::string hexlify(const char in, bool caps = false);
+
+// hex string to ASCII string
 std::string unhexlify(const std::string & in);
+
 std::string pkcs5(const std::string & data, const unsigned int & blocksize);
+
 std::string remove_padding(std::string data);
-std::string zfill(const std::string & str, const unsigned int & n, const char fill = 0); // add to front of string
-std::string pad(const std::string & str, const unsigned int & n, const char fill = 0); // adds to back of string
-std::string xor_strings(const std::string & str1, const std::string & str2); // xor the contents of 2 strings, up to the last character of the shorter string
+
+// add to front of string
+std::string zfill(const std::string & str, const unsigned int & n, const char fill = 0); 
+
+// adds to back of string
+std::string pad(const std::string & str, const unsigned int & n, const char fill = 0); 
+
+// xor the contents of 2 strings, up to the last character of the shorter string
+std::string xor_strings(const std::string & str1, const std::string & str2); 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Thanks to Xeo @ stackoverflow

@@ -41,25 +41,79 @@ std::string little_end(const std::string & str, const unsigned int & base){
 	return t;
 }
 
+// Changes a binary string to its hexadecimal equivalent
 std::string bintohex(const std::string & in, bool caps){
-    // Changes a binary string to its hexadecimal equivalent
-    if (in.size() % 4){
+    if (in.size() & 3){
         throw std::runtime_error("Error: input string length not a multiple of 4.");
     }
-    std::string out = "";
-    for(unsigned int x = 0; x < (in.size() >> 2); x++){
-        out += makehex(toint(in.substr(x << 2, 4), 2), 1, caps);
+    std::string out(in.size() >> 2, '0');
+    for(unsigned int i = 0, j = 0; i < in.size(); i += 4, j++){
+        unsigned char c = 0;
+        for(uint8_t k = 0; k < 4; k++){
+            c = (c << 1) | (in[i + k] == '1');
+        }
+
+        out[j] = h_lower[c];
+        if (caps){
+            out[j] = h_upper[c];
+        }
     }
     return out;
 }
 
-std::string hexlify(const std::string & in, bool caps){
-    // Changes an ASCII string to an ASCII string containing the
-    // hexadecimal representation of the orignal chars
-    std::string out = "";
-    for(unsigned int x = 0; x < in.size(); x++){
-        out += makehex(static_cast <unsigned char> (in[x]), 2, caps);
+std::string binify(const std::string & in, unsigned int size){
+    std::string out(in.size() << 3, 0);
+    unsigned int i = 0;
+    for(unsigned char const & c : in){
+        for(unsigned char const & b : binify(c)){
+            out[i++] = b;
+        }
     }
+    if (out.size() < size){
+        out = std::string(size - out.size(), '0') + out;
+    }
+    return out;
+}
+
+std::string binify( unsigned char c){
+    std::string out(8, '0');
+    uint8_t i = 7;
+    while (c){
+    out[i--] = b[c & 1] + '0';
+        c >>= 1;
+    }
+    return out;
+}
+
+// convert a string from binary to ASCII
+std::string unbinify(const std::string & in){
+    if (in.size() & 7){
+        throw std::runtime_error("Error: input string length not a multiple of 8.");
+    }
+
+    std::string out(in.size() >> 3, 0);
+    for(unsigned int i = 0, j = 0; i < in.size(); i += 8, j++){
+        unsigned char c = 0;
+        for(uint8_t k = 0; k < 8; k++){
+            c = (c << 1) | (in[i + k] == '1');
+        }
+        out[j] = c;
+    }
+
+    return out;
+}
+
+// Changes an ASCII string to an ASCII string containing the
+// hexadecimal representation of the original chars
+std::string hexlify(const std::string & in, bool caps){
+    std::string out(in.size() << 1, '0');
+    unsigned int i = 0;
+    for(unsigned char const & c : in){
+        std::string h = hexlify(c, caps);
+        out[i++] = h[0];
+        out[i++] = h[1];
+    }
+
     return out;
 }
 
