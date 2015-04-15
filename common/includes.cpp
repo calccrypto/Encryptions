@@ -65,7 +65,8 @@ std::string binify(const std::string & in, unsigned int size){
     std::string out(in.size() << 3, 0);
     unsigned int i = 0;
     for(unsigned char const & c : in){
-        for(unsigned char const & b : binify(c)){
+        std::string bin = binify(c);
+        for(unsigned char const & b : bin){
             out[i++] = b;
         }
     }
@@ -75,11 +76,11 @@ std::string binify(const std::string & in, unsigned int size){
     return out;
 }
 
-std::string binify( unsigned char c){
+std::string binify(unsigned char c){
     std::string out(8, '0');
     uint8_t i = 7;
     while (c){
-    out[i--] = b[c & 1] + '0';
+        out[i--] = b[c & 1];
         c >>= 1;
     }
     return out;
@@ -95,7 +96,7 @@ std::string unbinify(const std::string & in){
     for(unsigned int i = 0, j = 0; i < in.size(); i += 8, j++){
         unsigned char c = 0;
         for(uint8_t k = 0; k < 8; k++){
-            c = (c << 1) | (in[i + k] == '1');
+            c = (c << 1) + (in[i + k] == '1');
         }
         out[j] = c;
     }
