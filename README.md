@@ -106,5 +106,5 @@ Usage:
         Encrypting using CBC mode on AES:
             SymAlg * instance = new AES(key)
             data = CBC(instance, IV).encrypt(plaintext1 + plaintext2 + ... + plaintextN)
-            free(instance)
+            delete(instance)
 </pre>
