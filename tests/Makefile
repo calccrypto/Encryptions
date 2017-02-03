@@ -1,22 +1,24 @@
 # Encryptions Library Test Makefile
 CXX?=g++
-LFLAGS=-lEncryptions -L..
-CFLAGS=-std=c++11 -Wall
+CXXFLAGS=-std=c++11 -Wall
+LDFLAGS=-lEncryptions -L..
 TARGET=tests
 
-debug: CFLAGS += -g
+debug: CXXFLAGS += -g
 debug: all
 
 all: $(TARGET)
 
-.PHONY: lib
+.PHONY: lib clean clean-all
 
 lib:
 	$(MAKE) -C ..
 
 $(TARGET): tests.cpp lib
-	$(CXX) $(CFLAGS) tests.cpp $(LFLAGS) -o $(TARGET)
+	$(CXX) $(CXXFLAGS) tests.cpp $(LDFLAGS) -o $(TARGET)
 
 clean:
 	rm -f $(TARGET)
-	$(MAKE) -C .. clean
+
+clean-all:  clean
+	$(MAKE) clean-all -C ..

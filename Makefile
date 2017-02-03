@@ -4,7 +4,7 @@ TARGET=libEncryptions.a
 
 all: $(TARGET)
 
-.PHONY: common Encryptions
+.PHONY: common Encryptions clean clean-all
 
 common:
 	$(MAKE) -C common
@@ -17,5 +17,7 @@ $(TARGET): common Encryptions
 
 clean:
 	rm -f *.a
-	$(MAKE) -C common clean
-	$(MAKE) -C Encryptions clean
+
+clean-all:  clean
+	$(MAKE) clean -C common
+	$(MAKE) clean -C Encryptions
