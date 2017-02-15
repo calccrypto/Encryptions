@@ -442,7 +442,6 @@ class integer{
         template <typename Z>
         integer operator*(const Z & rhs)       const {
             static_assert(std::is_integral <Z>::value
-
                           , "Input type must be integral");
             return *this * integer(rhs);
         }
@@ -554,16 +553,13 @@ class integer{
 };
 
 // Give integer type traits
-namespace std {
+namespace std {  // This is probably not a good idea
     template <> struct is_arithmetic <integer> : std::true_type {};
     template <> struct is_integral   <integer> : std::true_type {};
     template <> struct is_signed     <integer> : std::true_type {};
 };
 
 // operators where lhs is not of type integer
-
-// this is too long to put in-line
-#define NOT_INTEGER template <typename Z> typename std::remove_reference <Z>::type
 
 // Bitwise Operators
 template <typename Z>
@@ -573,11 +569,12 @@ integer operator&(const Z & lhs, const integer & rhs){
     return integer(lhs) & rhs;
 }
 
-NOT_INTEGER operator&=(Z & lhs, const integer & rhs){
+template <typename Z>
+Z & operator&=(Z & lhs, const integer & rhs){
     static_assert(std::is_integral <Z>::value &&
                  !std::is_const <Z>::value
                   , "Input type must be integral");
-    return lhs = static_cast <typename std::remove_reference <Z>::type> (integer(lhs) & rhs);
+    return lhs = static_cast <Z> (integer(lhs) & rhs);
 }
 
 template <typename Z>
@@ -587,11 +584,12 @@ integer operator|(const Z & lhs, const integer & rhs){
     return integer(lhs) | rhs;
 }
 
-NOT_INTEGER operator|=(Z & lhs, const integer & rhs){
+template <typename Z>
+Z & operator|=(Z & lhs, const integer & rhs){
     static_assert(std::is_integral <Z>::value &&
                  !std::is_const <Z>::value
                   , "Input type must be integral");
-    return lhs = static_cast <typename std::remove_reference <Z>::type> (integer(lhs) | rhs);
+    return lhs = static_cast <Z> (integer(lhs) | rhs);
 }
 
 template <typename Z>
@@ -601,46 +599,49 @@ integer operator^(const Z & lhs, const integer & rhs){
     return integer(lhs) ^ rhs;
 }
 
-NOT_INTEGER operator^=(Z & lhs, const integer & rhs){
+template <typename Z>
+Z & operator^=(Z & lhs, const integer & rhs){
     static_assert(std::is_integral <Z>::value &&
                  !std::is_const <Z>::value
                   , "Input type must be integral");
-    return lhs = static_cast <typename std::remove_reference <Z>::type> (integer(lhs) ^ rhs);
+    return lhs = static_cast <Z> (integer(lhs) ^ rhs);
 }
 
 // Bitshift operators
-integer operator<<(const bool & lhs, const integer & rhs);
-integer operator<<(const uint8_t & lhs, const integer & rhs);
+integer operator<<(const bool     & lhs, const integer & rhs);
+integer operator<<(const uint8_t  & lhs, const integer & rhs);
 integer operator<<(const uint16_t & lhs, const integer & rhs);
 integer operator<<(const uint32_t & lhs, const integer & rhs);
 integer operator<<(const uint64_t & lhs, const integer & rhs);
-integer operator<<(const int8_t & lhs, const integer & rhs);
-integer operator<<(const int16_t & lhs, const integer & rhs);
-integer operator<<(const int32_t & lhs, const integer & rhs);
-integer operator<<(const int64_t & lhs, const integer & rhs);
+integer operator<<(const int8_t   & lhs, const integer & rhs);
+integer operator<<(const int16_t  & lhs, const integer & rhs);
+integer operator<<(const int32_t  & lhs, const integer & rhs);
+integer operator<<(const int64_t  & lhs, const integer & rhs);
 
-NOT_INTEGER operator<<=(Z & lhs, const integer & rhs){
+template <typename Z>
+Z & operator<<=(Z & lhs, const integer & rhs){
     static_assert(std::is_integral <Z>::value &&
                  !std::is_const <Z>::value
                   , "Input type must be integral");
-    return lhs = static_cast <typename std::remove_reference <Z>::type> (integer(lhs) << rhs);
+    return lhs = static_cast <Z> (integer(lhs) << rhs);
 }
 
-integer operator>>(const bool & lhs, const integer & rhs);
-integer operator>>(const uint8_t & lhs, const integer & rhs);
+integer operator>>(const bool     & lhs, const integer & rhs);
+integer operator>>(const uint8_t  & lhs, const integer & rhs);
 integer operator>>(const uint16_t & lhs, const integer & rhs);
 integer operator>>(const uint32_t & lhs, const integer & rhs);
 integer operator>>(const uint64_t & lhs, const integer & rhs);
-integer operator>>(const int8_t & lhs, const integer & rhs);
-integer operator>>(const int16_t & lhs, const integer & rhs);
-integer operator>>(const int32_t & lhs, const integer & rhs);
-integer operator>>(const int64_t & lhs, const integer & rhs);
+integer operator>>(const int8_t   & lhs, const integer & rhs);
+integer operator>>(const int16_t  & lhs, const integer & rhs);
+integer operator>>(const int32_t  & lhs, const integer & rhs);
+integer operator>>(const int64_t  & lhs, const integer & rhs);
 
-NOT_INTEGER operator>>=(Z & lhs, const integer & rhs){
+template <typename Z>
+Z & operator>>=(Z & lhs, const integer & rhs){
     static_assert(std::is_integral <Z>::value &&
                  !std::is_const <Z>::value
                   , "Input type must be integral");
-    return lhs = static_cast <typename std::remove_reference <Z>::type> (integer(lhs) >> rhs);
+    return lhs = static_cast <Z> (integer(lhs) >> rhs);
 }
 
 // Comparison Operators
@@ -694,11 +695,12 @@ integer operator+(const Z & lhs, const integer & rhs){
     return integer(lhs) + rhs;
 }
 
-NOT_INTEGER operator+=(Z & lhs, const integer & rhs){
+template <typename Z>
+Z & operator+=(Z & lhs, const integer & rhs){
     static_assert(std::is_integral <Z>::value &&
                  !std::is_const <Z>::value
                   , "Input type must be integral");
-    return lhs = static_cast <typename std::remove_reference <Z>::type> (integer(lhs) + rhs);
+    return lhs = static_cast <Z> (integer(lhs) + rhs);
 }
 
 template <typename Z>
@@ -708,11 +710,12 @@ integer operator-(const Z & lhs, const integer & rhs){
     return integer(lhs) - rhs;
 }
 
-NOT_INTEGER operator-=(Z & lhs, const integer & rhs){
+template <typename Z>
+Z & operator-=(Z & lhs, const integer & rhs){
     static_assert(std::is_integral <Z>::value &&
                  !std::is_const <Z>::value
                   , "Input type must be integral");
-    return lhs = static_cast <typename std::remove_reference <Z>::type> (integer(lhs) - rhs);
+    return lhs = static_cast <Z> (integer(lhs) - rhs);
 }
 
 template <typename Z>
@@ -722,11 +725,12 @@ integer operator*(const Z & lhs, const integer & rhs){
     return integer(lhs) * rhs;
 }
 
-NOT_INTEGER operator*=(Z & lhs, const integer & rhs){
+template <typename Z>
+Z & operator*=(Z & lhs, const integer & rhs){
     static_assert(std::is_integral <Z>::value &&
                  !std::is_const <Z>::value
                   , "Input type must be integral");
-    return lhs = static_cast <typename std::remove_reference <Z>::type> (integer(lhs) * rhs);
+    return lhs = static_cast <Z> (integer(lhs) * rhs);
 }
 
 template <typename Z>
@@ -736,11 +740,12 @@ integer operator/(const Z & lhs, const integer & rhs){
     return integer(lhs) / rhs;
 }
 
-NOT_INTEGER operator/=(Z & lhs, const integer & rhs){
+template <typename Z>
+Z & operator/=(Z & lhs, const integer & rhs){
     static_assert(std::is_integral <Z>::value &&
                  !std::is_const <Z>::value
                   , "Input type must be integral");
-    return lhs = static_cast <typename std::remove_reference <Z>::type> (integer(lhs) / rhs);
+    return lhs = static_cast <Z> (integer(lhs) / rhs);
 }
 
 template <typename Z>
@@ -750,11 +755,12 @@ integer operator%(const Z & lhs, const integer & rhs){
     return integer(lhs) % rhs;
 }
 
-NOT_INTEGER operator%=(Z & lhs, const integer & rhs){
+template <typename Z>
+Z & operator%=(Z & lhs, const integer & rhs){
     static_assert(std::is_integral <Z>::value &&
                  !std::is_const <Z>::value
                   , "Input type must be integral");
-    return lhs = static_cast <typename std::remove_reference <Z>::type> (integer(lhs) % rhs);
+    return lhs = static_cast <Z> (integer(lhs) % rhs);
 }
 
 // IO Operators
