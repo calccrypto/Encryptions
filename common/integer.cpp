@@ -53,59 +53,66 @@ integer::integer(const bool & b) :
     trim();
 }
 
-integer::integer(const uint8_t & val){
-    setFromZ(val);
-}
-
-integer::integer(const uint16_t & val){
-    setFromZ(val);
-}
-
-integer::integer(const uint32_t & val){
-    setFromZ(val);
-}
-
-integer::integer(const uint64_t & val){
-    setFromZ(val);
-}
-
-integer::integer(const int8_t & val){
-    setFromZ(val);
-}
-
-integer::integer(const int16_t & val){
-    setFromZ(val);
-}
-
-integer::integer(const int32_t & val){
-    setFromZ(val);
-}
-
-integer::integer(const int64_t & val){
-    setFromZ(val);
-}
-
-integer::integer(const std::string & val, const uint16_t & base)
+// Special Constructor for Strings
+// bases 2-16 and 256 are allowed
+//      Written by Corbin http://codereview.stackexchange.com/a/13452
+//      Modified by me
+integer::integer(const std::string & str, const integer & base) : integer()
 {
-    integer::Sign sign = integer::POSITIVE;
-    std::string::const_iterator it = val.begin();
-
-    // minus sign indicates negative value only if the base is between 2 and 16 inclusive
     if ((2 <= base) && (base <= 16)){
-        if (it != val.end()){
-            if (*it == '-'){
-                sign = integer::NEGATIVE;
-                it++;
+        if (!str.size()){
+            return;
+        }
+
+        integer::Sign sign = integer::POSITIVE;
+
+        std::string::size_type index = 0;
+
+        // minus sign indicates negative value
+        if (str[0] == '-'){
+            // make sure there are more digits
+            if (str.size() < 2){
+                throw std::runtime_error("Error: Input string is too short");
             }
+
+            sign = integer::NEGATIVE;
+            index++;
+        }
+
+        // process characters
+        for(; index < str.size(); index++){
+            uint8_t d = std::tolower(str[index]);
+            if (std::isdigit(d)){       // 0-9
+                d -= '0';
+                if (d >= base){
+                    throw std::runtime_error(std::string("Error: Not a digit in base ") + base.str(10) + ": '"+ str[index] + "'");
+                }
+            }
+            else if (std::isxdigit(d)){ // a-f
+                d -= 'a' - 10;
+                if (d >= base){
+                    throw std::runtime_error(std::string("Error: Not a digit in base ") + base.str(10) + ": '"+ str[index] + "'");
+                }
+            }
+            else{                       // bad character
+                throw std::runtime_error(std::string("Error: Not a digit in base ") + base.str(10) + ": '"+ str[index] + "'");
+            }
+
+            *this = (*this * base) + d;
+        }
+
+        _sign = sign;
+    }
+    else if (base == 256){
+        // process characters
+        for(unsigned char const & c : str){
+            *this = (*this << 8) | (c & 0xff);
         }
     }
-    else if (base == 256){} // do nothing; value is considered positive
-    else {
-        throw std::runtime_error("Error: Cannot convert from base " + std::to_string(base));
+    else{
+        throw std::runtime_error("Error: Cannot convert from base " + base.str(10));
     }
 
-    *this = integer(it, val.end(), base);
-    _sign = sign;
     trim();
 }
 
@@ -141,7 +148,7 @@ integer::operator uint16_t() const {
     uint16_t out = 0;
 
     const integer::REP_SIZE_T d = std::min(digits(), std::max((integer::REP_SIZE_T) 2 / integer::OCTETS, (integer::REP_SIZE_T) 1));
-    for(std::size_t x = 0; x < d; x++){
+    for(integer::REP_SIZE_T x = 0; x < d; x++){
         out += static_cast <uint16_t> (_value[digits() - x - 1]) << (x * integer::BITS);
     }
 
@@ -152,7 +159,7 @@ integer::operator uint32_t() const {
     uint32_t out = 0;
 
     const integer::REP_SIZE_T d = std::min(digits(), std::max((integer::REP_SIZE_T) 4 / integer::OCTETS, (integer::REP_SIZE_T) 1));
-    for(std::size_t x = 0; x < d; x++){
+    for(integer::REP_SIZE_T x = 0; x < d; x++){
         out += static_cast <uint32_t> (_value[digits() - x - 1]) << (x * integer::BITS);
     }
 
@@ -163,7 +170,7 @@ integer::operator uint64_t() const {
     uint64_t out = 0;
 
     const integer::REP_SIZE_T d = std::min(digits(), std::max((integer::REP_SIZE_T) 8 / integer::OCTETS, (integer::REP_SIZE_T) 1));
-    for(std::size_t x = 0; x < d; x++){
+    for(integer::REP_SIZE_T x = 0; x < d; x++){
         out += static_cast <uint64_t> (_value[digits() - x - 1]) << (x * integer::BITS);
     }
 
@@ -179,7 +186,7 @@ integer::operator int16_t() const {
     int16_t out = 0;
 
     const integer::REP_SIZE_T d = std::min(digits(), std::max((integer::REP_SIZE_T) 2 / integer::OCTETS, (integer::REP_SIZE_T) 1));
-    for(std::size_t x = 0; x < d; x++){
+    for(integer::REP_SIZE_T x = 0; x < d; x++){
         out += static_cast <int16_t> (_value[digits() - x - 1]) << (x * integer::BITS);
     }
 
@@ -190,7 +197,7 @@ integer::operator int32_t() const {
     int32_t out = 0;
 
     const integer::REP_SIZE_T d = std::min(digits(), std::max((integer::REP_SIZE_T) 4 / integer::OCTETS, (integer::REP_SIZE_T) 1));
-    for(std::size_t x = 0; x < d; x++){
+    for(integer::REP_SIZE_T x = 0; x < d; x++){
         out += static_cast <int32_t> (_value[digits() - x - 1]) << (x * integer::BITS);
     }
 
@@ -201,7 +208,7 @@ integer::operator int64_t() const {
     int64_t out = 0;
 
     const integer::REP_SIZE_T d = std::min(digits(), std::max((integer::REP_SIZE_T) 8 / integer::OCTETS, (integer::REP_SIZE_T) 1));
-    for(std::size_t x = 0; x < d; x++){
+    for(integer::REP_SIZE_T x = 0; x < d; x++){
         out += static_cast <int64_t> (_value[digits() - x - 1]) << (x * integer::BITS);
     }
 
@@ -1065,7 +1072,7 @@ std::pair <integer, integer> integer::non_recursive_divmod(const integer & lhs, 
 // division and modulus ignoring signs
 std::pair <integer, integer> integer::dm(const integer & lhs, const integer & rhs) const {
     if (!rhs){              // divide by 0 error
-        throw std::runtime_error("Error: division or modulus by 0");
+        throw std::domain_error("Error: division or modulus by 0");
     }
 
     if (rhs == 1){          // divide by 1 check
