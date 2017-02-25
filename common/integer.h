@@ -799,16 +799,16 @@ integer pow(integer base, Z_e exponent, const Z_m modulus){
     integer exp = exponent;
     const integer mod = modulus;
 
-	integer result = 1;
-	while (exp){
-		if (exp & one){
-			result = (result * base) % mod;
+    integer result = one;
+    while (exp){
+        if (exp & one){
+            result = (result * base) % mod;
         }
-		exp >>= one;
-		base = (base * base) % mod;
-	}
+        exp >>= one;
+        base = (base * base) % mod;
+    }
 
-	return result;
+    return result;
 }
 
 #endif // INTEGER_H
