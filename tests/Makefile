@@ -17,6 +17,9 @@ lib:
 $(TARGET): tests.cpp lib
 	$(CXX) $(CXXFLAGS) tests.cpp $(LDFLAGS) -o $(TARGET)
 
+run: $(TARGET)
+	./$(TARGET)
+
 clean:
 	rm -f $(TARGET)
 
