@@ -2,6 +2,3 @@
 *.o
 *.a
 *.exe
-
-# Others
-*.bak
