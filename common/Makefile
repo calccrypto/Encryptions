@@ -2,18 +2,18 @@
 CXX?=g++
 CXXFLAGS=-std=c++11 -Wall -c
 
+include sources.make
+OBJECTS=$(COMMON_SOURCES:.cpp=.o)
+
 debug: CXXFLAGS += -g
 debug: all
 
-all: includes.o integer.o
+all: $(OBJECTS)
 
 .PHONY: clean
 
-includes.o: includes.h includes.cpp
-	$(CXX) $(CXXFLAGS) includes.cpp
-
-integer.o: integer.h integer.cpp
-	$(CXX) $(CXXFLAGS) integer.cpp
+%.o : %.cpp %.h
+	$(CXX) $(CXXFLAGS) $< -o $@
 
 clean:
-	rm -f *.o
+	rm -f $(OBJECTS)

@@ -1,0 +1,23 @@
+ENCRYPTIONS_SOURCES=SymAlg.cpp      \
+                    AES.cpp         \
+                    Blowfish.cpp    \
+                    Camellia.cpp    \
+                    CAST128.cpp     \
+                    CAST256.cpp     \
+                    DES.cpp         \
+                    DESX.cpp        \
+                    GOST.cpp        \
+                    IDEA.cpp        \
+                    MISTY1.cpp      \
+                    RC2.cpp         \
+                    RC4.cpp         \
+                    RC5.cpp         \
+                    RC6.cpp         \
+                    RC_PQ.cpp       \
+                    SAFERK64.cpp    \
+                    SEED.cpp        \
+                    Skipjack.cpp    \
+                    TDES.cpp        \
+                    TEA.cpp         \
+                    Twofish.cpp     \
+                    XTEA.cpp

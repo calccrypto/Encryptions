@@ -1,5 +1,5 @@
 /*
-OFB.h
+ECB.h
 
 The MIT License (MIT)
 
@@ -24,23 +24,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-// Output Feedback
-#ifndef __OFB__
-#define __OFB__
+// Electronic Codebook
+#ifndef __ECB__
+#define __ECB__
 
 #include "../common/includes.h"
-#include "../common/integer.h"
-#include "SymAlg.h"
+#include "../Encryptions/SymAlg.h"
 
-class OFB{
-    private:
-        SymAlg * algo;
-        std::string const_IV;
-        uint8_t blocksize;
+class ECB{
+  private:
+    SymAlg * algo;
+    uint8_t blocksize;
 
-    public:
-        OFB(SymAlg * instance, const std::string & iv = "");
-        std::string encrypt(const std::string & data);
-        std::string decrypt(const std::string & data);
+  public:
+    ECB(SymAlg * instance, const std::string & iv = "");
+    std::string encrypt(const std::string & data);
+    std::string decrypt(const std::string & data);
 };
 #endif

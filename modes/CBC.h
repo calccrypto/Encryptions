@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 #include "../common/includes.h"
 #include "../common/integer.h"
-#include "SymAlg.h"
+#include "../Encryptions/SymAlg.h"
 
 class CBC{
   private:

@@ -1,5 +1,5 @@
 /*
-CFB.h
+CTR.h
 
 The MIT License (MIT)
 
@@ -24,22 +24,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-// Cipher Feedback
-#ifndef __CFB__
-#define __CFB__
+// Counter
+#ifndef __CTR__
+#define __CTR__
 
 #include "../common/includes.h"
 #include "../common/integer.h"
-#include "SymAlg.h"
+#include "../Encryptions/SymAlg.h"
 
-class CFB{
+class CTR{
   private:
     SymAlg * algo;
     std::string const_IV;
     uint8_t blocksize;
 
   public:
-    CFB(SymAlg * instance, const std::string & iv = "");
+    CTR(SymAlg * instance, const std::string & iv = "");
     std::string encrypt(const std::string & data);
     std::string decrypt(const std::string & data);
 };

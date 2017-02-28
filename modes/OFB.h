@@ -1,5 +1,5 @@
 /*
-CTR.h
+OFB.h
 
 The MIT License (MIT)
 
@@ -24,23 +24,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-// Counter
-#ifndef __CTR__
-#define __CTR__
+// Output Feedback
+#ifndef __OFB__
+#define __OFB__
 
 #include "../common/includes.h"
 #include "../common/integer.h"
-#include "SymAlg.h"
+#include "../Encryptions/SymAlg.h"
 
-class CTR{
-  private:
-    SymAlg * algo;
-    std::string const_IV;
-    uint8_t blocksize;
+class OFB{
+    private:
+        SymAlg * algo;
+        std::string const_IV;
+        uint8_t blocksize;
 
-  public:
-    CTR(SymAlg * instance, const std::string & iv = "");
-    std::string encrypt(const std::string & data);
-    std::string decrypt(const std::string & data);
+    public:
+        OFB(SymAlg * instance, const std::string & iv = "");
+        std::string encrypt(const std::string & data);
+        std::string decrypt(const std::string & data);
 };
 #endif

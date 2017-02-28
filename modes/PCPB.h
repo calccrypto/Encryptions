@@ -1,5 +1,5 @@
 /*
-ECB.h
+PCPB.h
 
 The MIT License (MIT)
 
@@ -24,20 +24,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-// Electronic Codebook
-#ifndef __ECB__
-#define __ECB__
+// Propagating Cipher - Block Chaining
+#ifndef __PCPB__
+#define __PCPB__
 
 #include "../common/includes.h"
-#include "SymAlg.h"
+#include "../common/integer.h"
+#include "../Encryptions/SymAlg.h"
 
-class ECB{
+class PCPB{
   private:
     SymAlg * algo;
+    std::string const_IV;
     uint8_t blocksize;
 
   public:
-    ECB(SymAlg * instance, const std::string & iv = "");
+    PCPB(SymAlg * instance, const std::string & iv = "");
     std::string encrypt(const std::string & data);
     std::string decrypt(const std::string & data);
 };

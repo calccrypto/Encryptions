@@ -1,9 +1,9 @@
-# Encryptions Makefile
+# Modes of Operation Makefile
 CXX?=g++
 CXXFLAGS=-std=c++11 -Wall -c
 
 include sources.make
-OBJECTS=$(ENCRYPTIONS_SOURCES:.cpp=.o)
+OBJECTS=$(MODES_SOURCES:.cpp=.o)
 
 debug: CXXFLAGS += -g
 debug: all

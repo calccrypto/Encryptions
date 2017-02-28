@@ -1,5 +1,5 @@
 /*
-PCPB.h
+Encryptions.h
 
 The MIT License (MIT)
 
@@ -24,23 +24,43 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-// Propagating Cipher - Block Chaining
-#ifndef __PCPB__
-#define __PCPB__
+#ifndef ENCRYPTIONS_H
+#define ENCRYPTIONS_H
 
-#include "../common/includes.h"
-#include "../common/integer.h"
-#include "SymAlg.h"
+// common includes
+#include "common/includes.h"
+#include "common/cryptomath.h"
+#include "Encryptions/SymAlg.h"
 
-class PCPB{
-  private:
-    SymAlg * algo;
-    std::string const_IV;
-    uint8_t blocksize;
+// Algorithms
+#include "Encryptions/AES.h"
+#include "Encryptions/Blowfish.h"
+#include "Encryptions/Camellia.h"
+#include "Encryptions/CAST128.h"
+#include "Encryptions/CAST256.h"
+#include "Encryptions/DES.h"
+#include "Encryptions/DESX.h"
+#include "Encryptions/GOST.h"
+#include "Encryptions/IDEA.h"
+#include "Encryptions/MISTY1.h"
+#include "Encryptions/RC2.h"
+#include "Encryptions/RC4.h"
+#include "Encryptions/RC5.h"
+#include "Encryptions/RC6.h"
+#include "Encryptions/SAFERK64.h"
+#include "Encryptions/SEED.h"
+#include "Encryptions/Skipjack.h"
+#include "Encryptions/TDES.h"
+#include "Encryptions/TEA.h"
+#include "Encryptions/Twofish.h"
+#include "Encryptions/XTEA.h"
 
-  public:
-    PCPB(SymAlg * instance, const std::string & iv = "");
-    std::string encrypt(const std::string & data);
-    std::string decrypt(const std::string & data);
-};
+// Modes of Operation
+#include "modes/ECB.h"
+#include "modes/CBC.h"
+#include "modes/CFB.h"
+#include "modes/CTR.h"
+#include "modes/OFB.h"
+#include "modes/PCPB.h"
+
 #endif
