@@ -2,14 +2,9 @@
 AR=ar
 TARGET=libEncryptions.a
 
-include common/sources.make
-COMMON_OBJECTS=$(addprefix common/, $(COMMON_SOURCES:.cpp=.o))
-
-include Encryptions/sources.make
-ENCRYPTIONS_OBJECTS=$(addprefix Encryptions/, $(ENCRYPTIONS_SOURCES:.cpp=.o))
-
-include modes/sources.make
-MODES_OBJECTS=$(addprefix modes/, $(MODES_SOURCES:.cpp=.o))
+include common/objects.mk
+include Encryptions/objects.mk
+include modes/objects.mk
 
 all: $(TARGET)
 
@@ -25,7 +20,7 @@ modes:
 	$(MAKE) -C modes
 
 $(TARGET): common Encryptions modes
-	$(AR) -r $(TARGET) $(COMMON_OBJECTS) $(ENCRYPTIONS_OBJECTS) $(MODES_OBJECTS)
+	$(AR) -r $(TARGET) $(addprefix common/, $(COMMON_OBJECTS)) $(addprefix Encryptions/, $(ENCRYPTIONS_OBJECTS)) $(addprefix modes/, $(MODES_OBJECTS))
 
 clean:
 	rm -f $(TARGET)
