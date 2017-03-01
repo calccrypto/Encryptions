@@ -64,5 +64,4 @@ const uint32_t SEED_KC[16] = {  0x9E3779B9, 0x3C6EF373, 0x78DDE6E6, 0xF1BBCDCC,
                                 0xE3779B99, 0xC6EF3733, 0x8DDE6E67, 0x1BBCDCCF,
                                 0x3779B99E, 0x6EF3733C, 0xDDE6E678, 0xBBCDCCF1,
                                 0x779B99E3, 0xEF3733C6, 0xDE6E678D, 0xBCDCCF1B};
-
 #endif
