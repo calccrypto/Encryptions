@@ -288,7 +288,7 @@ std::string AES::decrypt(const std::string & DATA){
     return OUT(data);
 }
 
-unsigned int AES::blocksize() const{
+unsigned int AES::blocksize() const {
     return 128;
 }
 /*

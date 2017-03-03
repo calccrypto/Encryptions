@@ -76,6 +76,6 @@ std::string RC5::decrypt(const std::string & DATA){
     return unhexlify(makehex(A & mod, w >> 2) + makehex(B & mod, w >> 2));
 }
 
-unsigned int RC5::blocksize() const{
+unsigned int RC5::blocksize() const {
     return w << 1;
 }

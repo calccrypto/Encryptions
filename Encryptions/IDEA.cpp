@@ -180,6 +180,6 @@ std::string IDEA::decrypt(const std::string & DATA){
     return run(DATA);
 }
 
-unsigned int IDEA::blocksize() const{
+unsigned int IDEA::blocksize() const {
     return 64;
 }

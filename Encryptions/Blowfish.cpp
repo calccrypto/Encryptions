@@ -99,6 +99,6 @@ std::string Blowfish::decrypt(const std::string & DATA){
     return out;
 }
 
-unsigned int Blowfish::blocksize() const{
+unsigned int Blowfish::blocksize() const {
     return 64;
 }

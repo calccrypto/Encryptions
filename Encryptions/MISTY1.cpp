@@ -161,6 +161,6 @@ std::string MISTY1::decrypt(const std::string & DATA){
     return unhexlify(makehex(D0, 8) + makehex(D1));
 }
 
-unsigned int MISTY1::blocksize() const{
+unsigned int MISTY1::blocksize() const {
     return 64;
 };

@@ -32,4 +32,5 @@ THE SOFTWARE.
 #include <stdexcept>
 
 void rc_pq(const int w , uint64_t & p, uint64_t & q);
+
 #endif

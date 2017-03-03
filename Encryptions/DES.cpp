@@ -123,6 +123,6 @@ std::string DES::decrypt(const std::string & DATA){
     return out;
 }
 
-unsigned int DES::blocksize() const{
+unsigned int DES::blocksize() const {
     return 64;
 }

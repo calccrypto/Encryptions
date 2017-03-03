@@ -90,6 +90,6 @@ std::string RC6::decrypt(const std::string & DATA){
     return unhexlify(little_end(makehex(A, w >> 2)) + little_end(makehex(B, w >> 2)) + little_end(makehex(C, w >> 2)) + little_end(makehex(D, w >> 2)));
 }
 
-unsigned int RC6::blocksize() const{
+unsigned int RC6::blocksize() const {
     return w << 2;
 }

@@ -156,6 +156,6 @@ std::string CAST256::decrypt(const std::string & DATA){
     return out;
 }
 
-unsigned int CAST256::blocksize() const{
+unsigned int CAST256::blocksize() const {
     return 128;
 }

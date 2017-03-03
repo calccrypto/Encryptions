@@ -208,6 +208,6 @@ std::string SAFERK64::decrypt(const std::string & DATA){
     return out;
 }
 
-unsigned int SAFERK64::blocksize() const{
+unsigned int SAFERK64::blocksize() const {
     return 128;
 }

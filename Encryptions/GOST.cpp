@@ -116,6 +116,6 @@ std::string GOST::decrypt(const std::string & DATA){
     return unhexlify(makehex(N[1], 8) + makehex(N[0], 8));
 }
 
-unsigned int GOST::blocksize() const{
+unsigned int GOST::blocksize() const {
     return 64;
 }

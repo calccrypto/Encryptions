@@ -36,7 +36,7 @@ class DESX : public SymAlg{
     private:
         DES des;
         std::string K1, K2;
-        
+
     public:
         DESX();
 
@@ -45,4 +45,5 @@ class DESX : public SymAlg{
         std::string decrypt(const std::string & DATA);
         unsigned int blocksize() const;
 };
+
 #endif

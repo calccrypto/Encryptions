@@ -155,6 +155,6 @@ std::string Skipjack::decrypt(const std::string & DATA){
     return unhexlify(makehex(w1, 4) + makehex(w2, 4) + makehex(w3, 4) + makehex(w4, 4));
 }
 
-unsigned int Skipjack::blocksize() const{
+unsigned int Skipjack::blocksize() const {
     return 64;
 }

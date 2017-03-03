@@ -67,6 +67,6 @@ std::string XTEA::decrypt(const std::string & DATA){
     return unhexlify(makehex(data[0], 8) + makehex(data[1], 8));
 }
 
-unsigned int XTEA::blocksize() const{
+unsigned int XTEA::blocksize() const {
     return 64;
 }

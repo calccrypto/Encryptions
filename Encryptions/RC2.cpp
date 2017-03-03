@@ -150,7 +150,7 @@ std::string RC2::decrypt(const std::string & DATA){
     return out;
 }
 
-unsigned int RC2::blocksize() const{
+unsigned int RC2::blocksize() const {
     return 64;
 }
 

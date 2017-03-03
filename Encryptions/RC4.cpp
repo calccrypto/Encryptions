@@ -80,6 +80,6 @@ std::string RC4::decrypt(const std::string & DATA){
     return out;
 }
 
-unsigned int RC4::blocksize() const{
+unsigned int RC4::blocksize() const {
     return 64;
 }

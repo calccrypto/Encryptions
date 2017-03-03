@@ -489,6 +489,6 @@ std::string Camellia::decrypt(const std::string & DATA){
     return out;
 }
 
-unsigned int Camellia::blocksize() const{
+unsigned int Camellia::blocksize() const {
     return 128;
 }

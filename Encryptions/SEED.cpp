@@ -93,6 +93,6 @@ std::string SEED::decrypt(const std::string & DATA){
     return out;
 }
 
-unsigned int SEED::blocksize() const{
+unsigned int SEED::blocksize() const {
     return 128;
 }

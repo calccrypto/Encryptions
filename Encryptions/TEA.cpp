@@ -67,6 +67,6 @@ std::string TEA::decrypt(const std::string & DATA){
     return unhexlify(makehex(data[0], 8) + makehex(data[1], 8));
 }
 
-unsigned int TEA::blocksize() const{
+unsigned int TEA::blocksize() const {
     return 64;
 }

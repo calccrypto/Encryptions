@@ -44,4 +44,5 @@ class SymAlg{
         virtual std::string decrypt(const std::string & DATA) = 0;
         virtual unsigned int blocksize() const = 0; // blocksize in bits
 };
+
 #endif

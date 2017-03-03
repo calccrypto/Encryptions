@@ -26,6 +26,7 @@ THE SOFTWARE.
 
 #ifndef __BLOWFISH_CONST__
 #define __BLOWFISH_CONST__
+
 const uint32_t Blowfish_P[18] = {   0x243F6A88UL, 0x85A308D3UL,
                                     0x13198A2EUL, 0x03707344UL,
                                     0xA4093822UL, 0x299F31D0UL,
@@ -164,4 +165,5 @@ const uint32_t Blowfish_SBOX[4][512] = {{   0xD1310BA6UL, 0x98DFB5ACUL, 0x2FFD72
                                             0x53113EC0UL, 0x1640E3D3UL, 0x38ABBD60UL, 0x2547ADF0UL, 0xBA38209CUL, 0xF746CE76UL, 0x77AFA1C5UL, 0x20756060UL,
                                             0x85CBFE4EUL, 0x8AE88DD8UL, 0x7AAAF9B0UL, 0x4CF9AA7EUL, 0x1948C25CUL, 0x02FB8A8CUL, 0x01C36AE4UL, 0xD6EBE1F9UL,
                                             0x90D4F869UL, 0xA65CDEA0UL, 0x3F09252DUL, 0xC208E69FUL, 0xB74E6132UL, 0xCE77E25BUL, 0x578FDFE3UL, 0x3AC372E6UL}};
+
 #endif

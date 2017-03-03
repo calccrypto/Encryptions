@@ -33,6 +33,6 @@ std::string DESX::decrypt(const std::string & DATA){
     return xor_strings(des.decrypt(xor_strings(DATA, K2)), K1);
 }
 
-unsigned int DESX::blocksize() const{
+unsigned int DESX::blocksize() const {
     return 64;
 }

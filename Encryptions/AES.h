@@ -56,4 +56,5 @@ class AES : public SymAlg{
         std::string decrypt(const std::string & DATA);
         unsigned int blocksize() const;
 };
+
 #endif

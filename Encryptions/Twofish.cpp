@@ -202,6 +202,6 @@ std::string Twofish::decrypt(const std::string & DATA){
     return run(DATA, false);
 }
 
-unsigned int Twofish::blocksize() const{
+unsigned int Twofish::blocksize() const {
     return 128;
 }

@@ -197,6 +197,6 @@ std::string CAST128::decrypt(const std::string & DATA){
     return run(DATA, rounds, 0, -1);
 }
 
-unsigned int CAST128::blocksize() const{
+unsigned int CAST128::blocksize() const {
     return 64;
 }
