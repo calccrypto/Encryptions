@@ -43,4 +43,5 @@ class OFB{
         std::string encrypt(const std::string & data);
         std::string decrypt(const std::string & data);
 };
+
 #endif
