@@ -30,12 +30,18 @@ THE SOFTWARE.
 #include <utility>
 #include <vector>
 
+#include <gtest/gtest.h>
+
+#include "common/includes.h"
+
 // hold matching plaintext/key/ciphertext tuples
 typedef std::tuple <std::string, std::string, std::string> PlainKeyCipher;
 
 // generic function to test symmetric key algorithms
 template <typename Alg>
 void sym_test(const std::vector <PlainKeyCipher> & test_vectors){
+    static_assert(std::is_base_of <SymAlg, Alg>::value, "Error: Algorithm type should be a symmetric key algorithm.");
+
     for(PlainKeyCipher const & pkc : test_vectors){
         std::string plain, key, cipher;
         std::tie(plain, key, cipher) = pkc;

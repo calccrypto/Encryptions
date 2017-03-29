@@ -12,15 +12,11 @@ Some functions were heavily influenced by python 2.7.2
 #include <stdexcept>
 
 // Some useful constants
-const std::string zero("\x00", 1);
-const std::string b = "01";
-const std::string d = b + "23456789";
-const std::string h_lower = d + "abcdef";
-const std::string h_upper = d + "ABCDEF";
-const uint8_t mod8 = 0xffU;
-const uint16_t mod16 = 0xffffU;
-const uint32_t mod32 = 0xffffffffUL;
-const uint64_t mod64 = 0xffffffffffffffffULL;
+static const std::string zero(1, 0);
+static const uint8_t  mod8  = 0xffU;
+static const uint16_t mod16 = 0xffffU;
+static const uint32_t mod32 = 0xffffffffUL;
+static const uint64_t mod64 = 0xffffffffffffffffULL;
 
 // string to integer
 uint64_t toint(const std::string & s, const int & base = 10);
@@ -37,13 +33,13 @@ template <typename T> std::string makebin(T value, unsigned int size = 8 * sizeo
     if (!size){
         out = "";
         while (value){
-            out = b[value & 1] + out;
+            out = "01"[value & 1] + out;
             value >>= 1;
         }
         return out;
     }
     while (value && size){
-        out[--size] = b[value & 1];
+        out[--size] = "01"[value & 1];
         value >>= 1;
     }
     return out;
@@ -58,13 +54,14 @@ template <typename T> std::string makehex(T value, unsigned int size = 2 * sizeo
         out << std::hex << value;
         return out.str();
     }
+
     std::string out(size, '0');
     while (value && size){
-        if (!caps){
-            out[--size] = h_lower[value & 15];
+        if (caps){
+            out[--size] = "0123456789ABCDEF"[value & 15];
         }
         else{
-            out[--size] = h_upper[value & 15];
+            out[--size] = "0123456789abcdef"[value & 15];
         }
         value >>= 4;
     }
@@ -115,13 +112,13 @@ std::string xor_strings(const std::string & str1, const std::string & str2);
 // http://stackoverflow.com/questions/6240950/platform-independent-dev-null-in-c
 template<typename Ch, typename Traits = std::char_traits<Ch> >
 struct basic_nullbuf : std::basic_streambuf<Ch, Traits> {
-	typedef std::basic_streambuf<Ch, Traits> base_type;
-	typedef typename base_type::int_type int_type;
-	typedef typename base_type::traits_type traits_type;
+    typedef std::basic_streambuf<Ch, Traits> base_type;
+    typedef typename base_type::int_type int_type;
+    typedef typename base_type::traits_type traits_type;
 
-	virtual int_type overflow(int_type c) {
-		return traits_type::not_eof(c);
-	}
+    virtual int_type overflow(int_type c) {
+        return traits_type::not_eof(c);
+    }
 };
 
 // convenient typedefs
