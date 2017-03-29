@@ -1,5 +1,5 @@
 /*
-RC_PQ.h
+plainkeycipher.h
 
 Copyright (c) 2013 - 2017 Jason Lee @ calccrypto at gmail.com
 
@@ -22,12 +22,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#ifndef __RC_PQ__
-#define __RC_PQ__
+
+#ifndef __PLAINKEYCIPHER__
+#define __PLAINKEYCIPHER__
 
 #include <string>
-#include <stdexcept>
+#include <utility>
+#include <vector>
 
-void rc_pq(const int w , uint64_t & p, uint64_t & q);
+// hold matching plaintext/key/ciphertext tuples
+typedef std::tuple <std::string, std::string, std::string> PlainKeyCipher;
+
+// generic function to test symmetric key algorithms
+template <typename Alg>
+void sym_test(const std::vector <PlainKeyCipher> & test_vectors){
+    for(PlainKeyCipher const & pkc : test_vectors){
+        std::string plain, key, cipher;
+        std::tie(plain, key, cipher) = pkc;
+        auto alg = Alg(unhexlify(key));
+        EXPECT_EQ(alg.encrypt(unhexlify(plain)), unhexlify(cipher));
+        EXPECT_EQ(alg.decrypt(unhexlify(cipher)), unhexlify(plain));
+    }
+}
 
 #endif

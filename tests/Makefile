@@ -1,21 +1,26 @@
 # Encryptions Library Test Makefile
 CXX?=g++
-CXXFLAGS=-std=c++11 -Wall
-LDFLAGS=-lEncryptions -L..
+CXXFLAGS=-std=c++11 -Wall -g -I../../googletest/googletest/include -I..
+LDFLAGS=-lEncryptions -L.. -L../../googletest/googlemock/gtest -lgtest -lpthread
 TARGET=tests
+
+include testcases/objects.mk
 
 debug: CXXFLAGS += -g
 debug: all
 
 all: $(TARGET)
 
-.PHONY: lib clean clean-all
+.PHONY: lib testcases clean clean-all
 
 lib:
 	$(MAKE) -C ..
 
-$(TARGET): tests.cpp lib
-	$(CXX) $(CXXFLAGS) tests.cpp $(LDFLAGS) -o $(TARGET)
+testcases:
+	$(MAKE) -C testcases
+
+$(TARGET): tests.cpp lib testcases
+	$(CXX) $(CXXFLAGS) tests.cpp $(addprefix testcases/, $(ENCRYPTIONS_TESTCASES)) $(LDFLAGS) -o $(TARGET)
 
 run: $(TARGET)
 	./$(TARGET)
@@ -24,4 +29,5 @@ clean:
 	rm -f $(TARGET)
 
 clean-all:  clean
+	$(MAKE) clean -C testcases
 	$(MAKE) clean-all -C ..

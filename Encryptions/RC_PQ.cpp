@@ -16,10 +16,7 @@ void rc_pq(const int w, uint64_t & p, uint64_t & q){
             q = 0x9e3779b97f4a7c15ULL;
             break;
         default:
-            {
-                std::stringstream s; s << w;
-                throw std::runtime_error("Error: No values defined for w = " + s.str());
-            }
+            throw std::runtime_error("Error: No values defined for w = " + std::to_string(w));
             break;
     }
 }
