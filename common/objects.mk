@@ -1,2 +1,2 @@
-COMMON_OBJECTS=includes.o \
+COMMON_OBJECTS=includes.o   \
                integer.o

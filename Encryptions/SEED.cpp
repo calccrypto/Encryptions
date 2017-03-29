@@ -39,15 +39,14 @@ std::string SEED::run(const std::string & DATA){
     return unhexlify(makehex(R, 16) + makehex(L, 16));
 }
 
-SEED::SEED():
-    SymAlg(),
-    mode(""),
-    k()
-{
-}
+SEED::SEED()
+    : SymAlg(),
+      mode(""),
+      k()
+{}
 
-SEED::SEED(const std::string & KEY):
-    SEED()
+SEED::SEED(const std::string & KEY)
+    : SEED()
 {
     setkey(KEY);
 }
@@ -61,11 +60,10 @@ void SEED::setkey(const std::string & KEY){
         throw std::runtime_error("Error: Key must be 128 bits in length.");
     }
 
-    integer key(KEY, 256);
-    uint64_t K0 = static_cast <uint32_t> (key >> 96);
-    uint64_t K1 = static_cast <uint32_t> (key >> 64);
-    uint64_t K2 = static_cast <uint32_t> (key >> 32);
-    uint64_t K3 = static_cast <uint32_t> (key);
+    uint64_t K0 = toint(KEY.substr(0,  4), 256);
+    uint64_t K1 = toint(KEY.substr(4,  4), 256);
+    uint64_t K2 = toint(KEY.substr(8,  4), 256);
+    uint64_t K3 = toint(KEY.substr(12, 4), 256);
     uint64_t T;
     for(uint8_t i = 1; i < 17; i++){
         k[i - 1].first = G((K0 + K2 - SEED_KC[i - 1]));

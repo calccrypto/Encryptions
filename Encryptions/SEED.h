@@ -29,7 +29,6 @@ THE SOFTWARE.
 
 #include "../common/cryptomath.h"
 #include "../common/includes.h"
-#include "../common/integer.h"
 #include "SymAlg.h"
 
 #include "SEED_Const.h"
