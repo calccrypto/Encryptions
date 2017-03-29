@@ -31,7 +31,7 @@ before_script:
   - cmake CMakeLists.txt
   - make
 
-  - cd Encryptions/tests
+  - cd ../Encryptions/tests
   - make
 
 script:
