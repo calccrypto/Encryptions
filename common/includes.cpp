@@ -229,15 +229,15 @@ std::string or_strings(const std::string & str1, const std::string & str2){
     for(std::string::size_type i = 0; i < end; i++){
         out[i] |= str2[i];
     }
-
     return out;
 }
 
 // xor the contents of 2 strings, up to the last character of the shorter string
 std::string xor_strings(const std::string & str1, const std::string & str2){
-    std::string out = "";
-    for(unsigned int x = 0; x < std::min(str1.size(), str2.size()); x++){
-        out += std::string(1, str1[x] ^ str2[x]);
+    std::string::size_type end = std::min(str1.size(), str2.size());
+    std::string out = str1.substr(0, end);
+    for(std::string::size_type i = 0; i < end; i++){
+        out[i] ^= str2[i];
     }
     return out;
 }
