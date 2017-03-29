@@ -15,6 +15,8 @@ that do not have these functions defined.
 
 // Greatest Common Divisor
 template <typename T> T gcd(T a, T b){
+    static_assert(std::is_integral <T>::value, "Error: Input value should be integral.");
+
 	T c = 1;
 	while (c != 0){
 		c = a % b;
@@ -26,6 +28,8 @@ template <typename T> T gcd(T a, T b){
 
 // Inverse Mod b * x = 1 mod a
 template <typename T> T invmod(T a, T b){
+    static_assert(std::is_integral <T>::value, "Error: Input values should be integral.");
+
 	T A = a;
 	T x = 0, lastx = 1, y = 1, lasty = 0;
 	while (b != 0){
@@ -49,8 +53,11 @@ template <typename T> T invmod(T a, T b){
 // Faster Exponentiation by Squaring
 // adapted from http://stackoverflow.com/questions/101439/the-most-efficient-way-to-implement-an-mpz_class-based-power-function-powint-int
 template <typename S, typename T>
-S POW(S base, T exp)
-{
+S POW(S base, T exp){
+    static_assert(std::is_integral <S>::value &&
+                  std::is_integral <T>::value
+                  , "Error: Arguments should be integral.");
+
     S result = 1;
     while (exp != 0)
     {
@@ -66,6 +73,10 @@ S POW(S base, T exp)
 // Exponentiation by squaring
 template <typename R, typename S, typename T>
 T POW(R base, S exponent, const T mod){
+    static_assert(std::is_integral <R>::value &&
+                  std::is_integral <S>::value &&
+                  std::is_integral <T>::value
+                  , "Error: Arguments should be integral.");
 	T result = 1;
 	while (exponent != 0){
 		if ((exponent & 1) == 1){
@@ -77,10 +88,10 @@ T POW(R base, S exponent, const T mod){
 	return result;
 }
 
-// Two's compliment
+// Two's compliment of input
 template <typename T>
 T two_comp(const T & a, const uint8_t bits = 16){
-	//Change a number to its 2s compliment//
+    static_assert(std::is_integral <T>::value, "Error: Input value should be integral.");
 	T XOR = 1;
 	XOR = (XOR << (bits - 1)) - 1;
 	XOR = (XOR << 1) + 1;
@@ -88,10 +99,10 @@ T two_comp(const T & a, const uint8_t bits = 16){
 }
 
 // From a Twofish code (modified)
-// Rotate Right
+// Bitwise rotation to the right
 template <typename T>
 T ROR(T x, const uint64_t & n, const uint64_t & bits){
-	// Bitwise rotation to the right
+    static_assert(std::is_integral <T>::value, "Error: Value being rotated should be integral.");
 	T mask = 1;
 	mask = (mask << (n - 1)) - 1;
 	mask = (mask << 1) + 1;
@@ -100,9 +111,10 @@ T ROR(T x, const uint64_t & n, const uint64_t & bits){
 }
 
 // Rotate Left
+// Bitwise rotation to the left
 template <typename T>
 T ROL(const T & x, const uint64_t & n, const uint64_t & bits){
-	// Bitwise rotation to the left
+    static_assert(std::is_integral <T>::value, "Error: Value being rotated should be integral.");
 	return ROR(x, bits - n, bits);
 }
 

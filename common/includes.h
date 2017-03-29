@@ -104,6 +104,15 @@ std::string zfill(const std::string & str, const unsigned int & n, const char fi
 // adds to back of string
 std::string pad(const std::string & str, const unsigned int & n, const char fill = 0);
 
+// Left rotate a string
+std::string ROL(const std::string & str, const std::size_t bits);
+
+// and two strings, up to the last character of the shorter string
+std::string and_strings(const std::string & str1, const std::string & str2);
+
+// or two strings, up to the last character of the shorter string
+std::string or_strings(const std::string & str1, const std::string & str2);
+
 // xor the contents of 2 strings, up to the last character of the shorter string
 std::string xor_strings(const std::string & str1, const std::string & str2);
 

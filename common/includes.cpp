@@ -191,6 +191,48 @@ std::string pad(const std::string & str, const unsigned int & n, const char fill
     return str;
 }
 
+// Left rotate a string
+std::string ROL(const std::string & str, const std::size_t bits){
+    std::string out;
+    if (str.size()){
+        out = (str + str).substr(bits >> 3, str.size());
+        const std::size_t push = bits & 7;
+        if (push){
+            const std::size_t pull = 8 - push;
+            const char mask = (1 << push) - 1;
+            const char top = (out[0] >> pull) & mask;
+
+            for(std::string::size_type i = 1; i < out.size(); i++){
+                out[i - 1] = (out[i - 1] << push) | ((out[i] >> pull) & mask);
+            }
+            out.back() = (out.back() << push) | top;
+        }
+    }
+
+    return out;
+}
+
+// and two strings, up to the last character of the shorter string
+std::string and_strings(const std::string & str1, const std::string & str2){
+    std::string::size_type end = std::min(str1.size(), str2.size());
+    std::string out = str1.substr(0, end);
+    for(std::string::size_type i = 0; i < end; i++){
+        out[i] &= str2[i];
+    }
+    return out;
+}
+
+// or two strings, up to the last character of the shorter string
+std::string or_strings(const std::string & str1, const std::string & str2){
+    std::string::size_type end = std::min(str1.size(), str2.size());
+    std::string out = str1.substr(0, end);
+    for(std::string::size_type i = 0; i < end; i++){
+        out[i] |= str2[i];
+    }
+
+    return out;
+}
+
 // xor the contents of 2 strings, up to the last character of the shorter string
 std::string xor_strings(const std::string & str1, const std::string & str2){
     std::string out = "";
