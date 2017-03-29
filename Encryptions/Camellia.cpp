@@ -201,14 +201,14 @@ std::string Camellia::run(const std::string & data){
     return D2 + D1;
 }
 
-Camellia::Camellia() :
-    SymAlg(),
+Camellia::Camellia()
+    : SymAlg(),
     keysize(0),
     keys()
 {}
 
-Camellia::Camellia(const std::string & KEY) :
-    Camellia()
+Camellia::Camellia(const std::string & KEY) 
+    : Camellia()
 {
     setkey(KEY);
 }

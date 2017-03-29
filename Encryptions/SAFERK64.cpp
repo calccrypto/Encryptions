@@ -119,15 +119,14 @@ void SAFERK64::inv_pht_layer(std::vector <uint8_t> & data){
     }
 }
 
-SAFERK64::SAFERK64(): 
-    SymAlg(),
-    r(0),
-    keys(0)
-{
-}
+SAFERK64::SAFERK64()
+    : SymAlg(),
+      r(0),
+      keys(0)
+{}
 
-SAFERK64::SAFERK64(const std::string & KEY, const uint8_t & rounds):
-    SAFERK64()
+SAFERK64::SAFERK64(const std::string & KEY, const uint8_t & rounds)
+    : SAFERK64()
 {
     setkey(KEY, rounds);
 }

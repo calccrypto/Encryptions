@@ -1,14 +1,13 @@
 #include "RC6.h"
 
-RC6::RC6():
-    SymAlg(),
-    w(0), r(0), b(0), lgw(0),
-    S(0)
-{
-}
+RC6::RC6()
+    : SymAlg(),
+      w(0), r(0), b(0), lgw(0),
+      S(0)
+{}
 
-RC6::RC6(const std::string & KEY, const unsigned int & W, const unsigned int & R):
-    RC6()
+RC6::RC6(const std::string & KEY, const unsigned int & W, const unsigned int & R)
+    : RC6()
 {
     setkey(KEY, W, R);
 }

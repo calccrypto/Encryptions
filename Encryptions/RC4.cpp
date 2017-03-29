@@ -36,13 +36,13 @@ uint8_t RC4::prga(const char mode){
     return 0; // get rid of compiler warnings
 }
 
-RC4::RC4():
-    SymAlg(),
-    s_e(), i_e(0), j_e(0), s_d(), i_d(0), j_d(0)
+RC4::RC4()
+    : SymAlg(),
+      s_e(), i_e(0), j_e(0), s_d(), i_d(0), j_d(0)
 {}
 
-RC4::RC4(const std::string & KEY):
-    RC4()
+RC4::RC4(const std::string & KEY)
+    : RC4()
 {
     setkey(KEY);
 }

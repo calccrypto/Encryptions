@@ -1,14 +1,13 @@
 #include "RC5.h"
 
-RC5::RC5():
-    SymAlg(),
-    w(0), r(0), b(0),
-    mod(0)
-{
-}
+RC5::RC5()
+    : SymAlg(),
+      w(0), r(0), b(0),
+      mod(0)
+{}
 
-RC5::RC5(const std::string & KEY, const uint64_t & W, const uint64_t & R, const uint64_t & B):
-    RC5()
+RC5::RC5(const std::string & KEY, const uint64_t & W, const uint64_t & R, const uint64_t & B)
+    : RC5()
 {
     setkey(KEY, W, R, B);
 }

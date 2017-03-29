@@ -48,15 +48,14 @@ std::string CAST128::run(const std::string & DATA, const uint8_t start, const ui
     return unhexlify(makehex(right, 8) + makehex(left, 8));
 }
 
-CAST128::CAST128() :
-    SymAlg(),
-    rounds(0),
-    kr(), km()
-{
-}
+CAST128::CAST128()
+    : SymAlg(),
+      rounds(0),
+      kr(), km()
+{}
 
-CAST128::CAST128(const std::string & KEY) :
-    CAST128()
+CAST128::CAST128(const std::string & KEY)
+    : CAST128()
 {
     setkey(KEY);
 }

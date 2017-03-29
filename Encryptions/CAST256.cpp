@@ -83,15 +83,15 @@ std::string CAST256::run(const std::string & DATA){
     return unhexlify(makehex(A, 8) + makehex(B, 8) + makehex(C, 8) + makehex(D, 8));
 }
 
-CAST256::CAST256(): 
-    SymAlg(),
-    A(0), B(0), C(0), D(0), a(0), b(0), c(0), d(0), e(0), f(0), g (0), h(0),
-    Kr(0), Tr(0),
-    Km(0), Tm(0){
-}
+CAST256::CAST256()
+    : SymAlg(),
+      A(0), B(0), C(0), D(0), a(0), b(0), c(0), d(0), e(0), f(0), g (0), h(0),
+      Kr(0), Tr(0),
+      Km(0), Tm(0)
+{}
 
-CAST256::CAST256(const std::string & KEY):
-    CAST256()
+CAST256::CAST256(const std::string & KEY)
+    : CAST256()
 {
     setkey(KEY);
 }

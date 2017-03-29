@@ -69,14 +69,13 @@ std::string DES::run(const std::string & DATA){
     return unhexlify(makehex(out, 16));
 }
 
-DES::DES() :
-    SymAlg(),
-    keys()
-{
-}
+DES::DES()
+    : SymAlg(),
+      keys()
+{}
 
-DES::DES(const std::string & KEY) :
-    DES()
+DES::DES(const std::string & KEY)
+    : DES()
 {
     setkey(KEY);
 }

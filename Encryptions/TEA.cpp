@@ -1,13 +1,12 @@
 #include "TEA.h"
 
-TEA::TEA():
-    SymAlg(),
-    delta(0), cycles(0), total(0), key()
-{
-}
+TEA::TEA()
+    : SymAlg(),
+      delta(0), cycles(0), total(0), key()
+{}
 
-TEA::TEA(const std::string & KEY, const uint32_t & ROUNDS, const uint32_t & DELTA, const uint32_t & TOTAL):
-    TEA()
+TEA::TEA(const std::string & KEY, const uint32_t & ROUNDS, const uint32_t & DELTA, const uint32_t & TOTAL)
+    : TEA()
 {
     setkey(KEY, ROUNDS, DELTA, TOTAL);
 }

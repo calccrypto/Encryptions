@@ -15,15 +15,14 @@ std::string TDES::run(const std::string & data, const std::string & key, const b
     return DES(key).decrypt(data);
 }
 
-TDES::TDES() :
-    SymAlg(),
-    k1(), k2(), k3(),
-    m1(), m2(), m3()
-{
-}
+TDES::TDES()
+    : SymAlg(),
+      k1(), k2(), k3(),
+      m1(), m2(), m3()
+{}
 
-TDES::TDES(const std::string & key1, const std::string & mode1, const std::string & key2, const std::string & mode2, const std::string & key3, const std::string & mode3) :
-    TDES()
+TDES::TDES(const std::string & key1, const std::string & mode1, const std::string & key2, const std::string & mode2, const std::string & key3, const std::string & mode3)
+    : TDES()
 {
     setkey(key1, mode1, key2, mode2, key3, mode3);
 }

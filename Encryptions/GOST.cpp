@@ -29,15 +29,14 @@ uint32_t GOST::sub(const uint32_t in){
     return out;
 }
 
-GOST::GOST():
-    SymAlg(),
-    k(),
-    X(), N(), C1(0), C2(0)
-{
-}
+GOST::GOST()
+    : SymAlg(),
+      k(),
+      X(), N(), C1(0), C2(0)
+{}
 
-GOST::GOST(const std::string & KEY, const uint8_t sbox[8][16]):
-    GOST()
+GOST::GOST(const std::string & KEY, const uint8_t sbox[8][16])
+    : GOST()
 {
     setkey(KEY, sbox);
 }

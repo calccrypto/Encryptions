@@ -60,14 +60,13 @@ void Skipjack::invB(uint16_t & w1, uint16_t & w2, uint16_t & w3, uint16_t & w4, 
     w4 = w5;
 }
 
-Skipjack::Skipjack():
-    SymAlg(),
-    key("")
-{
-}
+Skipjack::Skipjack()
+    : SymAlg(),
+      key("")
+{}
 
-Skipjack::Skipjack(const std::string & KEY):
-    Skipjack()
+Skipjack::Skipjack(const std::string & KEY)
+    : Skipjack()
 {
     setkey(KEY);
 }

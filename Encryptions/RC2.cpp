@@ -18,15 +18,14 @@ void RC2::r_mash(const uint8_t i){
     R[i] = (R[i] - K[R[(i + 3) & 3] & 63] + mod16 + 1) & mod16;
 }
 
-RC2::RC2():
-    SymAlg(),
-    K(), R(),
-    T1(64)
-{
-}
+RC2::RC2()
+    : SymAlg(),
+      K(), R(),
+      T1(64)
+{}
 
-RC2::RC2(const std::string & KEY, const uint32_t & t1):
-    RC2()
+RC2::RC2(const std::string & KEY, const uint32_t & t1)
+    : RC2()
 {
     T1 = t1;
     setkey(KEY);

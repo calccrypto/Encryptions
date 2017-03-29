@@ -85,15 +85,14 @@ std::string Twofish::run(const std::string & data, bool enc){
     return unhexlify(little_end(makehex(blk[0], 8)) + little_end(makehex(blk[1], 8)) + little_end(makehex(blk[2], 8)) + little_end(makehex(blk[3], 8)));
 }
 
-Twofish::Twofish() :
-    SymAlg(),
-    l_key(),
-    mk_tab()
-{
-}
+Twofish::Twofish()
+    : SymAlg(),
+      l_key(),
+      mk_tab()
+{}
 
-Twofish::Twofish(const std::string & KEY) :
-    Twofish()
+Twofish::Twofish(const std::string & KEY)
+    : Twofish()
 {
     setkey(KEY);
 }

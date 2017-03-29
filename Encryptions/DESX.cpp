@@ -1,12 +1,12 @@
 #include "DESX.h"
 
-DESX::DESX() :
-    SymAlg(),
-    K1(), K2()
+DESX::DESX() 
+    : SymAlg(),
+      K1(), K2()
 {}
 
-DESX::DESX(const std::string & KEY, const std::string & KEY1, const std::string & KEY2):
-    DESX()
+DESX::DESX(const std::string & KEY, const std::string & KEY1, const std::string & KEY2)
+    : DESX()
 {
     if (keyset){
         throw std::runtime_error("Error: Key has already been set.");

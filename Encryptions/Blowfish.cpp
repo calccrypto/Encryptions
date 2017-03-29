@@ -25,15 +25,14 @@ std::string Blowfish::run(const std::string & data){
     return unhexlify(makehex(right, 8) + makehex(left, 8));
 }
 
-Blowfish::Blowfish() :
-    SymAlg(),
-    settingkey(true),
-    p(), sbox()
-{
-}
+Blowfish::Blowfish()
+    : SymAlg(),
+      settingkey(true),
+      p(), sbox()
+{}
 
-Blowfish::Blowfish(const std::string & KEY) :
-    Blowfish()
+Blowfish::Blowfish(const std::string & KEY)
+    : Blowfish()
 {
     setkey(KEY);
 }

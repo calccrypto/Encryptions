@@ -1,13 +1,12 @@
 #include "XTEA.h"
 
-XTEA::XTEA():
-    SymAlg(),
+XTEA::XTEA()
+    : SymAlg(),
     delta(0), cycles(0), total(0), key()
-{
-}
+{}
 
-XTEA::XTEA(const std::string & KEY, const uint8_t & ROUNDS, const uint32_t & DELTA): //, const uint32_t & TOTAL = 0xc6ef3720){
-    XTEA()
+XTEA::XTEA(const std::string & KEY, const uint8_t & ROUNDS, const uint32_t & DELTA) //, const uint32_t & TOTAL = 0xc6ef3720){
+    : XTEA()
 {
     setkey(KEY, ROUNDS, DELTA);
 }

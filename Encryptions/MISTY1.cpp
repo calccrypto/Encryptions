@@ -46,24 +46,23 @@ uint32_t MISTY1::FLINV(const uint32_t FL_IN, const uint32_t k){
     uint16_t d0 = FL_IN >> 16;
     uint16_t d1 = FL_IN & 0xffff;
     if (!(k & 1)){
-       d0 ^= (d1 | EK[(k/2+6)%8+8]);
-       d1 ^= (d0 & EK[k/2]);
+        d0 ^= (d1 | EK[(k/2+6)%8+8]);
+        d1 ^= (d0 & EK[k/2]);
     }
     else{
-       d0 ^= (d1 | EK[((k-1)/2+4)%8]);
-       d1 ^= (d0 & EK[((k-1)/2+2)%8+8]);
+        d0 ^= (d1 | EK[((k-1)/2+4)%8]);
+        d1 ^= (d0 & EK[((k-1)/2+2)%8+8]);
     }
     return (d0 << 16) | d1;
 }
 
-MISTY1::MISTY1():
-    SymAlg(),
-    EK()
-{
-}
+MISTY1::MISTY1()
+    : SymAlg(),
+      EK()
+{}
 
-MISTY1::MISTY1(const std::string & KEY):
-    MISTY1()
+MISTY1::MISTY1(const std::string & KEY)
+    : MISTY1()
 {
     setkey(KEY);
 }
