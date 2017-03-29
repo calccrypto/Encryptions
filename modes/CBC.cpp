@@ -1,7 +1,8 @@
 #include "CBC.h"
 
 CBC::CBC(SymAlg * instance, const std::string & iv)
-  : algo(instance) {
+    : algo(instance)
+{
     blocksize = algo -> blocksize() >> 3;
     const_IV = iv;
     if (const_IV == ""){
@@ -10,14 +11,12 @@ CBC::CBC(SymAlg * instance, const std::string & iv)
 }
 
 std::string CBC::encrypt(const std::string & data){
-    std::string temp = pkcs5(data, blocksize);
+    const std::string temp = pkcs5(data, blocksize);
     std::string out = "";
     std::string IV = const_IV;
-    uint32_t x = 0;
-    while (x < temp.size()){
-        IV = algo -> encrypt(unhexlify(makehex(integer(hexlify(temp.substr(x, blocksize)), 16) ^ integer(hexlify(IV), 16), blocksize << 1)));
+    for(std::string::size_type x = 0; x < temp.size(); x += blocksize){
+        IV = algo -> encrypt(xor_strings(temp.substr(x, blocksize), IV));
         out += IV;
-        x += blocksize;
     }
     return out;
 }
@@ -25,11 +24,9 @@ std::string CBC::encrypt(const std::string & data){
 std::string CBC::decrypt(const std::string & data){
     std::string out = "";
     std::string IV = const_IV;
-    uint32_t x = 0;
-    while (x < data.size()){
-        out += unhexlify(makehex(integer(hexlify(algo -> decrypt(data.substr(x, blocksize))), 16) ^ integer(hexlify(IV), 16), blocksize << 1));
+    for(std::string::size_type x = 0; x < data.size(); x += blocksize){
+        out += xor_strings(algo -> decrypt(data.substr(x, blocksize)), IV);
         IV = data.substr(x, blocksize);
-        x += blocksize;
     }
     return remove_padding(out);
 }

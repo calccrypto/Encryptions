@@ -1,6 +1,8 @@
 #include "OFB.h"
+
 OFB::OFB(SymAlg * instance, const std::string & iv)
-  : algo(instance) {
+    : algo(instance)
+{
     blocksize = algo -> blocksize() >> 3;
     const_IV = iv;
     if (const_IV == ""){
@@ -9,14 +11,12 @@ OFB::OFB(SymAlg * instance, const std::string & iv)
   }
 
 std::string OFB::encrypt(const std::string & data){
-    std::string temp = pkcs5(data, blocksize);
+    const std::string temp = pkcs5(data, blocksize);
     std::string out = "";
     std::string IV = const_IV;
-    uint32_t x = 0;
-    while (x < temp.size()){
-        IV = algo ->encrypt(IV);
-        out += unhexlify(makehex(integer(hexlify(IV), 16) ^ integer(hexlify(temp.substr(x, blocksize)), 16), blocksize << 1));
-        x += blocksize;
+    for(std::string::size_type x = 0; x < temp.size(); x += blocksize){
+        IV = algo -> encrypt(IV);
+        out += xor_strings(IV, temp.substr(x, blocksize));
     }
     return out;
 }
@@ -24,11 +24,9 @@ std::string OFB::encrypt(const std::string & data){
 std::string OFB::decrypt(const std::string & data){
     std::string out = "";
     std::string IV = const_IV;
-    uint32_t x = 0;
-    while (x < data.size()){
+    for(std::string::size_type x = 0; x < data.size(); x += blocksize){
         IV = algo -> encrypt(IV);
-        out += unhexlify(makehex(integer(hexlify(IV), 16) ^ integer(hexlify(data.substr(x, blocksize)), 16), blocksize << 1));
-        x += blocksize;
+        out += xor_strings(IV, data.substr(x, blocksize));
     }
     return out;
 }

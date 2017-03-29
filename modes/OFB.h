@@ -27,7 +27,6 @@ THE SOFTWARE.
 #define __OFB__
 
 #include "../common/includes.h"
-#include "../common/integer.h"
 #include "../Encryptions/SymAlg.h"
 
 class OFB{
