@@ -1,4 +1,4 @@
-#include "./RC2.h"
+#include "RC2.h"
 
 void RC2::mix(const uint8_t j, const uint8_t i, const uint8_t s){
     R[i] += K[(j << 2) + i] + (R[(i + 3) & 3] & R[(i + 2) & 3]) + ((~R[(i + 3) & 3]) & R[(i + 1) & 3]);

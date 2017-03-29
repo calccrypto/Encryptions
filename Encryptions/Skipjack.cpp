@@ -1,4 +1,4 @@
-#include "./Skipjack.h"
+#include "Skipjack.h"
 
 uint16_t Skipjack::G_e(const uint16_t quarter, const uint32_t fourkeys){
     uint16_t left = quarter >> 8;

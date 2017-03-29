@@ -1,4 +1,4 @@
-#include "./XTEA.h"
+#include "XTEA.h"
 
 XTEA::XTEA():
     SymAlg(),

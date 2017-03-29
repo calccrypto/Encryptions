@@ -1,4 +1,4 @@
-#include "./PCPB.h"
+#include "PCPB.h"
 
 PCPB::PCPB(SymAlg * instance, const std::string & iv)
   : algo(instance) {

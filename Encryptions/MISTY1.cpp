@@ -1,4 +1,4 @@
-#include "./MISTY1.h"
+#include "MISTY1.h"
 
 uint16_t MISTY1::FI(const uint16_t FI_IN, const uint16_t FI_KEY){
     uint16_t d9 = FI_IN >> 7;

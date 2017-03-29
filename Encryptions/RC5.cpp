@@ -1,4 +1,4 @@
-#include "./RC5.h"
+#include "RC5.h"
 
 RC5::RC5():
     SymAlg(),

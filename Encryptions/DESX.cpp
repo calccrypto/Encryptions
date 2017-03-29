@@ -1,4 +1,4 @@
-#include "./DESX.h"
+#include "DESX.h"
 
 DESX::DESX() :
     SymAlg(),

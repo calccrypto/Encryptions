@@ -1,4 +1,4 @@
-#include "./CFB.h"
+#include "CFB.h"
 CFB::CFB(SymAlg * instance, const std::string & iv)
   : algo(instance) {
     blocksize = algo -> blocksize() >> 3;

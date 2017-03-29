@@ -1,4 +1,4 @@
-#include "./SEED.h"
+#include "SEED.h"
 
 uint32_t SEED::G(uint32_t X){
     X %= mod32;

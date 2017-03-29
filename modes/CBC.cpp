@@ -1,4 +1,4 @@
-#include "./CBC.h"
+#include "CBC.h"
 
 CBC::CBC(SymAlg * instance, const std::string & iv)
   : algo(instance) {

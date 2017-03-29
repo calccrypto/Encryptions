@@ -20,7 +20,7 @@ testcases:
 	$(MAKE) -C testcases
 
 $(TARGET): tests.cpp lib testcases
-	$(CXX) $(CXXFLAGS) tests.cpp $(addprefix testcases/, $(ENCRYPTIONS_TESTCASES)) $(LDFLAGS) -o $(TARGET)
+	$(CXX) $(CXXFLAGS) tests.cpp $(addprefix testcases/, $(ENCRYPTIONS_TESTCASES_OBJECTS)) $(LDFLAGS) -o $(TARGET)
 
 run: $(TARGET)
 	./$(TARGET)

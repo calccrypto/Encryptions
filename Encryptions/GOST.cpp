@@ -1,4 +1,4 @@
-#include "./GOST.h"
+#include "GOST.h"
 
 // GOST 28147-89
 uint32_t GOST::CM1(const uint32_t a, const uint32_t b){

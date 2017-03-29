@@ -1,4 +1,4 @@
-#include "./RC6.h"
+#include "RC6.h"
 
 RC6::RC6():
     SymAlg(),

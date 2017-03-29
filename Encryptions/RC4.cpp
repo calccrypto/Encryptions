@@ -1,4 +1,4 @@
-#include "./RC4.h"
+#include "RC4.h"
 
 void RC4::ksa(const std::string & k){
     // Original SBox

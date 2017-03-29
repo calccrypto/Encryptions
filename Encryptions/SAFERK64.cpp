@@ -1,4 +1,4 @@
-#include "./SAFERK64.h"
+#include "SAFERK64.h"
 
 void SAFERK64::add_bias(std::vector <uint8_t> & key_i, const uint8_t b[8]){
     for(uint8_t i = 0; i < 8; i++){

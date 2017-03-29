@@ -1,4 +1,4 @@
-#include "./CTR.h"
+#include "CTR.h"
 
 CTR::CTR(SymAlg * instance, const std::string & iv)
   : algo(instance) {

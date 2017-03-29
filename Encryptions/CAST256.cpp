@@ -1,4 +1,4 @@
-#include "./CAST256.h"
+#include "CAST256.h"
 
 uint32_t CAST256::F1(const uint32_t Data, const uint32_t Kmi, const uint8_t Kri){
     uint32_t temp = ROL((Kmi + Data) & mod32, Kri, 32);

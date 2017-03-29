@@ -1,4 +1,4 @@
-#include "./ECB.h"
+#include "ECB.h"
 
 ECB::ECB(SymAlg * instance, const std::string & iv)
 : algo(instance){

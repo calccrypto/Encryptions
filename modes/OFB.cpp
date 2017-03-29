@@ -1,4 +1,4 @@
-#include "./OFB.h"
+#include "OFB.h"
 OFB::OFB(SymAlg * instance, const std::string & iv)
   : algo(instance) {
     blocksize = algo -> blocksize() >> 3;

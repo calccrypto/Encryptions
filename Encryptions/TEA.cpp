@@ -1,4 +1,4 @@
-#include "./TEA.h"
+#include "TEA.h"
 
 TEA::TEA():
     SymAlg(),
