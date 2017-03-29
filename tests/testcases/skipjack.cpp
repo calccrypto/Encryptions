@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Encryptions/skipjack.h"
+#include "Encryptions/Skipjack.h"
 
 #include "testvectors/skipjack/skipjacktestvectorsnist.h"
 #include "testvectors/skipjack/skipjacktestvectorsset1.h"
