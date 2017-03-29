@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Encryptions/seed.h"
+#include "Encryptions/SEED.h"
 
 #include "testvectors/seed/seedtestvectorsset1.h"
 #include "testvectors/seed/seedtestvectorsset2.h"
