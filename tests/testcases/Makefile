@@ -7,10 +7,10 @@ include objects.mk
 debug: CXXFLAGS += -g
 debug: all
 
-all: $(ENCRYPTIONS_TESTCASES)
+all: $(ENCRYPTIONS_TESTCASES_OBJECTS)
 
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) $< -o $@
 
 clean:
-	rm -f $(ENCRYPTIONS_TESTCASES)
+	rm -f $(ENCRYPTIONS_TESTCASES_OBJECTS)
