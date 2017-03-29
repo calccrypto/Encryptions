@@ -783,7 +783,6 @@ integer pow(integer base, Z_e exponent, const Z_m modulus){
     static_assert(std::is_integral <Z_e>::value &&
                   std::is_integral <Z_m>::value
                   , "Exponent type should be integral");
-
     // check modulus first
     if (!modulus){
         throw std::domain_error("Error: modulus by 0");
