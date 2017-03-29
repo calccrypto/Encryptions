@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Encryptions/rc6.h"
+#include "Encryptions/RC6.h"
 
 #include "testvectors/rc/rc6testvectorsset1.h"
 #include "testvectors/rc/rc6testvectorsset2.h"

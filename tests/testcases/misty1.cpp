@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Encryptions/misty1.h"
+#include "Encryptions/MISTY1.h"
 
 #include "testvectors/misty1/misty1testvectorsset1.h"
 #include "testvectors/misty1/misty1testvectorsset2.h"
