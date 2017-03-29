@@ -30,7 +30,6 @@ THE SOFTWARE.
 
 #include "../common/cryptomath.h"
 #include "../common/includes.h"
-#include "../common/integer.h"
 #include "SymAlg.h"
 
 #include "Camellia_Const.h"
@@ -42,11 +41,11 @@ class Camellia : public SymAlg{
 
     private:
         uint16_t keysize;
-        std::vector <uint64_t> keys;
-        unsigned int SBOX(const uint8_t s, const uint8_t value);
-        uint64_t FL(const uint64_t & FL_IN, const uint64_t & KE);
-        uint64_t FLINV(const uint64_t & FLINV_IN, const uint64_t & KE);
-        uint64_t F(const uint64_t & F_IN, const uint64_t & KE);
+        std::vector <std::string> keys;
+        uint8_t  SBOX(const uint8_t s, const uint8_t value);
+        std::string FL(const std::string & FL_IN, const std::string & KE);
+        std::string FLINV(const std::string & FLINV_IN, const std::string & KE);
+        std::string F(const std::string & F_IN, const std::string & KE);
         std::string run(const std::string & data);
 
     public:

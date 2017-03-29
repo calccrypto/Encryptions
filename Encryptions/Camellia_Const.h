@@ -25,12 +25,12 @@ THE SOFTWARE.
 #ifndef __CAMELLIA_CONST__
 #define __CAMELLIA_CONST__
 
-const uint64_t Camellia_Sigma1 = 0xA09E667F3BCC908BULL;
-const uint64_t Camellia_Sigma2 = 0xB67AE8584CAA73B2ULL;
-const uint64_t Camellia_Sigma3 = 0xC6EF372FE94F82BEULL;
-const uint64_t Camellia_Sigma4 = 0x54FF53A5F1D36F1CULL;
-const uint64_t Camellia_Sigma5 = 0x10E527FADE682D1DULL;
-const uint64_t Camellia_Sigma6 = 0xB05688C2B3E6C1FDULL;
+const std::string Camellia_Sigma[6] = {unhexlify("A09E667F3BCC908B"),
+                                       unhexlify("B67AE8584CAA73B2"),
+                                       unhexlify("C6EF372FE94F82BE"),
+                                       unhexlify("54FF53A5F1D36F1C"),
+                                       unhexlify("10E527FADE682D1D"),
+                                       unhexlify("B05688C2B3E6C1FD")};
 
 const uint8_t Camellia_SBox[256] = {0x70, 0x82, 0x2c, 0xec, 0xb3, 0x27, 0xc0, 0xe5, 0xe4, 0x85, 0x57, 0x35, 0xea, 0x0c, 0xae, 0x41,
                                     0x23, 0xef, 0x6b, 0x93, 0x45, 0x19, 0xa5, 0x21, 0xed, 0x0e, 0x4f, 0x4e, 0x1d, 0x65, 0x92, 0xbd,
