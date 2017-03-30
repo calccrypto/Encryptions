@@ -9,7 +9,7 @@ debug: all
 
 all: $(ENCRYPTIONS_TESTCASES_OBJECTS)
 
-%.o : %.cpp
+%.o : %.cpp testvectors/plainkeycipher.h
 	$(CXX) $(CXXFLAGS) $< -o $@
 
 clean:
