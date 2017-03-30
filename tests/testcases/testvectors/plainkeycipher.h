@@ -46,8 +46,8 @@ void sym_test(const std::vector <PlainKeyCipher> & test_vectors){
         std::string plain, key, cipher;
         std::tie(plain, key, cipher) = pkc;
         auto alg = Alg(unhexlify(key));
-        EXPECT_EQ(hexlify(alg.encrypt(unhexlify(plain))), (cipher));
-        EXPECT_EQ(hexlify(alg.decrypt(unhexlify(cipher))), (plain));
+        EXPECT_EQ(alg.encrypt(unhexlify(plain)), unhexlify(cipher));
+        EXPECT_EQ(alg.decrypt(unhexlify(cipher)), unhexlify(plain));
     }
 }
 
