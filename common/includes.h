@@ -96,13 +96,10 @@ std::string unhexlify(const std::string & in);
 
 std::string pkcs5(const std::string & data, const unsigned int & blocksize);
 
-std::string remove_padding(std::string data);
+std::string remove_pkcs5(std::string data);
 
-// add to front of string
-std::string zfill(const std::string & str, const unsigned int & n, const char fill = 0);
-
-// adds to back of string
-std::string pad(const std::string & str, const unsigned int & n, const char fill = 0);
+// adds characters to the front of the string
+std::string zfill(const std::string & str, const unsigned int & n, const char fill);
 
 // Left rotate a string
 std::string ROL(const std::string & str, const std::size_t bits);
@@ -116,33 +113,4 @@ std::string or_strings(const std::string & str1, const std::string & str2);
 // xor the contents of 2 strings, up to the last character of the shorter string
 std::string xor_strings(const std::string & str1, const std::string & str2);
 
-// ////////////////////////////////////////////////////////////////////////////////
-// Thanks to Xeo @ stackoverflow
-// http://stackoverflow.com/questions/6240950/platform-independent-dev-null-in-c
-template<typename Ch, typename Traits = std::char_traits<Ch> >
-struct basic_nullbuf : std::basic_streambuf<Ch, Traits> {
-    typedef std::basic_streambuf<Ch, Traits> base_type;
-    typedef typename base_type::int_type int_type;
-    typedef typename base_type::traits_type traits_type;
-
-    virtual int_type overflow(int_type c) {
-        return traits_type::not_eof(c);
-    }
-};
-
-// convenient typedefs
-typedef basic_nullbuf<char> nullbuf;
-typedef basic_nullbuf<wchar_t> wnullbuf;
-
-// buffers and streams
-// in some .h
-extern std::ostream null_out;
-extern std::wostream wnull_out;
-
-//// in a concrete .cpp
-//nullbuf null_obj;
-//wnullbuf wnull_obj;
-//std::ostream null_out(&null_obj);
-//std::wostream wnull_out(&wnull_obj);
-//// ////////////////////////////////////////////////////////////////////////////////
 #endif

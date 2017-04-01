@@ -28,5 +28,5 @@ std::string CFB::decrypt(const std::string & data){
         out += xor_strings(algo -> encrypt(IV), data.substr(x, blocksize));
         IV = data.substr(x, blocksize);
     }
-    return remove_padding(out);
+    return remove_pkcs5(out);
 }

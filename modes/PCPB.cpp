@@ -30,5 +30,5 @@ std::string PCPB::decrypt(const std::string & data){
         out += xor_strings(algo -> decrypt(block), IV);
         IV = xor_strings(out.substr(out.size() - blocksize, blocksize), block);
     }
-    return remove_padding(out);
+    return remove_pkcs5(out);
 }

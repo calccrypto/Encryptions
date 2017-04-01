@@ -166,7 +166,7 @@ std::string pkcs5(const std::string & data, const unsigned int & blocksize){
     return data + padding;
 }
 
-std::string remove_padding(std::string data){
+std::string remove_pkcs5(std::string data){
     // Removes PKCS Padding
     uint8_t pad = static_cast <uint8_t> (data[data.size() - 1]);
     std::string padding(pad, static_cast <char> (pad));
@@ -177,16 +177,8 @@ std::string remove_padding(std::string data){
 
 // adds characters to the front of the string
 std::string zfill(const std::string & str, const unsigned int & n, const char fill){
-    if ((n - str.size()) > 0){
+    if (n > str.size()){
         return std::string(n - str.size(), fill) + str;
-    }
-    return str;
-}
-
-// adds characters to the back of the string
-std::string pad(const std::string & str, const unsigned int & n, const char fill){
-    if ((n - str.size()) > 0){
-        return str + std::string(n - str.size(), fill);
     }
     return str;
 }
@@ -241,8 +233,3 @@ std::string xor_strings(const std::string & str1, const std::string & str2){
     }
     return out;
 }
-
-nullbuf null_obj;
-wnullbuf wnull_obj;
-std::ostream null_out(&null_obj);
-std::wostream wnull_out(&wnull_obj);

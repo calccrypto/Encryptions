@@ -20,5 +20,5 @@ std::string ECB::decrypt(const std::string & data){
     for(std::string::size_type x = 0; x < data.size(); x += blocksize){
         out += algo -> decrypt(data.substr(x, blocksize));
     }
-    return remove_padding(out);
+    return remove_pkcs5(out);
 }

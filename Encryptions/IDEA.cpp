@@ -150,15 +150,15 @@ std::string IDEA::decrypt(const std::string & DATA){
     std::vector <uint16_t> t;
     for(uint8_t x = 0; x < 8; x++){
         k.push_back(invmod(static_cast <int> (65537), static_cast <int> (k[48 - 6 * x])));
-        k.push_back(two_comp(k[50 - 6 * x]));
-        k.push_back(two_comp(k[49 - 6 * x]));
+        k.push_back(two_comp(k[50 - 6 * x], 16));
+        k.push_back(two_comp(k[49 - 6 * x], 16));
         k.push_back(invmod(static_cast <int> (65537), static_cast <int> (k[51 - 6 * x])));
         k.push_back(k[46 - 6 * x]);
         k.push_back(k[47 - 6 * x]);
     }
     k.push_back(invmod(static_cast <int> (65537), static_cast <int> (k[0])));
-    k.push_back(two_comp(k[1]));
-    k.push_back(two_comp(k[2]));
+    k.push_back(two_comp(k[1], 16));
+    k.push_back(two_comp(k[2], 16));
     k.push_back(invmod(static_cast <int> (65537), static_cast <int> (k[3])));
     k.erase(k.begin(), k.begin() + 52);
 

@@ -42,5 +42,5 @@ std::string CTR::decrypt(const std::string & data){
         out += xor_strings(algo -> encrypt(IV), data.substr(x, blocksize));
         increment_IV(IV);
     }
-    return remove_padding(out);
+    return remove_pkcs5(out);
 }
