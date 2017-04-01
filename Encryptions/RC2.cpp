@@ -49,7 +49,7 @@ void RC2::setkey(const std::string & KEY, const uint32_t & t1){
     }
 
     unsigned int T8 = (T1 + 7) >> 3;
-    unsigned int TM = 255 % (unsigned int) POW(2, 8 + T1 - (T8 << 3));
+    unsigned int TM = 255 % (1UL << (8 + T1 - (T8 << 3)));
     for(int i = T; i < 128; i++){
         int j = i - 1, k = i - T;
         if (j < 0){

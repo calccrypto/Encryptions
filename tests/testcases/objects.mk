@@ -1,0 +1,19 @@
+ENCRYPTIONS_TESTCASES_OBJECTS=aes.o       \
+                              blowfish.o  \
+                              camellia.o  \
+                              cast128.o   \
+                              cast256.o   \
+                              des.o       \
+                              gost.o      \
+                              idea.o      \
+                              misty1.o    \
+                              rc4.o       \
+                              rc5.o       \
+                              rc6.o       \
+                              saferk64.o  \
+                              seed.o      \
+                              skipjack.o  \
+                              tea.o       \
+                              tripledes.o \
+                              twofish.o   \
+                              xtea.o
