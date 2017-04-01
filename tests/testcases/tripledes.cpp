@@ -2,11 +2,11 @@
 
 #include "Encryptions/TDES.h"
 
-#include "testvectors/tdes/tripledesecbinvperm.h"
-#include "testvectors/tdes/tripledesecbpermop.h"
-#include "testvectors/tdes/tripledesecbsubtab.h"
-#include "testvectors/tdes/tripledesecbvarkey.h"
-#include "testvectors/tdes/tripledesecbvartxt.h"
+#include "testvectors/tdes/invperm.h"
+#include "testvectors/tdes/permop.h"
+#include "testvectors/tdes/subtab.h"
+#include "testvectors/tdes/varkey.h"
+#include "testvectors/tdes/vartxt.h"
 
 TEST(TripleDES, invperm) {
     for(PlainKeyCipher const & pkc : TDES_INVPERM){

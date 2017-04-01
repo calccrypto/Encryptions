@@ -2,8 +2,8 @@
 
 #include "Encryptions/TEA.h"
 
-#include "testvectors/tea/teatestvectors.h"
+#include "testvectors/tea/edipermadi.h"
 
-TEST(TEA, test) {
-    sym_test <TEA> (TEA_TEST_VECTORS);
+TEST(TEA, edipermadi) {
+    sym_test <TEA> (TEA_EDIPERMADI);
 }

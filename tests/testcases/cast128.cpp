@@ -2,10 +2,10 @@
 
 #include "Encryptions/CAST128.h"
 
-#include "testvectors/cast/cast128testvectors.h"
+#include "testvectors/cast/cast128rfc2144.h"
 
-TEST(CAST128, rfc) {
-    sym_test <CAST128> (CAST128_TEST_VECTORS);
+TEST(CAST128, rfc2144) {
+    sym_test <CAST128> (CAST128_RFC2144);
 }
 
 /*

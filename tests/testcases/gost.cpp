@@ -2,7 +2,7 @@
 
 #include "Encryptions/GOST.h"
 
-#include "testvectors/gost/gosttestvectors.h"
+#include "testvectors/gost/testvectors.h"
 
 TEST(GOST, 28147_89) {
     for(PlainKeyCipher const & pkc : GOST_TEST_VECTORS){

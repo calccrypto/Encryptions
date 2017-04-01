@@ -2,7 +2,7 @@
 
 #include "Encryptions/Camellia.h"
 
-#include "testvectors/camellia/camelliatestvectors.h"
+#include "testvectors/camellia/ntt.h"
 
 // don't use sym_test; too much swapping
 

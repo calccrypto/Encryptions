@@ -2,10 +2,10 @@
 
 #include "Encryptions/Blowfish.h"
 
-#include "testvectors/blowfish/blowfishtestvectors.h"
+#include "testvectors/blowfish/schneier.h"
 
 TEST(Blowfish, 64) {
-    sym_test <Blowfish> (BLOWFISH_TEST_VECTORS);
+    sym_test <Blowfish> (BLOWFISH_SCHNEIER);
 }
 
 

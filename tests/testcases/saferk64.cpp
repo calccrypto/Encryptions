@@ -3,10 +3,10 @@
 #include "common/includes.h"
 #include "Encryptions/SAFERK64.h"
 
-#include "testvectors/safer/saferk64testvectors.h"
+#include "testvectors/safer/saferk64paper.h"
 
 TEST(SAFERK64, 6_rounds) {
-    for(PlainKeyCipher const & pkc : SAFERK64_TEST_VECTORS){
+    for(PlainKeyCipher const & pkc : SAFERK64_PAPER){
         std::string plain, key, cipher;
         std::tie(plain, key, cipher) = pkc;
         auto saferk64 = SAFERK64(unhexlify(key), 6);

@@ -2,8 +2,8 @@
 
 #include "Encryptions/Twofish.h"
 
-#include "testvectors/twofish/twofishecb_vk.h"
-#include "testvectors/twofish/twofishecb_vt.h"
+#include "testvectors/twofish/vk.h"
+#include "testvectors/twofish/vt.h"
 
 // Test vectors from <https://www.schneier.com/code/twofish-kat.zip>
 
