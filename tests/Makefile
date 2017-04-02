@@ -9,9 +9,9 @@ include testcases/objects.mk
 debug: CXXFLAGS += -g
 debug: all
 
-all: $(TARGET)
-
 .PHONY: lib testcases clean clean-all
+
+all: $(TARGET)
 
 lib:
 	$(MAKE) -C ..

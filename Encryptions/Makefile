@@ -7,9 +7,9 @@ include objects.mk
 debug: CXXFLAGS += -g
 debug: all
 
-all: $(ENCRYPTIONS_OBJECTS)
-
 .PHONY: clean
+
+all: $(ENCRYPTIONS_OBJECTS)
 
 %.o : %.cpp %.h ../common/cryptomath.h ../common/includes.h SymAlg.h
 	$(CXX) $(CXXFLAGS) $< -o $@
