@@ -1,4 +1,4 @@
-A C++ library of encryption alogorithms
+A C++ library of encryption algorithms
 
 Copyright (c) 2013 - 2017 Jason Lee @ calccrypto at gmail.com
 
