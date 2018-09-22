@@ -11,7 +11,7 @@ IMPORTANT:
     This library was not written for actual use.
     Rather, it was meant for educational purposes,
     so if you choose to use it in a real setting
-    where secrecy is requied, do so at your own risk.
+    where secrecy is required, do so at your own risk.
     People who use this library to learn about the
     algorithms can easily add a few std::couts to
     see the internal data.
@@ -66,8 +66,8 @@ Notes:
 
     Modes of Operation:
         Only the general ideas of how each Mode of Operation works is used.
-        If any of the included algorithm has a specific method of runing
-        under a certain Mode of Operaion, it was probably not programmed.
+        If any of the included algorithm has a specific method of running
+        under a certain Mode of Operation, it was probably not programmed.
 
         The default Initialization Vector is just a series of 0s.
 
@@ -88,7 +88,7 @@ Usage:
     'plaintext' is a one block long string of non encrypted data
     'ciphertext' is a one block long string of encrypted data
 
-    To run the algorithms seperately (run on only 1 block), simply use '.encrypt(data)'
+    To run the algorithms separately (run on only 1 block), simply use '.encrypt(data)'
     to encrypt or '.decrypt(data)' to decrypt, since the key has already been expanded.
 
     Ex:
