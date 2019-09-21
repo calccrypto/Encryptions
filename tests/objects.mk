@@ -7,6 +7,7 @@ ENCRYPTIONS_TESTCASES_OBJECTS=aes.o       \
                               gost.o      \
                               idea.o      \
                               misty1.o    \
+                              rc2.o       \
                               rc4.o       \
                               rc5.o       \
                               rc6.o       \
