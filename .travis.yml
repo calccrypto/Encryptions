@@ -20,13 +20,13 @@ env:
     - CXX_COMPILER=clang++-8
 
 addons:
-    apt:
-        update: false
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    update: false
 
 before_install:
-  # ubuntu toolchain is always required
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - if [[ "${CXX_COMPILER}" =~ "clang++" ]]; then wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -; sudo apt-add-repository "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-${CXX_COMPILER##*-} main" -y; fi
+  - if [[ "${CXX_COMPILER}" =~ "clang++" ]]; then wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -; sudo apt-add-repository "deb http://apt.llvm.org/xenial/ llvm-toolchain-$(lsb_release -c | awk '{printf $2}')-${CXX_COMPILER##*-} main" -y; fi
   - sudo apt-get update
   - sudo apt-get install "${CXX_COMPILER}" cmake pkg-config $(if [[ "${CXX_COMPILER}" =~ "clang++-" ]]; then echo llvm; fi) -y
 
