@@ -2,7 +2,7 @@
 
 std::string & CTR::increment_IV(std::string & IV){
     std::string::size_type i = IV.size();
-    while ((i > 0) && (IV[i - 1] == 0xff)){
+    while ((i > 0) && ((uint8_t) IV[i - 1] == (uint8_t) 0xff)){
         IV[i - 1] = 0;
         i--;
     }
