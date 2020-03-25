@@ -29,7 +29,7 @@ std::string CTR::encrypt(const std::string & data){
     std::string out = "";
     std::string IV = const_IV;
     for(std::string::size_type x = 0; x < temp.size(); x += blocksize){
-        out += xor_strings(algo -> encrypt(IV), temp.substr(0, blocksize));
+        out += xor_strings(algo -> encrypt(IV), temp.substr(x, blocksize));
         increment_IV(IV);
     }
     return out;
