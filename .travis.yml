@@ -40,7 +40,7 @@ before_script:
   - cd googletest
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake .. -DCMAKE_CXX_FLAGS="-std=c++11"
   - make
   - cd ../../Encryptions/tests
 
