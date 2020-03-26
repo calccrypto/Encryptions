@@ -161,7 +161,7 @@ std::string unhexlify(const std::string & in){
 
 std::string pkcs5(const std::string & data, const unsigned int & blocksize){
     // Adds PKCS5 Padding
-    int pad = ((blocksize - data.size()) % blocksize) % blocksize;
+    int pad = blocksize - (data.size() % blocksize);
     std::string padding(pad, static_cast <char> (pad));
     return data + padding;
 }
@@ -169,9 +169,11 @@ std::string pkcs5(const std::string & data, const unsigned int & blocksize){
 std::string remove_pkcs5(std::string data){
     // Removes PKCS Padding
     uint8_t pad = static_cast <uint8_t> (data[data.size() - 1]);
-    std::string padding(pad, static_cast <char> (pad));
-    if ((pad < data.size()) && (padding == data.substr(data.size() - pad, pad)))
-        data = data.substr(0, data.size() - pad);
+    if ((pad > data.size()) ||
+        (std::string(pad, static_cast <char> (pad)) != data.substr(data.size() - pad, pad))) {
+        throw std::runtime_error("Error: Could not remove pkcs5 padding.");
+    }
+    data.resize(data.size() - pad);
     return data;
 }
 
