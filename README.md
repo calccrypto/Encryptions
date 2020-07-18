@@ -54,7 +54,7 @@ Notes:
 
         Algorithms will expect eactly 1 block or b bits of data in
         8 bit ASCII, where b is the block size of the algorithm in
-        bits. If there are the wrong number of bits, the algorithm 
+        bits. If there are the wrong number of bits, the algorithm
         should crash.
 
         The keying algorithms will do the same, unless there are
@@ -72,15 +72,12 @@ Notes:
         The default Initialization Vector is just a series of 0s.
 
 Build:
-	make (creates the object files and libEncryptions.a)
-
-	or
-
-	g++ -std=c++11 main.cpp common/*.cpp Encryptions/*.cpp
-
-	or some equivalent
-    
-    Test code and its makefile are included in the test folder.
+    mkdir build
+    cd build
+    cmake ..
+    make
+    (optional) make test
+    (optional) make install
 
 Usage:
     'instance' is an instance of an algorithm
