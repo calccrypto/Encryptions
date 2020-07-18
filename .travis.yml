@@ -3,17 +3,13 @@
 language: cpp
 
 os: linux
-sudo: false
+dist: bionic
 
 env:
-    - CXX_COMPILER=g++-4.9
     - CXX_COMPILER=g++-5
     - CXX_COMPILER=g++-6
     - CXX_COMPILER=g++-7
     - CXX_COMPILER=g++-8
-    - CXX_COMPILER=clang++-3.8
-    - CXX_COMPILER=clang++-3.9
-    - CXX_COMPILER=clang++-4.0
     - CXX_COMPILER=clang++-5.0
     - CXX_COMPILER=clang++-6.0
     - CXX_COMPILER=clang++-7
@@ -21,12 +17,14 @@ env:
 
 addons:
   apt:
+    packages:
+      - python3-pip
     sources:
       - ubuntu-toolchain-r-test
     update: false
 
 before_install:
-  - if [[ "${CXX_COMPILER}" =~ "clang++" ]]; then wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -; sudo apt-add-repository "deb http://apt.llvm.org/xenial/ llvm-toolchain-$(lsb_release -c | awk '{printf $2}')-${CXX_COMPILER##*-} main" -y; fi
+  - if [[ "${CXX_COMPILER}" =~ "clang++" ]]; then wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -; sudo apt-add-repository "deb http://apt.llvm.org/bionic/ llvm-toolchain-$(lsb_release -c | awk '{printf $2}')-${CXX_COMPILER##*-} main" -y; fi
   - sudo apt-get update
   - sudo apt-get install "${CXX_COMPILER}" cmake pkg-config $(if [[ "${CXX_COMPILER}" =~ "clang++-" ]]; then echo llvm; fi) -y
 
@@ -34,16 +32,29 @@ before_script:
   - export CXX="${CXX_COMPILER}"
   - export GTEST_COLOR=1
 
-  # not much better than git submodules, but there was never a need/want for the repo in this repo
   - cd ..
+
+  # get googletest
   - git clone https://github.com/google/googletest.git
   - cd googletest
   - mkdir build
   - cd build
-  - cmake .. -DCMAKE_CXX_FLAGS="-std=c++11"
-  - make
-  - cd ../../Encryptions/tests
+  - export GTEST_ROOT=$HOME/.local/googletest
+  - cmake .. -DCMAKE_INSTALL_PREFIX=$GTEST_ROOT -DCMAKE_CXX_FLAGS="-std=c++11"
+  - make -j 2
+  - make install
+  - cd ../..
+
+  # get newer CMake
+  - pip3 install --user cmake
+  - export CMAKE_ROOT=$(dirname $(dirname $(dirname $(pip3 show cmake | grep "Location:" | awk '{print $2}'))))/bin/cmake
+  - export PATH=$(dirname ${CMAKE_ROOT}):$PATH
+
+  - cd Encryptions
 
 script:
+  - mkdir build
+  - cd build
+  - cmake ..
   - make
-  - make test
+  - ctest -V
