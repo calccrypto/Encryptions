@@ -77,7 +77,7 @@ uint8_t AES::GF(uint8_t a, uint8_t b){
     From Wikipedia*/
     uint8_t prim = 0x1b;
     uint8_t p = 0, i = 0;
-    while ((i < 8) && (a != 0) and (b != 0)){
+    while ((i < 8) && (a != 0) && (b != 0)){
         if (b & 1){
             p ^= a;
         }

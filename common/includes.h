@@ -10,6 +10,7 @@ Some functions were heavily influenced by python 2.7.2
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <algorithm>
 
 // Some useful constants
 static const std::string zero(1, 0);
