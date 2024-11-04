@@ -27,6 +27,7 @@ THE SOFTWARE.
 
 #include <string>
 #include <stdexcept>
+#include <stdint.h>
 
 void rc_pq(const int w , uint64_t & p, uint64_t & q);
 
