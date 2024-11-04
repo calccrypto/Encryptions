@@ -12,8 +12,6 @@ if (CMAKE_SYSTEM_NAME STREQUAL "CYGWIN")
 endif()
 
 add_library(Encryptions_static STATIC Encryptions.h)
-set_target_properties(Encryptions_static PROPERTIES OUTPUT_NAME "Encryptions")
-install(TARGETS Encryptions_static DESTINATION lib)
 
 # build a separate set of object files with PIC enabled
 set(BUILD_SHARED_LIB ON CACHE BOOL "Build a shared library")
@@ -28,6 +26,12 @@ add_subdirectory(Encryptions)
 add_subdirectory(modes)
 enable_testing()
 add_subdirectory(tests)
+
+
+target_include_directories(Encryptions_static PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:include>
+    )
 
 set_target_properties(Encryptions_static
   PROPERTIES
@@ -44,8 +48,7 @@ install(TARGETS Encryptions_static EXPORT Encryptions_staticConfig
     LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-INSTALL(FILES Encryptions.h
-        DESTINATION include)
-
+install(FILES Encryptions.h DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/modes DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
 install(EXPORT Encryptions_staticConfig DESTINATION share/Encryptions_staticConfig/cmake)
 export(TARGETS Encryptions_static FILE Encryptions_staticConfig.cmake)
