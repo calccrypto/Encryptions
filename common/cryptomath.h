@@ -12,6 +12,7 @@ that do not have these functions defined.
 #define __CRYPTO_MATH__
 
 #include <iostream>
+#include <stdint.h>
 
 // Greatest Common Divisor
 template <typename T> T gcd(T a, T b){
