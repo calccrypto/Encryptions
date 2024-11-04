@@ -29,5 +29,23 @@ add_subdirectory(modes)
 enable_testing()
 add_subdirectory(tests)
 
+set_target_properties(Encryptions_static
+  PROPERTIES
+    ARCHIVE_OUTPUT_DIRECTORY ${BINARY_DIR}/lib
+    LIBRARY_OUTPUT_DIRECTORY ${BINARY_DIR}/lib
+    RUNTIME_OUTPUT_DIRECTORY ${BINARY_DIR}
+    VERSION ${PROJECT_VERSION}
+    SOVERSION 1
+    DEBUG_POSTFIX "d"
+    )
+
+install(TARGETS Encryptions_static EXPORT Encryptions_staticConfig
+    ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR})
+
 INSTALL(FILES Encryptions.h
         DESTINATION include)
+
+install(EXPORT Encryptions_staticConfig DESTINATION share/Encryptions_staticConfig/cmake)
+export(TARGETS Encryptions_static FILE Encryptions_staticConfig.cmake)
